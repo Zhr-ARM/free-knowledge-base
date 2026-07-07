@@ -42,7 +42,8 @@ async function main() {
     await writeGeneratedDocument(document, documentByRelativePath, uploadFileSet)
   }
 
-  await writeLibraryIndex(documents)
+  const categories = await getLibraryCategories(documents)
+  await writeLibraryIndex(documents, categories)
   console.log(`Synced ${documents.length} document(s) from uploads/.`)
 }
 
@@ -128,7 +129,7 @@ const fileUrl = withBase('${document.publicUrl}')
 
 # ${document.title}
 
-> 来源：\`uploads/${document.relativePath}\`
+> 分类：${document.category}
 
 <div style="height: 76vh; border: 1px solid var(--vp-c-divider); border-radius: 8px; overflow: hidden;">
   <iframe :src="fileUrl" title="${escapeHtml(document.title)}" style="width: 100%; height: 100%; border: 0;"></iframe>
@@ -158,7 +159,7 @@ const fileUrl = withBase('${document.publicUrl}')
 
 # ${document.title}
 
-> 来源：\`uploads/${document.relativePath}\`
+> 分类：${document.category}
 
 <p><a :href="fileUrl" target="_blank" rel="noreferrer">下载原始 Word 文件</a></p>
 
@@ -180,7 +181,7 @@ const fileUrl = withBase('${document.publicUrl}')
 
 # ${document.title}
 
-> 来源：\`uploads/${document.relativePath}\`
+> 分类：${document.category}
 
 ${note}
 
@@ -208,29 +209,47 @@ function rewriteMarkdownLinks(source, currentRelativePath, documentByRelativePat
   })
 }
 
-async function writeLibraryIndex(documents) {
+async function getLibraryCategories(documents) {
+  const preferred = ['单片机', 'ROS', '开源项目']
+  const entries = await fs.readdir(uploadsDir, { withFileTypes: true })
+  const folderCategories = entries
+    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
+    .map((entry) => entry.name)
+  const categorySet = new Set([...folderCategories, ...documents.map((document) => document.category)])
+  const preferredCategories = preferred.filter((category) => categorySet.has(category))
+  const extraCategories = [...categorySet]
+    .filter((category) => !preferred.includes(category))
+    .sort((a, b) => a.localeCompare(b, 'zh-CN'))
+
+  return [...preferredCategories, ...extraCategories]
+}
+
+async function writeLibraryIndex(documents, categories) {
   const lines = [
     '# 资料库',
     '',
-    '这个页面由 `uploads/` 文件夹自动生成。把 `.md`、`.pdf`、`.docx`、`.doc` 文件放进去，然后运行：',
+    '这里按分类汇总开源协会已经公开的学习资料。点击条目可以在线阅读、预览 PDF，或下载原始文件。',
     '',
-    '```bash',
-    'npm run sync:uploads',
-    '```',
+    '可以通过顶部搜索框查找关键词，也可以按下面的分类浏览。',
     '',
-    '生成规则：Markdown 会变成知识库页面，PDF 会嵌入预览，DOCX 会转换为网页内容并保留下载链接，旧版 DOC 会作为下载资料展示。',
+    '暂时没有收录内容的分类会显示“暂无资料”。',
     ''
   ]
 
-  if (documents.length === 0) {
+  if (categories.length === 0) {
     lines.push('## 暂无资料', '')
-    lines.push('请先把资料放入 `uploads/单片机/`、`uploads/ROS/` 或其他主题文件夹。')
+    lines.push('当前知识库还没有公开资料。')
   } else {
-    const grouped = groupByCategory(documents)
-    for (const [category, categoryDocuments] of grouped) {
+    const grouped = new Map(groupByCategory(documents))
+    for (const category of categories) {
+      const categoryDocuments = grouped.get(category) || []
       lines.push(`## ${category}`, '')
-      for (const document of categoryDocuments) {
-        lines.push(`- [${escapeMarkdownText(document.title)}](${document.pageLink}) <Badge text="${labelForExt(document.ext)}" type="info" />`)
+      if (categoryDocuments.length === 0) {
+        lines.push('暂无资料')
+      } else {
+        for (const document of categoryDocuments) {
+          lines.push(`- [${escapeMarkdownText(document.title)}](${document.pageLink}) <Badge text="${labelForExt(document.ext)}" type="info" />`)
+        }
       }
       lines.push('')
     }

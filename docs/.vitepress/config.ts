@@ -19,7 +19,7 @@ export default defineConfig({
       { text: '资料库', link: '/library/' },
       { text: '单片机', link: '/guide/mcu' },
       { text: 'ROS', link: '/guide/ros' },
-      { text: '上传说明', link: '/guide/contribute' }
+      { text: '查找资料', link: '/guide/contribute' }
     ],
     sidebar: [
       {
@@ -29,11 +29,11 @@ export default defineConfig({
           { text: '资料库', link: '/library/' },
           { text: '单片机', link: '/guide/mcu' },
           { text: 'ROS', link: '/guide/ros' },
-          { text: '上传说明', link: '/guide/contribute' },
+          { text: '查找资料', link: '/guide/contribute' },
           { text: '常见问题', link: '/guide/faq' },
-          { text: '流程规范', link: '/guide/process' },
+          { text: '资料分类', link: '/guide/process' },
           { text: '工具资源', link: '/guide/resources' },
-          { text: '更新记录', link: '/guide/changelog' }
+          { text: '资料更新', link: '/guide/changelog' }
         ]
       }
     ],
