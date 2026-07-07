@@ -34,6 +34,8 @@ npm run docs:build
 npm run docs:deploy
 ```
 
+这个脚本会使用 `/free-knowledge-base/` 作为 GitHub Pages 项目站路径。
+
 然后在 GitHub 仓库 `Settings` -> `Pages` 中确认：
 
 - Source: `Deploy from a branch`
