@@ -2,26 +2,26 @@
 layout: home
 
 hero:
-  name: 知识库
-  text: 免费、轻量、可持续维护
-  tagline: 用 Markdown 写内容，用 GitHub Pages 免费发布，先把知识沉淀跑起来。
+  name: 开源协会知识库
+  text: 单片机、ROS 与开源项目资料沉淀
+  tagline: 汇总协会培训、项目实践、竞赛经验和技术文档，让资料能被搜索、阅读和持续维护。
   actions:
     - theme: brand
-      text: 开始使用
-      link: /guide/getting-started
+      text: 浏览资料库
+      link: /library/
     - theme: alt
-      text: 查看资源
-      link: /guide/resources
+      text: 上传说明
+      link: /guide/contribute
 
 features:
-  - title: 零服务器成本
-    details: 静态网站托管在 GitHub Pages，不需要购买服务器或数据库。
-  - title: Markdown 维护
-    details: 每篇文章都是普通 Markdown 文件，方便迁移、备份和版本管理。
-  - title: 内置全文搜索
-    details: 使用 VitePress 本地搜索，用户可以直接搜索站内内容。
+  - title: 单片机资料
+    details: 整理 STM32、51、ESP32、Arduino、外设驱动、传感器和嵌入式基础内容。
+  - title: ROS 与机器人
+    details: 沉淀 ROS1、ROS2、建模仿真、导航、SLAM、机器人项目实践资料。
+  - title: 文件自动展示
+    details: 把 Markdown、PDF、Word 文档放入 uploads 文件夹后，可生成站内资料页面。
 ---
 
-## 推荐维护方式
+## 建议使用方式
 
-把每个主题拆成一篇 Markdown 文档，按目录沉淀。先保证内容清楚，再逐步优化页面风格和导航结构。
+协会成员把资料按主题放入 `uploads/` 文件夹，运行同步命令后，资料会出现在“资料库”页面。适合存放培训课件、实验指导、项目复盘、竞赛资料和学习路线。

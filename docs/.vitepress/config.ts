@@ -4,8 +4,8 @@ const base = process.env.VITEPRESS_BASE || '/'
 
 export default defineConfig({
   lang: 'zh-CN',
-  title: '知识库',
-  description: '一个零成本、公开只读、基于 Markdown 的知识库',
+  title: '开源协会知识库',
+  description: '沉淀单片机、ROS、嵌入式与开源项目资料的公开知识库',
   base,
   cleanUrls: true,
   lastUpdated: true,
@@ -16,14 +16,20 @@ export default defineConfig({
     },
     nav: [
       { text: '首页', link: '/' },
-      { text: '开始使用', link: '/guide/getting-started' },
-      { text: '更新记录', link: '/guide/changelog' }
+      { text: '资料库', link: '/library/' },
+      { text: '单片机', link: '/guide/mcu' },
+      { text: 'ROS', link: '/guide/ros' },
+      { text: '上传说明', link: '/guide/contribute' }
     ],
     sidebar: [
       {
-        text: '知识库',
+        text: '开源协会知识库',
         items: [
           { text: '开始使用', link: '/guide/getting-started' },
+          { text: '资料库', link: '/library/' },
+          { text: '单片机', link: '/guide/mcu' },
+          { text: 'ROS', link: '/guide/ros' },
+          { text: '上传说明', link: '/guide/contribute' },
           { text: '常见问题', link: '/guide/faq' },
           { text: '流程规范', link: '/guide/process' },
           { text: '工具资源', link: '/guide/resources' },
@@ -32,11 +38,11 @@ export default defineConfig({
       }
     ],
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/' }
+      { icon: 'github', link: 'https://github.com/Zhr-ARM/free-knowledge-base' }
     ],
     footer: {
-      message: 'Powered by VitePress and GitHub Pages.',
-      copyright: '免费托管，Markdown 维护。'
+      message: '开源协会知识沉淀与资料共享。',
+      copyright: 'Powered by VitePress and GitHub Pages.'
     },
     docFooter: {
       prev: '上一篇',

@@ -1,22 +1,24 @@
 # 工具资源
 
-把常用链接、模板、工具和参考资料集中放在这里。
+这里整理协会常用学习与建站资源。
 
-## 建站相关
+## 单片机与嵌入式
+
+- STM32CubeMX
+- Keil MDK
+- PlatformIO
+- 串口调试助手
+- 逻辑分析仪与示波器使用资料
+
+## ROS 与机器人
+
+- ROS / ROS2 官方文档
+- RViz、Gazebo、MoveIt
+- Ubuntu 与开发环境配置资料
+- 机器人底盘、雷达、相机和 IMU 驱动资料
+
+## 知识库维护
 
 - [VitePress 官方文档](https://vitepress.dev/)
 - [GitHub Pages 官方文档](https://docs.github.com/pages)
 - [Markdown 基础语法](https://www.markdownguide.org/basic-syntax/)
-
-## 内容维护
-
-- 文章命名建议使用英文路径，例如 `faq.md`、`process.md`。
-- 页面标题使用中文，方便读者阅读。
-- 图片可以放在 `docs/public/` 目录下，再从 Markdown 中引用。
-
-## 后续可扩展
-
-- 自定义域名
-- 飞书文档导入
-- 访问统计
-- 自动检查失效链接
