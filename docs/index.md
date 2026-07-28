@@ -9,9 +9,6 @@ hero:
     - theme: brand
       text: 浏览资料库
       link: /library/
-    - theme: alt
-      text: 如何查找
-      link: /guide/contribute
 
 features:
   - title: 嵌入式

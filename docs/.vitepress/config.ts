@@ -19,8 +19,7 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '资料库', link: '/library/' },
       { text: '嵌入式', link: '/guide/embedded' },
-      { text: '机器人运动控制', link: '/guide/robot-motion-control' },
-      { text: '查找资料', link: '/guide/contribute' }
+      { text: '机器人运动控制', link: '/guide/robot-motion-control' }
     ],
     sidebar: [
       {
@@ -29,12 +28,7 @@ export default defineConfig({
           { text: '开始使用', link: '/guide/getting-started' },
           { text: '资料库', link: '/library/' },
           { text: '嵌入式', link: '/guide/embedded' },
-          { text: '机器人运动控制', link: '/guide/robot-motion-control' },
-          { text: '查找资料', link: '/guide/contribute' },
-          { text: '常见问题', link: '/guide/faq' },
-          { text: '资料分类', link: '/guide/process' },
-          { text: '工具资源', link: '/guide/resources' },
-          { text: '资料更新', link: '/guide/changelog' }
+          { text: '机器人运动控制', link: '/guide/robot-motion-control' }
         ]
       }
     ],
