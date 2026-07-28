@@ -36,12 +36,7 @@ jobs:
       - name: Set VitePress base path
         shell: bash
         run: |
-          repo_name="${GITHUB_REPOSITORY#*/}"
-          if [ "$repo_name" = "${GITHUB_REPOSITORY_OWNER}.github.io" ]; then
-            echo "VITEPRESS_BASE=/" >> "$GITHUB_ENV"
-          else
-            echo "VITEPRESS_BASE=/$repo_name/" >> "$GITHUB_ENV"
-          fi
+          echo "VITEPRESS_BASE=/" >> "$GITHUB_ENV"
 
       - name: Build
         run: npm run docs:build

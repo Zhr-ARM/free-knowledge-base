@@ -5,7 +5,7 @@
 线上地址：
 
 ```text
-https://zhr-arm.github.io/free-knowledge-base/
+https://cdut-osa.cn/
 ```
 
 ## 本地运行
@@ -67,7 +67,7 @@ npm run docs:deploy
 当前仓库使用 `gh-pages` 分支发布静态产物。发布地址：
 
 ```text
-https://zhr-arm.github.io/free-knowledge-base/
+https://cdut-osa.cn/
 ```
 
 如果以后想改成 GitHub Actions 自动部署，先刷新 GitHub CLI 权限：
