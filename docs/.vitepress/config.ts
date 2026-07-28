@@ -8,6 +8,7 @@ export default defineConfig({
   description: '沉淀嵌入式与机器人运动控制资料的公开知识库',
   base,
   cleanUrls: true,
+  srcExclude: ['public/**'],
   lastUpdated: true,
   themeConfig: {
     logo: '/association-logo.jpg',

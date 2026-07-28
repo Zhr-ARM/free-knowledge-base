@@ -4,6 +4,7 @@ docs/.vitepress/cache/
 docs/library/index.md
 docs/library/generated/
 docs/public/uploads/
+tmp/
 .DS_Store
 Thumbs.db
 *.log

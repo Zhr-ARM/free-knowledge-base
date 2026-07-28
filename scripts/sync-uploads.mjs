@@ -10,9 +10,14 @@ const uploadsDir = path.join(rootDir, 'uploads')
 const generatedDir = path.join(rootDir, 'docs', 'library', 'generated')
 const publicUploadsDir = path.join(rootDir, 'docs', 'public', 'uploads')
 const rawUploadsDir = path.join(publicUploadsDir, 'raw')
+const previewUploadsDir = path.join(publicUploadsDir, 'previews')
 const libraryIndexPath = path.join(rootDir, 'docs', 'library', 'index.md')
 
-const supportedDocuments = new Set(['.md', '.markdown', '.pdf', '.docx', '.doc'])
+const supportedDocuments = new Set([
+  '.md', '.markdown', '.pdf', '.docx', '.doc',
+  '.zip', '.rar', '.7z', '.ppt', '.pptx',
+  '.xls', '.xlsx', '.xmind', '.chm', '.txt', '.csv'
+])
 
 async function main() {
   await fs.mkdir(uploadsDir, { recursive: true })
@@ -28,9 +33,14 @@ async function main() {
     .sort((a, b) => a.localeCompare(b, 'zh-CN'))
 
   const uploadFileSet = new Set(uploadFiles)
-  const documents = uploadFiles
-    .filter((relativePath) => supportedDocuments.has(path.extname(relativePath).toLowerCase()))
-    .map((relativePath) => createDocumentRecord(relativePath))
+  const documents = await Promise.all(
+    uploadFiles
+      .filter((relativePath) => supportedDocuments.has(path.extname(relativePath).toLowerCase()))
+      .map(async (relativePath) => {
+        const stats = await fs.stat(path.join(uploadsDir, ...relativePath.split('/')))
+        return createDocumentRecord(relativePath, stats.size)
+      })
+  )
 
   const documentByRelativePath = new Map(documents.map((document) => [document.relativePath, document]))
 
@@ -69,18 +79,23 @@ function isIgnoredUpload(relativePath) {
   return fileName.startsWith('.') || relativePath === 'README.md'
 }
 
-function createDocumentRecord(relativePath) {
+function createDocumentRecord(relativePath, sizeBytes) {
   const ext = path.extname(relativePath).toLowerCase()
   const title = titleFromPath(relativePath)
   const id = `doc-${crypto.createHash('sha1').update(relativePath).digest('hex').slice(0, 10)}`
-  const firstFolder = relativePath.includes('/') ? relativePath.split('/')[0] : '未分类'
+  const pathParts = relativePath.split('/')
+  const firstFolder = pathParts.length > 1 ? pathParts[0] : '未分类'
+  const sectionParts = pathParts.slice(1, -1)
 
   return {
     id,
     title,
     category: firstFolder,
+    sectionParts,
+    displayPath: [firstFolder, ...sectionParts.map(displaySectionName)].join(' / '),
     relativePath,
     ext,
+    sizeBytes,
     sourcePath: path.join(uploadsDir, ...relativePath.split('/')),
     pagePath: path.join(generatedDir, `${id}.md`),
     pageLink: `/library/generated/${id}`,
@@ -104,8 +119,10 @@ async function writeGeneratedDocument(document, documentByRelativePath, uploadFi
     page = renderPdfPage(document)
   } else if (document.ext === '.docx') {
     page = await renderDocxPage(document)
-  } else {
+  } else if (document.ext === '.doc') {
     page = renderLegacyDocPage(document)
+  } else {
+    page = renderDownloadPage(document)
   }
 
   await fs.writeFile(document.pagePath, page, 'utf8')
@@ -117,54 +134,74 @@ async function renderMarkdownPage(document, documentByRelativePath, uploadFileSe
   const { frontmatter, body } = splitFrontmatter(rewritten)
   const prefix = /^#\s+.+$/m.test(body) ? '' : `# ${document.title}\n\n`
 
-  return `${frontmatter}${prefix}${body.trimStart()}\n`
+  return `${disableGeneratedPageSearch(frontmatter)}${prefix}${body.trimStart()}\n`
 }
 
 function renderPdfPage(document) {
-  return `<script setup>
+  return `---
+search: false
+---
+
+<script setup>
 import { withBase } from 'vitepress'
 
-const fileUrl = withBase('${document.publicUrl}')
+const fileUrl = withBase(${JSON.stringify(document.publicUrl)})
 </script>
 
 # ${document.title}
 
-> 分类：${document.category}
+${renderFileMeta(document)}
 
-<div style="height: 76vh; border: 1px solid var(--vp-c-divider); border-radius: 8px; overflow: hidden;">
-  <iframe :src="fileUrl" title="${escapeHtml(document.title)}" style="width: 100%; height: 100%; border: 0;"></iframe>
+<p class="kb-download-actions"><a class="kb-download-button" :href="fileUrl" download>下载 PDF</a></p>
+
+<div class="kb-pdf-preview">
+  <iframe :src="fileUrl" title="${escapeHtml(document.title)}"></iframe>
 </div>
-
-<p><a :href="fileUrl" target="_blank" rel="noreferrer">打开或下载 PDF</a></p>
 `
 }
 
 async function renderDocxPage(document) {
   try {
+    const documentPreviewDir = path.join(previewUploadsDir, document.id)
+    let imageIndex = 0
+    await fs.mkdir(documentPreviewDir, { recursive: true })
+
     const result = await mammoth.convertToHtml(
       { path: document.sourcePath },
       {
         convertImage: mammoth.images.imgElement(async (image) => {
-          const imageBuffer = await image.read('base64')
-          return { src: `data:${image.contentType};base64,${imageBuffer}` }
+          const imageBuffer = await image.readAsBuffer()
+          const imageName = `image-${String(++imageIndex).padStart(3, '0')}.${extensionForImage(image.contentType)}`
+          await fs.writeFile(path.join(documentPreviewDir, imageName), imageBuffer)
+          return {
+            src: `__KB_WITH_BASE__/uploads/previews/${document.id}/${encodeURIComponent(imageName)}`
+          }
         })
       }
     )
+    const previewHtml = result.value.replace(
+      /src="__KB_WITH_BASE__([^"]+)"/g,
+      (_, imageUrl) => `:src="withBase('${imageUrl}')"`
+    )
 
-    return `<script setup>
+    return `---
+search: false
+---
+
+<script setup>
 import { withBase } from 'vitepress'
 
-const fileUrl = withBase('${document.publicUrl}')
+const fileUrl = withBase(${JSON.stringify(document.publicUrl)})
 </script>
 
 # ${document.title}
 
-> 分类：${document.category}
+${renderFileMeta(document)}
 
-<p><a :href="fileUrl" target="_blank" rel="noreferrer">下载原始 Word 文件</a></p>
+<p class="kb-download-actions"><a class="kb-download-button" :href="fileUrl" download>下载原始 Word 文件</a></p>
 
-<div style="border: 1px solid var(--vp-c-divider); border-radius: 8px; padding: 24px; background: var(--vp-c-bg-soft);">
-${result.value}
+<div class="kb-document-preview">
+${previewHtml}
 </div>
 `
   } catch (error) {
@@ -173,20 +210,55 @@ ${result.value}
 }
 
 function renderLegacyDocPage(document, note = '旧版 .doc 文件不能直接转换为网页内容。') {
-  return `<script setup>
+  return `---
+search: false
+---
+
+<script setup>
 import { withBase } from 'vitepress'
 
-const fileUrl = withBase('${document.publicUrl}')
+const fileUrl = withBase(${JSON.stringify(document.publicUrl)})
 </script>
 
 # ${document.title}
 
-> 分类：${document.category}
+${renderFileMeta(document)}
 
 ${note}
 
-<p><a :href="fileUrl" target="_blank" rel="noreferrer">下载 Word 文件</a></p>
+<p class="kb-download-actions"><a class="kb-download-button" :href="fileUrl" download>下载 Word 文件</a></p>
 `
+}
+
+function renderDownloadPage(document) {
+  const typeLabel = labelForExt(document.ext)
+
+  return `---
+search: false
+---
+
+<script setup>
+import { withBase } from 'vitepress'
+
+const fileUrl = withBase(${JSON.stringify(document.publicUrl)})
+</script>
+
+# ${document.title}
+
+${renderFileMeta(document)}
+
+此文件提供原始格式下载。
+
+<p class="kb-download-actions"><a class="kb-download-button" :href="fileUrl" download>下载 ${typeLabel} 文件</a></p>
+`
+}
+
+function renderFileMeta(document) {
+  return `<div class="kb-file-meta">
+  <span><strong>目录</strong>${escapeHtml(document.displayPath)}</span>
+  <span><strong>格式</strong>${escapeHtml(labelForExt(document.ext))}</span>
+  <span><strong>大小</strong>${escapeHtml(formatFileSize(document.sizeBytes))}</span>
+</div>`
 }
 
 function rewriteMarkdownLinks(source, currentRelativePath, documentByRelativePath, uploadFileSet) {
@@ -247,8 +319,20 @@ async function writeLibraryIndex(documents, categories) {
       if (categoryDocuments.length === 0) {
         lines.push('暂无资料')
       } else {
-        for (const document of categoryDocuments) {
-          lines.push(`- [${escapeMarkdownText(document.title)}](${document.pageLink}) <Badge text="${labelForExt(document.ext)}" type="info" />`)
+        const directDocuments = categoryDocuments.filter((document) => document.sectionParts.length === 0)
+        appendDocumentList(lines, directDocuments)
+
+        const firstSections = [...new Set(
+          categoryDocuments
+            .filter((document) => document.sectionParts.length > 0)
+            .map((document) => document.sectionParts[0])
+        )].sort((a, b) => a.localeCompare(b, 'zh-CN'))
+
+        for (const section of firstSections) {
+          const sectionDocuments = categoryDocuments.filter((document) => document.sectionParts[0] === section)
+          lines.push(`::: details ${displaySectionName(section)}（${sectionDocuments.length} 份）`, '')
+          appendSectionContents(lines, sectionDocuments, 1)
+          lines.push(':::', '')
         }
       }
       lines.push('')
@@ -258,10 +342,48 @@ async function writeLibraryIndex(documents, categories) {
   await fs.writeFile(libraryIndexPath, `${lines.join('\n')}\n`, 'utf8')
 }
 
+function appendSectionContents(lines, documents, consumedSections) {
+  const directDocuments = documents.filter(
+    (document) => document.sectionParts.length === consumedSections
+  )
+  appendDocumentList(lines, directDocuments)
+
+  const childSections = [...new Set(
+    documents
+      .filter((document) => document.sectionParts.length > consumedSections)
+      .map((document) => document.sectionParts[consumedSections])
+  )].sort((a, b) => a.localeCompare(b, 'zh-CN'))
+
+  for (const section of childSections) {
+    const headingLevel = Math.min(consumedSections + 2, 6)
+    const childDocuments = documents.filter(
+      (document) => document.sectionParts[consumedSections] === section
+    )
+    lines.push(`${'#'.repeat(headingLevel)} ${displaySectionName(section)}`, '')
+    appendSectionContents(lines, childDocuments, consumedSections + 1)
+  }
+}
+
+function appendDocumentList(lines, documents) {
+  for (const document of [...documents].sort(
+    (a, b) => a.relativePath.localeCompare(b.relativePath, 'zh-CN')
+  )) {
+    lines.push(
+      `- [${escapeMarkdownText(document.title)}](${document.pageLink}) ` +
+      `<Badge text="${labelForExt(document.ext)}" type="info" /> ` +
+      `<span class="kb-file-size">${formatFileSize(document.sizeBytes)}</span>`
+    )
+  }
+
+  if (documents.length > 0) lines.push('')
+}
+
 function groupByCategory(documents) {
   const grouped = new Map()
 
-  for (const document of documents.sort((a, b) => a.relativePath.localeCompare(b.relativePath, 'zh-CN'))) {
+  for (const document of [...documents].sort(
+    (a, b) => a.relativePath.localeCompare(b.relativePath, 'zh-CN')
+  )) {
     if (!grouped.has(document.category)) grouped.set(document.category, [])
     grouped.get(document.category).push(document)
   }
@@ -273,6 +395,16 @@ function splitFrontmatter(source) {
   const match = source.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n/)
   if (!match) return { frontmatter: '', body: source }
   return { frontmatter: match[0], body: source.slice(match[0].length) }
+}
+
+function disableGeneratedPageSearch(frontmatter) {
+  if (!frontmatter) return '---\nsearch: false\n---\n'
+
+  if (/^search\s*:/m.test(frontmatter)) {
+    return frontmatter.replace(/^search\s*:.*$/m, 'search: false')
+  }
+
+  return frontmatter.replace(/\r?\n---\r?\n$/, '\nsearch: false\n---\n')
 }
 
 function splitHref(href) {
@@ -293,14 +425,51 @@ function normalizeUploadPath(value) {
 
 function titleFromPath(relativePath) {
   const parsed = path.parse(relativePath)
-  return parsed.name.replace(/[-_]+/g, ' ').trim() || parsed.name
+  return parsed.name.replace(/^\d{1,3}[-_.、\s]+/, '').trim() || parsed.name
+}
+
+function displaySectionName(value) {
+  return value.replace(/^\d{1,3}[-_.、\s]+/, '').trim() || value
 }
 
 function labelForExt(ext) {
   if (ext === '.md' || ext === '.markdown') return 'Markdown'
   if (ext === '.pdf') return 'PDF'
   if (ext === '.docx') return 'DOCX'
-  return 'DOC'
+  if (ext === '.doc') return 'DOC'
+  if (ext === '.zip') return 'ZIP'
+  if (ext === '.rar') return 'RAR'
+  if (ext === '.7z') return '7Z'
+  if (ext === '.ppt') return 'PPT'
+  if (ext === '.pptx') return 'PPTX'
+  if (ext === '.xls') return 'XLS'
+  if (ext === '.xlsx') return 'XLSX'
+  if (ext === '.xmind') return 'XMind'
+  if (ext === '.chm') return 'CHM'
+  if (ext === '.csv') return 'CSV'
+  if (ext === '.txt') return 'TXT'
+  return ext.replace(/^\./, '').toUpperCase()
+}
+
+function formatFileSize(sizeBytes) {
+  if (sizeBytes < 1024) return `${sizeBytes} B`
+  if (sizeBytes < 1024 * 1024) return `${(sizeBytes / 1024).toFixed(1)} KB`
+  return `${(sizeBytes / 1024 / 1024).toFixed(1)} MB`
+}
+
+function extensionForImage(contentType) {
+  const extensions = {
+    'image/gif': 'gif',
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/svg+xml': 'svg',
+    'image/tiff': 'tiff',
+    'image/bmp': 'bmp',
+    'image/x-emf': 'emf',
+    'image/x-wmf': 'wmf'
+  }
+
+  return extensions[contentType] || 'bin'
 }
 
 function encodePath(relativePath) {

@@ -15,9 +15,9 @@ hero:
 
 features:
   - title: 嵌入式
-    details: C 语言、STM32、ESP32、Arduino、传感器、外设驱动、通信协议和嵌入式工程实践。
+    details: C 语言、51 单片机、STM32、实时系统、ESP32、硬件设计和协会培训资料。
   - title: 机器人运动控制
-    details: ROS、底盘控制、运动学、导航、SLAM、仿真、传感器融合和机器人项目实践。
+    details: 电机控制、FOC、强化学习和机器人学习路线；尚未收录的方向会明确标注。
   - title: 资料状态清晰
     details: 已收录资料会直接显示；暂未收录的分类会标记“暂无资料”。
 ---

@@ -228,6 +228,98 @@
   border-left-color: var(--kb-teal);
 }
 
+.kb-file-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  margin: 20px 0;
+  padding: 14px 0;
+  border-top: 1px solid var(--kb-border);
+  border-bottom: 1px solid var(--kb-border);
+  color: var(--vp-c-text-2);
+  font-size: 14px;
+}
+
+.kb-file-meta span {
+  display: inline-flex;
+  gap: 8px;
+  min-width: 0;
+}
+
+.kb-file-meta strong {
+  color: var(--vp-c-text-1);
+}
+
+.kb-download-actions {
+  margin: 20px 0 !important;
+}
+
+.kb-download-button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
+  border: 1px solid var(--kb-teal);
+  border-radius: 6px;
+  background: var(--kb-teal);
+  color: #fff !important;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.kb-download-button:hover {
+  border-color: var(--kb-deep-teal);
+  background: var(--kb-deep-teal);
+}
+
+.kb-pdf-preview {
+  width: 100%;
+  height: min(76vh, 920px);
+  min-height: 520px;
+  overflow: hidden;
+  border: 1px solid var(--kb-border);
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+}
+
+.kb-pdf-preview iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.kb-document-preview {
+  overflow-x: auto;
+  padding: 24px;
+  border: 1px solid var(--kb-border);
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+}
+
+.kb-file-size {
+  margin-left: 6px;
+  color: var(--vp-c-text-3);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.vp-doc .custom-block.details {
+  border-color: var(--kb-border);
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+}
+
+.vp-doc .custom-block.details summary {
+  color: var(--kb-navy);
+  font-weight: 700;
+}
+
+.dark .vp-doc .custom-block.details summary {
+  color: #b8edf4;
+}
+
 @media (max-width: 900px) {
   .kb-brand-strip,
   .kb-section {
@@ -259,5 +351,19 @@
 
   .kb-brand-copy strong {
     font-size: 21px;
+  }
+
+  .kb-file-meta {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .kb-pdf-preview {
+    height: 65vh;
+    min-height: 420px;
+  }
+
+  .kb-document-preview {
+    padding: 16px;
   }
 }
