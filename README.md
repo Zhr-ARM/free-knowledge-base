@@ -1,6 +1,6 @@
 # 开源协会知识库
 
-这是一个基于 VitePress、Markdown 和 GitHub Pages 的免费公开知识库，用来沉淀协会的单片机、ROS、嵌入式、机器人和开源项目资料。
+这是一个基于 VitePress、Markdown 和 GitHub Pages 的免费公开知识库，用来沉淀协会的嵌入式和机器人运动控制资料。
 
 线上地址：
 
@@ -21,9 +21,8 @@ npm run docs:dev
 
 ```text
 uploads/
-├─ 单片机/
-├─ ROS/
-└─ 开源项目/
+├─ 嵌入式/
+└─ 机器人运动控制/
 ```
 
 支持格式：

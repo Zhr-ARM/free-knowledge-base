@@ -5,20 +5,20 @@ const base = process.env.VITEPRESS_BASE || '/'
 export default defineConfig({
   lang: 'zh-CN',
   title: '开源协会知识库',
-  description: '沉淀单片机、ROS、嵌入式与开源项目资料的公开知识库',
+  description: '沉淀嵌入式与机器人运动控制资料的公开知识库',
   base,
   cleanUrls: true,
   lastUpdated: true,
   themeConfig: {
-    logo: '/logo.svg',
+    logo: '/association-logo.jpg',
     search: {
       provider: 'local'
     },
     nav: [
       { text: '首页', link: '/' },
       { text: '资料库', link: '/library/' },
-      { text: '单片机', link: '/guide/mcu' },
-      { text: 'ROS', link: '/guide/ros' },
+      { text: '嵌入式', link: '/guide/embedded' },
+      { text: '机器人运动控制', link: '/guide/robot-motion-control' },
       { text: '查找资料', link: '/guide/contribute' }
     ],
     sidebar: [
@@ -27,8 +27,8 @@ export default defineConfig({
         items: [
           { text: '开始使用', link: '/guide/getting-started' },
           { text: '资料库', link: '/library/' },
-          { text: '单片机', link: '/guide/mcu' },
-          { text: 'ROS', link: '/guide/ros' },
+          { text: '嵌入式', link: '/guide/embedded' },
+          { text: '机器人运动控制', link: '/guide/robot-motion-control' },
           { text: '查找资料', link: '/guide/contribute' },
           { text: '常见问题', link: '/guide/faq' },
           { text: '资料分类', link: '/guide/process' },

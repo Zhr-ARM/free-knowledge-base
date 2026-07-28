@@ -210,7 +210,7 @@ function rewriteMarkdownLinks(source, currentRelativePath, documentByRelativePat
 }
 
 async function getLibraryCategories(documents) {
-  const preferred = ['单片机', 'ROS', '开源项目']
+  const preferred = ['嵌入式', '机器人运动控制']
   const entries = await fs.readdir(uploadsDir, { withFileTypes: true })
   const folderCategories = entries
     .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
