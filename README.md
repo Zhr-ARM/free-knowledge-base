@@ -5,7 +5,7 @@
 线上地址：
 
 ```text
-https://cdut-osa.cn/
+https://zhr-arm.github.io/free-knowledge-base/
 ```
 
 ## 本地运行
@@ -67,35 +67,8 @@ npm run docs:deploy
 当前仓库使用 `gh-pages` 分支发布静态产物。发布地址：
 
 ```text
-https://cdut-osa.cn/
+https://zhr-arm.github.io/free-knowledge-base/
 ```
-
-## 自定义域名 DNS
-
-当前 GitHub Pages 自定义域名是：
-
-```text
-cdut-osa.cn
-```
-
-在域名服务商的 DNS 控制台中，把根域名配置为 GitHub Pages：
-
-```text
-类型  主机记录  记录值
-A     @         185.199.108.153
-A     @         185.199.109.153
-A     @         185.199.110.153
-A     @         185.199.111.153
-```
-
-建议同时配置 `www`：
-
-```text
-类型    主机记录  记录值
-CNAME   www       Zhr-ARM.github.io
-```
-
-DNS 生效后，再到 GitHub 仓库 `Settings -> Pages` 勾选 `Enforce HTTPS`。
 
 如果以后想改成 GitHub Actions 自动部署，先刷新 GitHub CLI 权限：
 

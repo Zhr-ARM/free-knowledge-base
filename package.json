@@ -8,7 +8,7 @@
     "docs:dev": "npm run sync:uploads && vitepress dev docs --host 0.0.0.0",
     "docs:build": "npm run sync:uploads && vitepress build docs",
     "docs:preview": "vitepress preview docs --host 0.0.0.0",
-    "docs:deploy": "cross-env VITEPRESS_BASE=/ npm run docs:build && gh-pages -d docs/.vitepress/dist"
+    "docs:deploy": "cross-env VITEPRESS_BASE=/free-knowledge-base/ npm run docs:build && gh-pages -d docs/.vitepress/dist"
   },
   "devDependencies": {
     "cross-env": "^10.1.0",
