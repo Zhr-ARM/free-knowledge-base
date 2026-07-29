@@ -6,20 +6,480 @@
     <title>AD-51单片机PCB设计工程 | 开源协会知识库</title>
     <meta name="description" content="沉淀嵌入式与机器人运动控制资料的公开知识库">
     <meta name="generator" content="VitePress v1.6.4">
-    <link rel="preload stylesheet" href="/assets/style.G76BeFzm.css" as="style">
+    <link rel="preload stylesheet" href="/assets/style.MKnyf9dl.css" as="style">
     <link rel="preload stylesheet" href="/vp-icons.css" as="style">
     
-    <script type="module" src="/assets/app.DwSalGCD.js"></script>
+    <script type="module" src="/assets/app.D_iwdCn4.js"></script>
     <link rel="preload" href="/assets/inter-roman-latin.Di8DUHzh.woff2" as="font" type="font/woff2" crossorigin="">
-    <link rel="modulepreload" href="/assets/chunks/theme.CcjBcm4w.js">
+    <link rel="modulepreload" href="/assets/chunks/theme.DbnUY3IV.js">
     <link rel="modulepreload" href="/assets/chunks/framework.BWuWLRhz.js">
-    <link rel="modulepreload" href="/assets/library_generated_doc-89874c5de2.md.DDTCGuzN.lean.js">
+    <link rel="modulepreload" href="/assets/library_generated_doc-89874c5de2.md.DwPp4SqP.lean.js">
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
     <script id="check-dark-mode">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
     <script id="check-mac-os">document.documentElement.classList.toggle("mac",/Mac|iPhone|iPod|iPad/i.test(navigator.platform));</script>
   </head>
   <body>
-    <div id="app"><div class="Layout" data-v-5d98c3a5><!--[--><!--]--><!--[--><span tabindex="-1" data-v-0b0ada53></span><a href="#VPContent" class="VPSkipLink visually-hidden" data-v-0b0ada53>Skip to content</a><!--]--><!----><header class="VPNav" data-v-5d98c3a5 data-v-ae24b3ad><div class="VPNavBar" data-v-ae24b3ad data-v-6aa21345><div class="wrapper" data-v-6aa21345><div class="container" data-v-6aa21345><div class="title" data-v-6aa21345><div class="VPNavBarTitle has-sidebar" data-v-6aa21345 data-v-1168a8e4><a class="title" href="/" data-v-1168a8e4><!--[--><!--]--><!--[--><img class="VPImage logo" src="/association-logo.jpg" alt data-v-8426fc1a><!--]--><span data-v-1168a8e4>开源协会知识库</span><!--[--><!--]--></a></div></div><div class="content" data-v-6aa21345><div class="content-body" data-v-6aa21345><!--[--><!--]--><div class="VPNavBarSearch search" data-v-6aa21345><!--[--><!----><div id="local-search"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search"><span class="DocSearch-Button-Container"><span class="vp-icon DocSearch-Search-Icon"></span><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"><kbd class="DocSearch-Button-Key"></kbd><kbd class="DocSearch-Button-Key">K</kbd></span></button></div><!--]--></div><nav aria-labelledby="main-nav-aria-label" class="VPNavBarMenu menu" data-v-6aa21345 data-v-dc692963><span id="main-nav-aria-label" class="visually-hidden" data-v-dc692963> Main Navigation </span><!--[--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>首页</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/library/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>资料库</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/embedded" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>嵌入式</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/robot-motion-control" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>机器人运动控制</span><!--]--></a><!--]--><!--]--></nav><!----><div class="VPNavBarAppearance appearance" data-v-6aa21345 data-v-6c893767><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-6c893767 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div><div class="VPSocialLinks VPNavBarSocialLinks social-links" data-v-6aa21345 data-v-0394ad82 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div><div class="VPFlyout VPNavBarExtra extra" data-v-6aa21345 data-v-bb2aa2f0 data-v-cf11d7a2><button type="button" class="button" aria-haspopup="true" aria-expanded="false" aria-label="extra navigation" data-v-cf11d7a2><span class="vpi-more-horizontal icon" data-v-cf11d7a2></span></button><div class="menu" data-v-cf11d7a2><div class="VPMenu" data-v-cf11d7a2 data-v-b98bc113><!----><!--[--><!--[--><!----><div class="group" data-v-bb2aa2f0><div class="item appearance" data-v-bb2aa2f0><p class="label" data-v-bb2aa2f0>外观</p><div class="appearance-action" data-v-bb2aa2f0><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-bb2aa2f0 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div></div></div><div class="group" data-v-bb2aa2f0><div class="item social-links" data-v-bb2aa2f0><div class="VPSocialLinks social-links-list" data-v-bb2aa2f0 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div></div></div><!--]--><!--]--></div></div></div><!--[--><!--]--><button type="button" class="VPNavBarHamburger hamburger" aria-label="mobile navigation" aria-expanded="false" aria-controls="VPNavScreen" data-v-6aa21345 data-v-e5dd9c1c><span class="container" data-v-e5dd9c1c><span class="top" data-v-e5dd9c1c></span><span class="middle" data-v-e5dd9c1c></span><span class="bottom" data-v-e5dd9c1c></span></span></button></div></div></div></div><div class="divider" data-v-6aa21345><div class="divider-line" data-v-6aa21345></div></div></div><!----></header><div class="VPLocalNav has-sidebar empty" data-v-5d98c3a5 data-v-a6f0e41e><div class="container" data-v-a6f0e41e><button class="menu" aria-expanded="false" aria-controls="VPSidebarNav" data-v-a6f0e41e><span class="vpi-align-left menu-icon" data-v-a6f0e41e></span><span class="menu-text" data-v-a6f0e41e>菜单</span></button><div class="VPLocalNavOutlineDropdown" style="--vp-vh:0px;" data-v-a6f0e41e data-v-8a42e2b4><button data-v-8a42e2b4>回到顶部</button><!----></div></div></div><aside class="VPSidebar" data-v-5d98c3a5 data-v-319d5ca6><div class="curtain" data-v-319d5ca6></div><nav class="nav" id="VPSidebarNav" aria-labelledby="sidebar-aria-label" tabindex="-1" data-v-319d5ca6><span class="visually-hidden" id="sidebar-aria-label" data-v-319d5ca6> Sidebar Navigation </span><!--[--><!--]--><!--[--><div class="no-transition group" data-v-c40bc020><section class="VPSidebarItem level-0" data-v-c40bc020 data-v-b3fd67f8><div class="item" role="button" tabindex="0" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><h2 class="text" data-v-b3fd67f8>开源协会知识库</h2><!----></div><div class="items" data-v-b3fd67f8><!--[--><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/getting-started" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>开始使用</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/library/" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>资料库</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/embedded" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>嵌入式</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/robot-motion-control" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>机器人运动控制</p><!--]--></a><!----></div><!----></div><!--]--></div></section></div><!--]--><!--[--><!--]--></nav></aside><div class="VPContent has-sidebar" id="VPContent" data-v-5d98c3a5 data-v-1428d186><div class="VPDoc has-sidebar has-aside" data-v-1428d186 data-v-39a288b8><!--[--><!--]--><div class="container" data-v-39a288b8><div class="aside" data-v-39a288b8><div class="aside-curtain" data-v-39a288b8></div><div class="aside-container" data-v-39a288b8><div class="aside-content" data-v-39a288b8><div class="VPDocAside" data-v-39a288b8 data-v-3f215769><!--[--><!--]--><!--[--><!--]--><nav aria-labelledby="doc-outline-aria-label" class="VPDocAsideOutline" data-v-3f215769 data-v-a5bbad30><div class="content" data-v-a5bbad30><div class="outline-marker" data-v-a5bbad30></div><div aria-level="2" class="outline-title" id="doc-outline-aria-label" role="heading" data-v-a5bbad30>本页目录</div><ul class="VPDocOutlineItem root" data-v-a5bbad30 data-v-b933a997><!--[--><!--]--></ul></div></nav><!--[--><!--]--><div class="spacer" data-v-3f215769></div><!--[--><!--]--><!----><!--[--><!--]--><!--[--><!--]--></div></div></div></div><div class="content" data-v-39a288b8><div class="content-container" data-v-39a288b8><!--[--><!--]--><main class="main" data-v-39a288b8><div style="position:relative;" class="vp-doc _library_generated_doc-89874c5de2 external-link-icon-enabled" data-v-39a288b8><div><h1 id="ad-51单片机pcb设计工程" tabindex="-1">AD-51单片机PCB设计工程 <a class="header-anchor" href="#ad-51单片机pcb设计工程" aria-label="Permalink to &quot;AD-51单片机PCB设计工程&quot;">​</a></h1><div class="kb-file-meta"><span><strong>目录</strong>嵌入式 / 硬件设计与PCB / 设计工程</span><span><strong>格式</strong>ZIP</span><span><strong>大小</strong>3.0 MB</span></div><p>此文件提供原始格式下载。</p><p class="kb-download-actions"><a class="kb-download-button" href="/uploads/raw/%E5%B5%8C%E5%85%A5%E5%BC%8F/06-%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1%E4%B8%8EPCB/%E8%AE%BE%E8%AE%A1%E5%B7%A5%E7%A8%8B/AD-51%E5%8D%95%E7%89%87%E6%9C%BAPCB%E8%AE%BE%E8%AE%A1%E5%B7%A5%E7%A8%8B.zip" download>下载 ZIP 文件</a></p></div></div></main><footer class="VPDocFooter" data-v-39a288b8 data-v-e257564d><!--[--><!--]--><!----><nav class="prev-next" aria-labelledby="doc-footer-aria-label" data-v-e257564d><span class="visually-hidden" id="doc-footer-aria-label" data-v-e257564d>Pager</span><div class="pager" data-v-e257564d><!----></div><div class="pager" data-v-e257564d><a class="VPLink link pager-link next" href="/guide/getting-started" data-v-e257564d><!--[--><span class="desc" data-v-e257564d>下一篇</span><span class="title" data-v-e257564d>开始使用</span><!--]--></a></div></nav></footer><!--[--><!--]--></div></div></div><!--[--><!--]--></div></div><footer class="VPFooter has-sidebar" data-v-5d98c3a5 data-v-e315a0ad><div class="container" data-v-e315a0ad><p class="message" data-v-e315a0ad>开源协会知识沉淀与资料共享。</p><p class="copyright" data-v-e315a0ad>Powered by VitePress and GitHub Pages.</p></div></footer><!--[--><!--]--></div></div>
-    <script>window.__VP_HASH_MAP__=JSON.parse("{\"guide_embedded.md\":\"BHAe_NYR\",\"guide_getting-started.md\":\"Bqpeg4mo\",\"guide_robot-motion-control.md\":\"BW8G4pa-\",\"index.md\":\"SpcP3ZNM\",\"library_generated_doc-0c87426632.md\":\"Cg5sZMeW\",\"library_generated_doc-0edadc79e9.md\":\"B8crb2LR\",\"library_generated_doc-115616aa75.md\":\"BQJQlqyg\",\"library_generated_doc-11d294a6fa.md\":\"pSvVu923\",\"library_generated_doc-1338744994.md\":\"BfoeQSIy\",\"library_generated_doc-1694ce68fa.md\":\"B1mDKs1L\",\"library_generated_doc-19e950c8bd.md\":\"CmDWcQC4\",\"library_generated_doc-1c8356e419.md\":\"B4SpI7gK\",\"library_generated_doc-1cad1cfa7a.md\":\"DDMqQCST\",\"library_generated_doc-1d874c7346.md\":\"jwdtQIWV\",\"library_generated_doc-1df552e31c.md\":\"BbSzQgHU\",\"library_generated_doc-1f7eeb2478.md\":\"D6p5R4BN\",\"library_generated_doc-23e64d7aa3.md\":\"DS7rIAyT\",\"library_generated_doc-25c2ca1a00.md\":\"B2dNyLn1\",\"library_generated_doc-277853480e.md\":\"C4HCVLz6\",\"library_generated_doc-2806056aab.md\":\"kZU9ztrN\",\"library_generated_doc-2f286a2cac.md\":\"BCdO-MsH\",\"library_generated_doc-30964a207a.md\":\"BS8qlWet\",\"library_generated_doc-33eb0e4d89.md\":\"igTIH4q6\",\"library_generated_doc-3694ef88db.md\":\"BYbhcqoV\",\"library_generated_doc-37a55a2dda.md\":\"BCF_9pPl\",\"library_generated_doc-420b513a36.md\":\"Bk3dbD6x\",\"library_generated_doc-447b7a2ba9.md\":\"BZA0eY7n\",\"library_generated_doc-448f4f56b5.md\":\"Bx1SH5EE\",\"library_generated_doc-44cfd64a5d.md\":\"CoCU3cZE\",\"library_generated_doc-504a0bb11d.md\":\"BPlAdKRp\",\"library_generated_doc-5714cd02f9.md\":\"D1bOfiz8\",\"library_generated_doc-5a6d823e8e.md\":\"BoXekZIf\",\"library_generated_doc-5d17bfe9d0.md\":\"B4EexyXA\",\"library_generated_doc-60bded06db.md\":\"COYXe0Ec\",\"library_generated_doc-63a039f8e7.md\":\"CbUK0Tg2\",\"library_generated_doc-63af9b29de.md\":\"ChLVQk_s\",\"library_generated_doc-64ed09afa1.md\":\"BUtoE6dP\",\"library_generated_doc-651a4b046d.md\":\"DRV3UtSJ\",\"library_generated_doc-68d1ef7f2c.md\":\"C7P0LOIk\",\"library_generated_doc-6d3dc02122.md\":\"Btlkx1ZR\",\"library_generated_doc-6e56514662.md\":\"CwUvOJbd\",\"library_generated_doc-6fdf145080.md\":\"BxhFdQak\",\"library_generated_doc-72586a38eb.md\":\"DLhWCOZp\",\"library_generated_doc-7360882287.md\":\"DvSqj4CF\",\"library_generated_doc-755776bcf2.md\":\"8nYDLt_D\",\"library_generated_doc-77311ccf4e.md\":\"ChSKaX0-\",\"library_generated_doc-775125e152.md\":\"BJBc6Xx-\",\"library_generated_doc-7a0752f103.md\":\"BVHO029M\",\"library_generated_doc-831d61553e.md\":\"CadO59h8\",\"library_generated_doc-89874c5de2.md\":\"DDTCGuzN\",\"library_generated_doc-8c467c633f.md\":\"CdEwNxmu\",\"library_generated_doc-8ef8cfc49c.md\":\"BB3Ntirn\",\"library_generated_doc-9053c27312.md\":\"BQuYgxCo\",\"library_generated_doc-90ea137ffb.md\":\"DHZBqOjK\",\"library_generated_doc-91fec6c102.md\":\"DOEetHuq\",\"library_generated_doc-95f2617b53.md\":\"BiDMlVqu\",\"library_generated_doc-97ec301176.md\":\"C6PV08t4\",\"library_generated_doc-985d3f547d.md\":\"BYu6cRD9\",\"library_generated_doc-9aaa85564c.md\":\"BYkObiYN\",\"library_generated_doc-a09b57432c.md\":\"CFH5AugM\",\"library_generated_doc-a3f843c655.md\":\"BLk4EXf-\",\"library_generated_doc-a7125a7496.md\":\"CdVH5-lO\",\"library_generated_doc-a9b939c1d7.md\":\"DuGxIA_5\",\"library_generated_doc-ad65f16e01.md\":\"CV-oKDRD\",\"library_generated_doc-b082a5098c.md\":\"BeWR2P77\",\"library_generated_doc-b137af2c9c.md\":\"C_uXnIhD\",\"library_generated_doc-b16199b132.md\":\"B_2sowo8\",\"library_generated_doc-b1ee804a03.md\":\"C8g2cPLX\",\"library_generated_doc-b23eeebff1.md\":\"BfmZhlb0\",\"library_generated_doc-b41bf628de.md\":\"CwrwXAQ_\",\"library_generated_doc-b68590b8ac.md\":\"rHFIIIDr\",\"library_generated_doc-b710258ab5.md\":\"eHSg6IvP\",\"library_generated_doc-b8d8c8547a.md\":\"Bi--A27B\",\"library_generated_doc-b9d0ee371d.md\":\"CknRKVPv\",\"library_generated_doc-bed41b3e47.md\":\"CHt7_QOo\",\"library_generated_doc-bf24e716d3.md\":\"CZY6VRxA\",\"library_generated_doc-c6f390b099.md\":\"m6L8nd_A\",\"library_generated_doc-c75aa7bcf0.md\":\"CyVdVZtk\",\"library_generated_doc-ca880c8c69.md\":\"DDb611wd\",\"library_generated_doc-cd6c0d2060.md\":\"Bz-uok5J\",\"library_generated_doc-cec4c39766.md\":\"Ds-83jm4\",\"library_generated_doc-cfe5ed322b.md\":\"CX8oSRXi\",\"library_generated_doc-cff0ffbcf5.md\":\"D6d1BJ2P\",\"library_generated_doc-d1f02d7b86.md\":\"BAN9IrKu\",\"library_generated_doc-d721f2bfc8.md\":\"ooAlFpgc\",\"library_generated_doc-d801e39e19.md\":\"DzGuoynA\",\"library_generated_doc-d8a0dbf87d.md\":\"DRanZLJU\",\"library_generated_doc-d8b12e4169.md\":\"DWzUu8lk\",\"library_generated_doc-db83f17c96.md\":\"LU-wQ1ll\",\"library_generated_doc-ddacb55a96.md\":\"9vpL5FYY\",\"library_generated_doc-de4b40d6f1.md\":\"JrrhNxjc\",\"library_generated_doc-de9ddd00fc.md\":\"DzX2bt7-\",\"library_generated_doc-df40b62ca2.md\":\"CeoSEycV\",\"library_generated_doc-e3a1c1ca16.md\":\"BnkPqoYD\",\"library_generated_doc-e3de3bfe1a.md\":\"C2bvlYHi\",\"library_generated_doc-e461e6f214.md\":\"IO8JxY9o\",\"library_generated_doc-e54d2ce749.md\":\"D_eqa_aU\",\"library_generated_doc-e5579098a7.md\":\"B23kQfXd\",\"library_generated_doc-e660c8856a.md\":\"HsnlPoJK\",\"library_generated_doc-ea3865b43c.md\":\"DiXLdTIr\",\"library_generated_doc-ea8d1cd1a1.md\":\"BMCX_3lL\",\"library_generated_doc-eb4b03f30e.md\":\"CUeySxlg\",\"library_generated_doc-ef02588d18.md\":\"Czmu3Vpn\",\"library_generated_doc-ef6bcf86df.md\":\"BJouzUjL\",\"library_generated_doc-f057f3c7c3.md\":\"0lN_HW1G\",\"library_generated_doc-f38fd52503.md\":\"cTSZ1jKX\",\"library_generated_doc-f4fe6565c2.md\":\"zeghf7CG\",\"library_generated_doc-f5ed4331ce.md\":\"BLIfnXT-\",\"library_generated_doc-f64e7a02fb.md\":\"CZrG-lqu\",\"library_generated_doc-fcc7daedff.md\":\"CQ1NqbSU\",\"library_generated_doc-fdb02902fe.md\":\"BY6zJvmC\",\"library_generated_doc-ff72dbc431.md\":\"BQlf8kKB\",\"library_generated_doc-ffc4010b5b.md\":\"ICMFuvch\",\"library_index.md\":\"CN9CO2Lp\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"开源协会知识库\",\"description\":\"沉淀嵌入式与机器人运动控制资料的公开知识库\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{\"logo\":\"/association-logo.jpg\",\"search\":{\"provider\":\"local\"},\"nav\":[{\"text\":\"首页\",\"link\":\"/\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}],\"sidebar\":[{\"text\":\"开源协会知识库\",\"items\":[{\"text\":\"开始使用\",\"link\":\"/guide/getting-started\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}]}],\"socialLinks\":[{\"icon\":\"github\",\"link\":\"https://github.com/Zhr-ARM/free-knowledge-base\"}],\"footer\":{\"message\":\"开源协会知识沉淀与资料共享。\",\"copyright\":\"Powered by VitePress and GitHub Pages.\"},\"docFooter\":{\"prev\":\"上一篇\",\"next\":\"下一篇\"},\"outline\":{\"label\":\"本页目录\",\"level\":[2,3]},\"lastUpdated\":{\"text\":\"最后更新\"},\"darkModeSwitchLabel\":\"外观\",\"sidebarMenuLabel\":\"菜单\",\"returnToTopLabel\":\"回到顶部\",\"langMenuLabel\":\"切换语言\",\"externalLinkIcon\":true},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":true}");</script>
+    <div id="app"><div class="Layout" data-v-5d98c3a5><!--[--><!--]--><!--[--><span tabindex="-1" data-v-0b0ada53></span><a href="#VPContent" class="VPSkipLink visually-hidden" data-v-0b0ada53>Skip to content</a><!--]--><!----><header class="VPNav" data-v-5d98c3a5 data-v-ae24b3ad><div class="VPNavBar" data-v-ae24b3ad data-v-6aa21345><div class="wrapper" data-v-6aa21345><div class="container" data-v-6aa21345><div class="title" data-v-6aa21345><div class="VPNavBarTitle has-sidebar" data-v-6aa21345 data-v-1168a8e4><a class="title" href="/" data-v-1168a8e4><!--[--><!--]--><!--[--><img class="VPImage logo" src="/association-logo.jpg" alt data-v-8426fc1a><!--]--><span data-v-1168a8e4>开源协会知识库</span><!--[--><!--]--></a></div></div><div class="content" data-v-6aa21345><div class="content-body" data-v-6aa21345><!--[--><!--]--><div class="VPNavBarSearch search" data-v-6aa21345><!--[--><!----><div id="local-search"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search"><span class="DocSearch-Button-Container"><span class="vp-icon DocSearch-Search-Icon"></span><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"><kbd class="DocSearch-Button-Key"></kbd><kbd class="DocSearch-Button-Key">K</kbd></span></button></div><!--]--></div><nav aria-labelledby="main-nav-aria-label" class="VPNavBarMenu menu" data-v-6aa21345 data-v-dc692963><span id="main-nav-aria-label" class="visually-hidden" data-v-dc692963> Main Navigation </span><!--[--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>首页</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/library/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>资料库</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/embedded" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>嵌入式</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/robot-motion-control" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>机器人运动控制</span><!--]--></a><!--]--><!--]--></nav><!----><div class="VPNavBarAppearance appearance" data-v-6aa21345 data-v-6c893767><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-6c893767 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div><div class="VPSocialLinks VPNavBarSocialLinks social-links" data-v-6aa21345 data-v-0394ad82 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div><div class="VPFlyout VPNavBarExtra extra" data-v-6aa21345 data-v-bb2aa2f0 data-v-cf11d7a2><button type="button" class="button" aria-haspopup="true" aria-expanded="false" aria-label="extra navigation" data-v-cf11d7a2><span class="vpi-more-horizontal icon" data-v-cf11d7a2></span></button><div class="menu" data-v-cf11d7a2><div class="VPMenu" data-v-cf11d7a2 data-v-b98bc113><!----><!--[--><!--[--><!----><div class="group" data-v-bb2aa2f0><div class="item appearance" data-v-bb2aa2f0><p class="label" data-v-bb2aa2f0>外观</p><div class="appearance-action" data-v-bb2aa2f0><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-bb2aa2f0 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div></div></div><div class="group" data-v-bb2aa2f0><div class="item social-links" data-v-bb2aa2f0><div class="VPSocialLinks social-links-list" data-v-bb2aa2f0 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div></div></div><!--]--><!--]--></div></div></div><!--[--><!--]--><button type="button" class="VPNavBarHamburger hamburger" aria-label="mobile navigation" aria-expanded="false" aria-controls="VPNavScreen" data-v-6aa21345 data-v-e5dd9c1c><span class="container" data-v-e5dd9c1c><span class="top" data-v-e5dd9c1c></span><span class="middle" data-v-e5dd9c1c></span><span class="bottom" data-v-e5dd9c1c></span></span></button></div></div></div></div><div class="divider" data-v-6aa21345><div class="divider-line" data-v-6aa21345></div></div></div><!----></header><div class="VPLocalNav has-sidebar empty" data-v-5d98c3a5 data-v-a6f0e41e><div class="container" data-v-a6f0e41e><button class="menu" aria-expanded="false" aria-controls="VPSidebarNav" data-v-a6f0e41e><span class="vpi-align-left menu-icon" data-v-a6f0e41e></span><span class="menu-text" data-v-a6f0e41e>菜单</span></button><div class="VPLocalNavOutlineDropdown" style="--vp-vh:0px;" data-v-a6f0e41e data-v-8a42e2b4><button data-v-8a42e2b4>回到顶部</button><!----></div></div></div><aside class="VPSidebar" data-v-5d98c3a5 data-v-319d5ca6><div class="curtain" data-v-319d5ca6></div><nav class="nav" id="VPSidebarNav" aria-labelledby="sidebar-aria-label" tabindex="-1" data-v-319d5ca6><span class="visually-hidden" id="sidebar-aria-label" data-v-319d5ca6> Sidebar Navigation </span><!--[--><!--]--><!--[--><div class="no-transition group" data-v-c40bc020><section class="VPSidebarItem level-0" data-v-c40bc020 data-v-b3fd67f8><div class="item" role="button" tabindex="0" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><h2 class="text" data-v-b3fd67f8>开源协会知识库</h2><!----></div><div class="items" data-v-b3fd67f8><!--[--><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/getting-started" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>开始使用</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/library/" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>资料库</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/embedded" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>嵌入式</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/robot-motion-control" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>机器人运动控制</p><!--]--></a><!----></div><!----></div><!--]--></div></section></div><!--]--><!--[--><!--]--></nav></aside><div class="VPContent has-sidebar" id="VPContent" data-v-5d98c3a5 data-v-1428d186><div class="VPDoc has-sidebar has-aside" data-v-1428d186 data-v-39a288b8><!--[--><!--]--><div class="container" data-v-39a288b8><div class="aside" data-v-39a288b8><div class="aside-curtain" data-v-39a288b8></div><div class="aside-container" data-v-39a288b8><div class="aside-content" data-v-39a288b8><div class="VPDocAside" data-v-39a288b8 data-v-3f215769><!--[--><!--]--><!--[--><!--]--><nav aria-labelledby="doc-outline-aria-label" class="VPDocAsideOutline" data-v-3f215769 data-v-a5bbad30><div class="content" data-v-a5bbad30><div class="outline-marker" data-v-a5bbad30></div><div aria-level="2" class="outline-title" id="doc-outline-aria-label" role="heading" data-v-a5bbad30>本页目录</div><ul class="VPDocOutlineItem root" data-v-a5bbad30 data-v-b933a997><!--[--><!--]--></ul></div></nav><!--[--><!--]--><div class="spacer" data-v-3f215769></div><!--[--><!--]--><!----><!--[--><!--]--><!--[--><!--]--></div></div></div></div><div class="content" data-v-39a288b8><div class="content-container" data-v-39a288b8><!--[--><!--]--><main class="main" data-v-39a288b8><div style="position:relative;" class="vp-doc _library_generated_doc-89874c5de2 external-link-icon-enabled" data-v-39a288b8><div><h1 id="ad-51单片机pcb设计工程" tabindex="-1">AD-51单片机PCB设计工程 <a class="header-anchor" href="#ad-51单片机pcb设计工程" aria-label="Permalink to &quot;AD-51单片机PCB设计工程&quot;">​</a></h1><div class="kb-file-meta"><span><strong>目录</strong>嵌入式 / 硬件设计与PCB / 设计工程</span><span><strong>格式</strong>ZIP</span><span><strong>大小</strong>3.0 MB</span></div><p class="kb-download-actions"><a class="kb-download-button kb-download-button-secondary" href="/uploads/raw/%E5%B5%8C%E5%85%A5%E5%BC%8F/06-%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1%E4%B8%8EPCB/%E8%AE%BE%E8%AE%A1%E5%B7%A5%E7%A8%8B/AD-51%E5%8D%95%E7%89%87%E6%9C%BAPCB%E8%AE%BE%E8%AE%A1%E5%B7%A5%E7%A8%8B.zip" download>下载完整源码包</a></p><h2 id="在线预览" tabindex="-1">在线预览 <a class="header-anchor" href="#在线预览" aria-label="Permalink to &quot;在线预览&quot;">​</a></h2><div class="kb-preview-summary"><span><strong>11</strong> 个文件</span><span><strong>2</strong> 个目录</span><span><strong>4.9 MB</strong> 解压后大小</span></div><div class="kb-archive-preview"><div class="kb-extension-list" aria-label="文件类型统计"><span><strong>TXT</strong>4</span><span><strong>CSV</strong>2</span><span><strong>PRJPCB</strong>1</span><span><strong>PCBDOC</strong>1</span><span><strong>PCBLIB</strong>1</span><span><strong>SCHDOC</strong>1</span><span><strong>SCHLIB</strong>1</span></div><details class="kb-preview-panel kb-archive-index"><summary>查看完整目录 · 11 个文件</summary><pre>   3.2 KB  51：STC89C52_Gerber/51-RoundHoles.TXT
+    203 B  51：STC89C52_Gerber/51-SlotHoles.TXT
+     60 B  51：STC89C52_Gerber/Assembly Testpoint Report for 51.csv
+   6.0 KB  51：STC89C52_Gerber/Pick Place for 51.csv
+    275 B  51：STC89C52_Gerber/Status Report.Txt
+  46.9 KB  51：STC89C52.PrjPcb
+   3.9 MB  Document/51.PcbDoc
+ 573.0 KB  Document/51.PcbLib
+ 385.5 KB  Document/51.SchDoc
+  70.0 KB  Document/51.SchLib
+    308 B  README.txt</pre></details><section class="kb-source-previews" aria-labelledby="doc-89874c5de2-source-heading"><h3 id="doc-89874c5de2-source-heading">可读文件预览</h3><details class="kb-preview-panel kb-code-preview" open><summary><span>README.txt</span><small>308 B</small></summary><pre><code>AD-51单片机PCB设计工程
+
+本压缩包由开源协会知识库从学习目录中自动精选生成。
+已排除安装包、视频、编译缓存、目标文件、可执行文件、私钥和大型第三方依赖。
+部分工程需要通过对应 IDE、SDK 或配置文件重新生成依赖后再编译。</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>51：STC89C52_Gerber/51-RoundHoles.TXT</span><small>3.2 KB</small></summary><pre><code>M48
+;Layer_Color=9474304
+;FILE_FORMAT=2:5
+INCH,LZ
+;TYPE=PLATED
+T01F00S00C0.01000
+T02F00S00C0.03000
+T03F00S00C0.03150
+T04F00S00C0.03543
+T05F00S00C0.03937
+T06F00S00C0.04000
+T07F00S00C0.07087
+T09F00S00C0.11811
+%
+T01
+X03075Y00755
+X03655Y007
+X0217503Y0026203
+X01445Y00065
+X0113Y00425
+X01475Y00715
+X0065
+X0045Y00805
+X00075Y00815
+X00345Y0045
+X00355Y00265
+X00585Y0005
+X0049Y0107
+X00445Y012
+X0054Y01295
+X0038524Y0150073
+X0018Y0187
+X0008Y01105
+X0093Y01215
+X00985Y0126
+X0103Y0116
+X0126Y01155
+Y01325
+X0115982Y0132518
+X012Y01375
+X01165Y0142
+X0123Y0143
+X012592Y015031
+X012Y0159
+X01165Y0162
+X0123Y01695
+X01215Y0183
+X0118Y0186
+X0117Y01795
+X00985Y0175
+Y01685
+X0087Y01355
+X0142Y01215
+X01645Y0088
+X01715Y0178
+Y0183465
+X0193Y01775
+X0201Y0156
+X02275Y01415
+X0216Y02245
+X0174629Y0214297
+X0158Y0209
+X01435Y0196
+X01275Y02235
+X01245Y0231
+X0094Y0209
+X02545Y02115
+X02995Y0183
+X03105Y01705
+X0316Y01565
+X03135Y0153
+X02985Y0094
+X0273Y0086
+X0333Y00975
+X0358Y01915
+X03575Y02105
+X0357Y02275
+X0374Y0238
+Y0202
+X03275Y0215
+X0357Y02465
+X03595Y0255
+X0379Y0248
+X0368Y02755
+X0357Y0288
+X03335Y0296
+X0313
+X02745Y03155
+X02505Y03065
+X02455Y028
+X02475Y0266
+X0248Y0242
+X0254Y03455
+X02895Y0356
+X0289Y03775
+X0346Y03765
+X0347Y03445
+X02405Y03065
+X0218Y02865
+X02115Y0271
+X02035Y0261
+X0197Y0266
+X0239Y0256
+X01735Y0315
+X0164Y03225
+X01565Y03185
+X0151Y0335
+X0120901Y0336477
+X0128Y0296
+X01235Y0286
+X0138Y0306
+X0148666Y0364756
+X00965Y02755
+X01005Y024
+X01215Y02395
+X00525Y02655
+X00415Y0276
+X00395Y0255
+X00315Y0254
+X00185Y0251
+X0035Y02975
+X0034Y03135
+X00345Y0345
+X0085Y03105
+T02
+X0016158Y00825
+X0035842Y0072658
+Y0092343
+X0045795Y0163105
+Y0173105
+Y0183105
+Y0193105
+Y0203105
+X0046083Y0212994
+X0086205Y0213006
+Y0203006
+Y0193006
+Y0183006
+Y0173006
+Y0163006
+T03
+X0258787Y0034
+X0278
+X03Y0288
+Y0307213
+T04
+X0047335Y0020221
+Y0030063
+Y0037937
+Y004778
+X0014Y0126
+Y0136
+X015
+Y0146
+Y0156
+Y0166
+Y0176
+Y0186
+Y0196
+Y0206
+Y0216
+Y0226
+Y0236
+X0164
+Y0226
+Y0216
+Y0206
+Y0196
+Y0186
+Y0176
+Y0166
+Y0156
+Y0146
+Y0136
+Y0126
+Y0116
+X015
+Y0126
+X0135Y0083
+X0125
+X0115
+X0384Y0186
+Y0196
+Y0212
+Y0222
+Y0236
+Y0246
+Y0256
+X0252Y0354
+X0242
+X0232
+X0222
+X0212
+X0202
+X0192
+X0164Y0306
+Y0296
+Y0286
+Y0276
+Y0266
+Y0256
+Y0246
+X015
+Y0256
+Y0266
+Y0276
+Y0286
+Y0296
+Y0306
+X0024Y031
+Y03
+Y029
+Y0326
+Y0336
+Y0356
+Y0366
+T05
+X0092378Y0064
+X0104189
+X0116
+X0134Y0116
+Y0126
+Y0136
+Y0146
+Y0156
+Y0166
+Y0176
+Y0186
+Y0196
+Y0206
+Y0216
+Y0226
+Y0236
+X0185209Y0235965
+Y0225965
+Y0215965
+Y0205965
+Y0195965
+Y0185965
+Y0175965
+Y0165965
+Y0155965
+Y0145965
+Y0135965
+Y0125965
+Y0115965
+X0259382
+Y0125965
+Y0135965
+Y0145965
+Y0155965
+Y0165965
+Y0175965
+Y0185965
+Y0195965
+Y0205965
+Y0215965
+Y0225965
+Y0235965
+X028Y0236
+Y0226
+Y0216
+Y0206
+Y0196
+Y0186
+Y0176
+Y0166
+Y0156
+Y0146
+Y0136
+Y0126
+Y0116
+Y0246
+Y0256
+Y0266
+Y0276
+Y0286
+X0259382Y0285965
+Y0295965
+Y0305965
+Y0275965
+Y0265965
+Y0255965
+Y0245965
+X0185209
+Y0255965
+Y0265965
+Y0275965
+Y0285965
+Y0295965
+Y0305965
+X0134Y0266
+Y0256
+Y0246
+X0076Y0339008
+Y0364992
+T06
+X0296Y036
+Y037
+X0306
+X0316
+X0326
+X0336
+Y036
+X0326
+X0316
+X0306
+T07
+X0127811Y0064
+X0080567
+T09
+X0377953Y0015748
+X011811
+X0377953Y0377953
+X011811
+M30
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>51：STC89C52_Gerber/51-SlotHoles.TXT</span><small>203 B</small></summary><pre><code>M48
+;Layer_Color=9474304
+;FILE_FORMAT=2:5
+INCH,LZ
+;TYPE=PLATED
+T08F00S00C0.08268
+%
+G90
+G05
+T08
+G00X0036665Y0006441
+M15
+G01Y0006441
+M16
+G00X0036665Y0061559
+M15
+G01Y0061559
+M16
+M17
+M30
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>51：STC89C52_Gerber/Assembly Testpoint Report for 51.csv</span><small>60 B</small></summary><pre><code>&quot;Net&quot;,&quot;Name&quot;,&quot;X Coord&quot;,&quot;Y Coord&quot;,&quot;Side&quot;,&quot;Hole Size&quot;,&quot;Type&quot;
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>51：STC89C52_Gerber/Pick Place for 51.csv</span><small>6.0 KB</small></summary><pre><code>Altium Designer Pick and Place Locations
+B:\AD_Learn\51：STC89C52\Project Outputs for 51：STC89C52\Pick Place for 51.csv
+
+========================================================================================================================
+File Design Information:
+
+Date:       02/10/25
+Time:       13:31
+Revision:   Not in VersionControl
+Variant:    No variations
+Units used: mil
+
+&quot;Designator&quot;,&quot;Comment&quot;,&quot;Layer&quot;,&quot;Footprint&quot;,&quot;Center-X(mil)&quot;,&quot;Center-Y(mil)&quot;,&quot;Rotation&quot;,&quot;Description&quot;
+&quot;Y2&quot;,&quot;12M&quot;,&quot;TopLayer&quot;,&quot;FPC-CO2-5R0X11R5-V&quot;,&quot;2683.937&quot;,&quot;340.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;Y1&quot;,&quot;11.0592M&quot;,&quot;TopLayer&quot;,&quot;FPC-CO2-5R0X11R5-V&quot;,&quot;3000.000&quot;,&quot;2976.063&quot;,&quot;90&quot;,&quot;&quot;
+&quot;USB1&quot;,&quot;TYPEC&quot;,&quot;TopLayer&quot;,&quot;USB_A&quot;,&quot;420.000&quot;,&quot;340.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;U9&quot;,&quot;IC_AT89C5122D-RDRU&quot;,&quot;TopLayer&quot;,&quot;DIP40&quot;,&quot;2222.953&quot;,&quot;2109.646&quot;,&quot;90&quot;,&quot;&quot;
+&quot;U5&quot;,&quot;18B20&quot;,&quot;TopLayer&quot;,&quot;HDR1X3&quot;,&quot;240.000&quot;,&quot;3000.000&quot;,&quot;90&quot;,&quot;&quot;
+&quot;U3&quot;,&quot;IC_CH340G&quot;,&quot;TopLayer&quot;,&quot;FPC-SO16-150&quot;,&quot;3080.000&quot;,&quot;680.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;U1&quot;,&quot;IC_LM1117&quot;,&quot;TopLayer&quot;,&quot;SOP-223-3L&quot;,&quot;880.000&quot;,&quot;940.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;J9&quot;,&quot;J9&quot;,&quot;TopLayer&quot;,&quot;HDR1X2&quot;,&quot;240.000&quot;,&quot;3610.000&quot;,&quot;90&quot;,&quot;&quot;
+&quot;SK1&quot;,&quot;滑动开关&quot;,&quot;TopLayer&quot;,&quot;SS-12F44&quot;,&quot;1041.890&quot;,&quot;640.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;S2&quot;,&quot;RST&quot;,&quot;TopLayer&quot;,&quot;SW-PB&quot;,&quot;3358.110&quot;,&quot;2960.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;S1&quot;,&quot;RST&quot;,&quot;TopLayer&quot;,&quot;SW-PB&quot;,&quot;3358.110&quot;,&quot;2760.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;RV1&quot;,&quot;10K&quot;,&quot;TopLayer&quot;,&quot;RV&quot;,&quot;260.000&quot;,&quot;825.000&quot;,&quot;90&quot;,&quot;&quot;
+&quot;RP2&quot;,&quot;20PIN&quot;,&quot;TopLayer&quot;,&quot;HDR1X20&quot;,&quot;1640.000&quot;,&quot;2110.000&quot;,&quot;90&quot;,&quot;&quot;
+&quot;RP1&quot;,&quot;18PIN&quot;,&quot;TopLayer&quot;,&quot;HDR1X18&quot;,&quot;2800.000&quot;,&quot;2010.000&quot;,&quot;90&quot;,&quot;&quot;
+&quot;RD7&quot;,&quot;10K*4&quot;,&quot;TopLayer&quot;,&quot;FPC-0603RA&quot;,&quot;1084.567&quot;,&quot;1809.501&quot;,&quot;90&quot;,&quot;&quot;
+&quot;RD6&quot;,&quot;10K*4&quot;,&quot;TopLayer&quot;,&quot;FPC-0603RA&quot;,&quot;1084.567&quot;,&quot;1574.751&quot;,&quot;90&quot;,&quot;&quot;
+&quot;RD5&quot;,&quot;1K*4&quot;,&quot;TopLayer&quot;,&quot;FPC-0603RA&quot;,&quot;3260.000&quot;,&quot;1220.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;RD4&quot;,&quot;1K*4&quot;,&quot;TopLayer&quot;,&quot;FPC-0603RA&quot;,&quot;3264.567&quot;,&quot;1512.756&quot;,&quot;270&quot;,&quot;&quot;
+&quot;RD3&quot;,&quot;1k*4&quot;,&quot;TopLayer&quot;,&quot;FPC-0603RA&quot;,&quot;664.252&quot;,&quot;2824.567&quot;,&quot;180&quot;,&quot;&quot;
+&quot;RD2&quot;,&quot;100*4&quot;,&quot;TopLayer&quot;,&quot;FPC-0603RA&quot;,&quot;1084.567&quot;,&quot;2044.252&quot;,&quot;90&quot;,&quot;&quot;
+&quot;RD1&quot;,&quot;100*4&quot;,&quot;TopLayer&quot;,&quot;FPC-0603RA&quot;,&quot;1084.567&quot;,&quot;1340.000&quot;,&quot;90&quot;,&quot;&quot;
+&quot;R23&quot;,&quot;10K&quot;,&quot;TopLayer&quot;,&quot;FPC-0402R&quot;,&quot;3660.000&quot;,&quot;3020.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;R16&quot;,&quot;5.1K&quot;,&quot;TopLayer&quot;,&quot;FPC-0402R&quot;,&quot;420.000&quot;,&quot;3040.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;R11&quot;,&quot;1K&quot;,&quot;TopLayer&quot;,&quot;FPC-0402R&quot;,&quot;380.000&quot;,&quot;1110.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;R9&quot;,&quot;5.1K&quot;,&quot;TopLayer&quot;,&quot;FPC-0402R&quot;,&quot;3660.000&quot;,&quot;2480.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;R8&quot;,&quot;1K&quot;,&quot;TopLayer&quot;,&quot;FPC-0402R&quot;,&quot;900.000&quot;,&quot;3163.858&quot;,&quot;90&quot;,&quot;&quot;
+&quot;R7&quot;,&quot;10K&quot;,&quot;TopLayer&quot;,&quot;FPC-0402R&quot;,&quot;2816.142&quot;,&quot;760.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;R1&quot;,&quot;10K&quot;,&quot;TopLayer&quot;,&quot;FPC-0402R&quot;,&quot;3660.000&quot;,&quot;2700.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;Q5&quot;,&quot;PNP三极管&quot;,&quot;TopLayer&quot;,&quot;FPC-SOT323&quot;,&quot;785.591&quot;,&quot;3164.567&quot;,&quot;180&quot;,&quot;&quot;
+&quot;Q4&quot;,&quot;PNP三极管&quot;,&quot;TopLayer&quot;,&quot;FPC-SOT323&quot;,&quot;840.000&quot;,&quot;2655.433&quot;,&quot;180&quot;,&quot;&quot;
+&quot;Q3&quot;,&quot;PNP三极管&quot;,&quot;TopLayer&quot;,&quot;FPC-SOT323&quot;,&quot;720.000&quot;,&quot;2655.433&quot;,&quot;180&quot;,&quot;&quot;
+&quot;Q2&quot;,&quot;PNP三极管&quot;,&quot;TopLayer&quot;,&quot;FPC-SOT323&quot;,&quot;600.000&quot;,&quot;2655.433&quot;,&quot;180&quot;,&quot;&quot;
+&quot;Q1&quot;,&quot;PNP三极管&quot;,&quot;TopLayer&quot;,&quot;FPC-SOT323&quot;,&quot;480.000&quot;,&quot;2655.433&quot;,&quot;180&quot;,&quot;&quot;
+&quot;LED20&quot;,&quot;RED&quot;,&quot;TopLayer&quot;,&quot;FPC-0805D&quot;,&quot;377.402&quot;,&quot;1020.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;LED1&quot;,&quot;4连数码管&quot;,&quot;TopLayer&quot;,&quot;CL3641A&quot;,&quot;660.000&quot;,&quot;1880.000&quot;,&quot;90&quot;,&quot;&quot;
+&quot;L8&quot;,&quot;LED&quot;,&quot;TopLayer&quot;,&quot;FPC-0805D&quot;,&quot;3642.598&quot;,&quot;1700.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;L7&quot;,&quot;LED&quot;,&quot;TopLayer&quot;,&quot;FPC-0805D&quot;,&quot;3642.598&quot;,&quot;1597.143&quot;,&quot;180&quot;,&quot;&quot;
+&quot;L6&quot;,&quot;LED&quot;,&quot;TopLayer&quot;,&quot;FPC-0805D&quot;,&quot;3642.598&quot;,&quot;1494.285&quot;,&quot;180&quot;,&quot;&quot;
+&quot;L5&quot;,&quot;LED&quot;,&quot;TopLayer&quot;,&quot;FPC-0805D&quot;,&quot;3642.598&quot;,&quot;1391.428&quot;,&quot;180&quot;,&quot;&quot;
+&quot;L4&quot;,&quot;LED&quot;,&quot;TopLayer&quot;,&quot;FPC-0805D&quot;,&quot;3642.598&quot;,&quot;1288.571&quot;,&quot;180&quot;,&quot;&quot;
+&quot;L3&quot;,&quot;LED&quot;,&quot;TopLayer&quot;,&quot;FPC-0805D&quot;,&quot;3642.598&quot;,&quot;1185.714&quot;,&quot;180&quot;,&quot;&quot;
+&quot;L2&quot;,&quot;LED&quot;,&quot;TopLayer&quot;,&quot;FPC-0805D&quot;,&quot;3642.598&quot;,&quot;1082.857&quot;,&quot;180&quot;,&quot;&quot;
+&quot;L1&quot;,&quot;LED&quot;,&quot;TopLayer&quot;,&quot;FPC-0805D&quot;,&quot;3642.598&quot;,&quot;980.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;K4&quot;,&quot;SW-PB&quot;,&quot;TopLayer&quot;,&quot;SW-PB&quot;,&quot;3358.110&quot;,&quot;2560.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;K3&quot;,&quot;SW-PB&quot;,&quot;TopLayer&quot;,&quot;SW-PB&quot;,&quot;3358.110&quot;,&quot;2373.333&quot;,&quot;180&quot;,&quot;&quot;
+&quot;K2&quot;,&quot;SW-PB&quot;,&quot;TopLayer&quot;,&quot;SW-PB&quot;,&quot;3358.110&quot;,&quot;2186.667&quot;,&quot;180&quot;,&quot;&quot;
+&quot;K1&quot;,&quot;SW-PB&quot;,&quot;TopLayer&quot;,&quot;SW-PB&quot;,&quot;3358.110&quot;,&quot;2000.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;J16&quot;,&quot;CON2&quot;,&quot;TopLayer&quot;,&quot;HDR1X2&quot;,&quot;240.000&quot;,&quot;3310.000&quot;,&quot;90&quot;,&quot;&quot;
+&quot;J15&quot;,&quot;CON2&quot;,&quot;TopLayer&quot;,&quot;HDR1X2&quot;,&quot;3840.000&quot;,&quot;2170.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;J12&quot;,&quot;CON2&quot;,&quot;TopLayer&quot;,&quot;HDR1X2&quot;,&quot;3840.000&quot;,&quot;1910.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;J11&quot;,&quot;SIP3&quot;,&quot;TopLayer&quot;,&quot;HDR1X3&quot;,&quot;1250.000&quot;,&quot;830.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;J10&quot;,&quot;LCD128-64&quot;,&quot;TopLayer&quot;,&quot;HDR1X20&quot;,&quot;1500.000&quot;,&quot;2110.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;J5&quot;,&quot;SIP7&quot;,&quot;TopLayer&quot;,&quot;HDR1X7&quot;,&quot;2220.000&quot;,&quot;3540.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;J2&quot;,&quot;LCD-1602&quot;,&quot;TopLayer&quot;,&quot;HDR1X16&quot;,&quot;1340.000&quot;,&quot;1910.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;J1&quot;,&quot;2PIN排针&quot;,&quot;TopLayer&quot;,&quot;HDR1X2&quot;,&quot;140.000&quot;,&quot;1310.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;ISP&quot;,&quot;ISP&quot;,&quot;TopLayer&quot;,&quot;IDE-10&quot;,&quot;3160.000&quot;,&quot;3650.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;IR1&quot;,&quot;IRRED&quot;,&quot;TopLayer&quot;,&quot;HDR1X3&quot;,&quot;3840.000&quot;,&quot;2460.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;F1&quot;,&quot;FUSE&quot;,&quot;TopLayer&quot;,&quot;1206F&quot;,&quot;600.000&quot;,&quot;529.213&quot;,&quot;90&quot;,&quot;&quot;
+&quot;D2&quot;,&quot;1N4148&quot;,&quot;TopLayer&quot;,&quot;FPC-1206D&quot;,&quot;2820.000&quot;,&quot;915.118&quot;,&quot;90&quot;,&quot;&quot;
+&quot;C110&quot;,&quot;10uF/10V&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;600.000&quot;,&quot;906.667&quot;,&quot;180&quot;,&quot;&quot;
+&quot;C38&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;956.142&quot;,&quot;480.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;C37&quot;,&quot;100uF/16V&quot;,&quot;TopLayer&quot;,&quot;FPC-CPCSM-3R2X8R0-1&quot;,&quot;840.000&quot;,&quot;263.189&quot;,&quot;90&quot;,&quot;&quot;
+&quot;C36&quot;,&quot;102&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;3660.000&quot;,&quot;2600.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;C33&quot;,&quot;30pF&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;2830.000&quot;,&quot;2961.142&quot;,&quot;90&quot;,&quot;&quot;
+&quot;C32&quot;,&quot;30pF&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;2830.000&quot;,&quot;3045.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;C29&quot;,&quot;20P&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;2623.858&quot;,&quot;480.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;C28&quot;,&quot;20P&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;2736.142&quot;,&quot;480.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;C24&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;1700.000&quot;,&quot;1020.000&quot;,&quot;90&quot;,&quot;&quot;
+&quot;C23&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;3740.000&quot;,&quot;1940.000&quot;,&quot;90&quot;,&quot;&quot;
+&quot;C22&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;416.451&quot;,&quot;3578.829&quot;,&quot;270&quot;,&quot;&quot;
+&quot;C21&quot;,&quot;105&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;3660.000&quot;,&quot;2913.333&quot;,&quot;180&quot;,&quot;&quot;
+&quot;C18&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;260.000&quot;,&quot;1275.000&quot;,&quot;270&quot;,&quot;&quot;
+&quot;C16&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;1160.000&quot;,&quot;1680.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;C15&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;2460.000&quot;,&quot;3420.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;C14&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;420.000&quot;,&quot;2936.142&quot;,&quot;270&quot;,&quot;&quot;
+&quot;C13&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;1620.000&quot;,&quot;1020.000&quot;,&quot;90&quot;,&quot;&quot;
+&quot;C12&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;3660.000&quot;,&quot;2380.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;C11&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;160.000&quot;,&quot;1060.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;C10&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;600.000&quot;,&quot;820.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;C8&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;600.000&quot;,&quot;993.333&quot;,&quot;0&quot;,&quot;&quot;
+&quot;C5&quot;,&quot;220uF/16V&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;600.000&quot;,&quot;1080.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;C3&quot;,&quot;105&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;3660.000&quot;,&quot;2806.667&quot;,&quot;0&quot;,&quot;&quot;
+&quot;C2&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;3285.000&quot;,&quot;855.000&quot;,&quot;180&quot;,&quot;&quot;
+&quot;C1&quot;,&quot;104&quot;,&quot;TopLayer&quot;,&quot;FPC-0402C&quot;,&quot;2816.142&quot;,&quot;700.000&quot;,&quot;0&quot;,&quot;&quot;
+&quot;BP1&quot;,&quot;BUZZER&quot;,&quot;TopLayer&quot;,&quot;BUZZER&quot;,&quot;760.000&quot;,&quot;3520.000&quot;,&quot;270&quot;,&quot;&quot;
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>51：STC89C52_Gerber/Status Report.Txt</span><small>275 B</small></summary><pre><code>Output: Generates pick and place files
+Type  : Pick Place
+From  : Variant [[No Variations]] of Project [51：STC89C52.PrjPcb]
+   Generated File[Pick Place for 51.csv]
+
+
+Files Generated   : 1
+Documents Printed : 0
+
+Finished Output Generation At 13:31:04 On 2025/10/2
+</code></pre></details></section></div></div></div></main><footer class="VPDocFooter" data-v-39a288b8 data-v-e257564d><!--[--><!--]--><!----><nav class="prev-next" aria-labelledby="doc-footer-aria-label" data-v-e257564d><span class="visually-hidden" id="doc-footer-aria-label" data-v-e257564d>Pager</span><div class="pager" data-v-e257564d><!----></div><div class="pager" data-v-e257564d><a class="VPLink link pager-link next" href="/guide/getting-started" data-v-e257564d><!--[--><span class="desc" data-v-e257564d>下一篇</span><span class="title" data-v-e257564d>开始使用</span><!--]--></a></div></nav></footer><!--[--><!--]--></div></div></div><!--[--><!--]--></div></div><footer class="VPFooter has-sidebar" data-v-5d98c3a5 data-v-e315a0ad><div class="container" data-v-e315a0ad><p class="message" data-v-e315a0ad>开源协会知识沉淀与资料共享。</p><p class="copyright" data-v-e315a0ad>Powered by VitePress and GitHub Pages.</p></div></footer><!--[--><!--]--></div></div>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"guide_embedded.md\":\"BHAe_NYR\",\"guide_getting-started.md\":\"Bqpeg4mo\",\"guide_robot-motion-control.md\":\"BW8G4pa-\",\"index.md\":\"SpcP3ZNM\",\"library_generated_doc-0c87426632.md\":\"Cg5sZMeW\",\"library_generated_doc-0edadc79e9.md\":\"B8crb2LR\",\"library_generated_doc-115616aa75.md\":\"BQJQlqyg\",\"library_generated_doc-11d294a6fa.md\":\"pSvVu923\",\"library_generated_doc-1338744994.md\":\"BfoeQSIy\",\"library_generated_doc-1694ce68fa.md\":\"B1mDKs1L\",\"library_generated_doc-19e950c8bd.md\":\"CmDWcQC4\",\"library_generated_doc-1c8356e419.md\":\"B4SpI7gK\",\"library_generated_doc-1cad1cfa7a.md\":\"DDMqQCST\",\"library_generated_doc-1d874c7346.md\":\"CmorYCMW\",\"library_generated_doc-1df552e31c.md\":\"BbSzQgHU\",\"library_generated_doc-1f7eeb2478.md\":\"D6p5R4BN\",\"library_generated_doc-23e64d7aa3.md\":\"DS7rIAyT\",\"library_generated_doc-25c2ca1a00.md\":\"B2dNyLn1\",\"library_generated_doc-277853480e.md\":\"C4HCVLz6\",\"library_generated_doc-2806056aab.md\":\"kZU9ztrN\",\"library_generated_doc-2f286a2cac.md\":\"BCdO-MsH\",\"library_generated_doc-30964a207a.md\":\"DE2saZaM\",\"library_generated_doc-33eb0e4d89.md\":\"igTIH4q6\",\"library_generated_doc-3694ef88db.md\":\"BYbhcqoV\",\"library_generated_doc-37a55a2dda.md\":\"BCF_9pPl\",\"library_generated_doc-420b513a36.md\":\"Bk3dbD6x\",\"library_generated_doc-447b7a2ba9.md\":\"BZA0eY7n\",\"library_generated_doc-448f4f56b5.md\":\"Bx1SH5EE\",\"library_generated_doc-44cfd64a5d.md\":\"k8J9-W73\",\"library_generated_doc-504a0bb11d.md\":\"BPlAdKRp\",\"library_generated_doc-5714cd02f9.md\":\"D1bOfiz8\",\"library_generated_doc-5a6d823e8e.md\":\"BoYHIzky\",\"library_generated_doc-5d17bfe9d0.md\":\"B4EexyXA\",\"library_generated_doc-60bded06db.md\":\"XXaEbtjY\",\"library_generated_doc-63a039f8e7.md\":\"CbUK0Tg2\",\"library_generated_doc-63af9b29de.md\":\"ChLVQk_s\",\"library_generated_doc-64ed09afa1.md\":\"BUtoE6dP\",\"library_generated_doc-651a4b046d.md\":\"DRV3UtSJ\",\"library_generated_doc-68d1ef7f2c.md\":\"J2InFLp8\",\"library_generated_doc-6d3dc02122.md\":\"Btlkx1ZR\",\"library_generated_doc-6e56514662.md\":\"CwUvOJbd\",\"library_generated_doc-6fdf145080.md\":\"BxhFdQak\",\"library_generated_doc-72586a38eb.md\":\"DLhWCOZp\",\"library_generated_doc-7360882287.md\":\"DvSqj4CF\",\"library_generated_doc-755776bcf2.md\":\"C8jnx4FB\",\"library_generated_doc-77311ccf4e.md\":\"ChSKaX0-\",\"library_generated_doc-775125e152.md\":\"BJBc6Xx-\",\"library_generated_doc-7a0752f103.md\":\"BVHO029M\",\"library_generated_doc-831d61553e.md\":\"CadO59h8\",\"library_generated_doc-89874c5de2.md\":\"DwPp4SqP\",\"library_generated_doc-8c467c633f.md\":\"CdEwNxmu\",\"library_generated_doc-8ef8cfc49c.md\":\"BB3Ntirn\",\"library_generated_doc-9053c27312.md\":\"BQuYgxCo\",\"library_generated_doc-90ea137ffb.md\":\"DHZBqOjK\",\"library_generated_doc-91fec6c102.md\":\"DOEetHuq\",\"library_generated_doc-95f2617b53.md\":\"BiDMlVqu\",\"library_generated_doc-97ec301176.md\":\"C6PV08t4\",\"library_generated_doc-985d3f547d.md\":\"BYu6cRD9\",\"library_generated_doc-9aaa85564c.md\":\"BYkObiYN\",\"library_generated_doc-a09b57432c.md\":\"CFH5AugM\",\"library_generated_doc-a3f843c655.md\":\"BLk4EXf-\",\"library_generated_doc-a7125a7496.md\":\"CvNDcNb3\",\"library_generated_doc-a9b939c1d7.md\":\"B_-j7xWJ\",\"library_generated_doc-ad65f16e01.md\":\"CV-oKDRD\",\"library_generated_doc-b082a5098c.md\":\"BeWR2P77\",\"library_generated_doc-b137af2c9c.md\":\"C_uXnIhD\",\"library_generated_doc-b16199b132.md\":\"B_2sowo8\",\"library_generated_doc-b1ee804a03.md\":\"C8g2cPLX\",\"library_generated_doc-b23eeebff1.md\":\"BfmZhlb0\",\"library_generated_doc-b41bf628de.md\":\"CwrwXAQ_\",\"library_generated_doc-b68590b8ac.md\":\"rHFIIIDr\",\"library_generated_doc-b710258ab5.md\":\"Dp5da2no\",\"library_generated_doc-b8d8c8547a.md\":\"Bi--A27B\",\"library_generated_doc-b9d0ee371d.md\":\"CknRKVPv\",\"library_generated_doc-bed41b3e47.md\":\"CHt7_QOo\",\"library_generated_doc-bf24e716d3.md\":\"CZY6VRxA\",\"library_generated_doc-c6f390b099.md\":\"m6L8nd_A\",\"library_generated_doc-c75aa7bcf0.md\":\"CyVdVZtk\",\"library_generated_doc-ca880c8c69.md\":\"DDb611wd\",\"library_generated_doc-cd6c0d2060.md\":\"Bz-uok5J\",\"library_generated_doc-cec4c39766.md\":\"Ds-83jm4\",\"library_generated_doc-cfe5ed322b.md\":\"CX8oSRXi\",\"library_generated_doc-cff0ffbcf5.md\":\"D6d1BJ2P\",\"library_generated_doc-d1f02d7b86.md\":\"BAN9IrKu\",\"library_generated_doc-d721f2bfc8.md\":\"ooAlFpgc\",\"library_generated_doc-d801e39e19.md\":\"DzGuoynA\",\"library_generated_doc-d8a0dbf87d.md\":\"DRanZLJU\",\"library_generated_doc-d8b12e4169.md\":\"DWzUu8lk\",\"library_generated_doc-db83f17c96.md\":\"LU-wQ1ll\",\"library_generated_doc-ddacb55a96.md\":\"9vpL5FYY\",\"library_generated_doc-de4b40d6f1.md\":\"JrrhNxjc\",\"library_generated_doc-de9ddd00fc.md\":\"DzX2bt7-\",\"library_generated_doc-df40b62ca2.md\":\"B17oF7ev\",\"library_generated_doc-e3a1c1ca16.md\":\"CcrVyjtV\",\"library_generated_doc-e3de3bfe1a.md\":\"C2bvlYHi\",\"library_generated_doc-e461e6f214.md\":\"D8PjdL5D\",\"library_generated_doc-e54d2ce749.md\":\"D_eqa_aU\",\"library_generated_doc-e5579098a7.md\":\"B23kQfXd\",\"library_generated_doc-e660c8856a.md\":\"HsnlPoJK\",\"library_generated_doc-ea3865b43c.md\":\"DiXLdTIr\",\"library_generated_doc-ea8d1cd1a1.md\":\"BMCX_3lL\",\"library_generated_doc-eb4b03f30e.md\":\"CUeySxlg\",\"library_generated_doc-ef02588d18.md\":\"Czmu3Vpn\",\"library_generated_doc-ef6bcf86df.md\":\"BJouzUjL\",\"library_generated_doc-f057f3c7c3.md\":\"0lN_HW1G\",\"library_generated_doc-f38fd52503.md\":\"cTSZ1jKX\",\"library_generated_doc-f4fe6565c2.md\":\"zeghf7CG\",\"library_generated_doc-f5ed4331ce.md\":\"BLIfnXT-\",\"library_generated_doc-f64e7a02fb.md\":\"CZrG-lqu\",\"library_generated_doc-fcc7daedff.md\":\"CQ1NqbSU\",\"library_generated_doc-fdb02902fe.md\":\"BAYoCMk4\",\"library_generated_doc-ff72dbc431.md\":\"BQlf8kKB\",\"library_generated_doc-ffc4010b5b.md\":\"ICMFuvch\",\"library_index.md\":\"CN9CO2Lp\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"开源协会知识库\",\"description\":\"沉淀嵌入式与机器人运动控制资料的公开知识库\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{\"logo\":\"/association-logo.jpg\",\"search\":{\"provider\":\"local\"},\"nav\":[{\"text\":\"首页\",\"link\":\"/\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}],\"sidebar\":[{\"text\":\"开源协会知识库\",\"items\":[{\"text\":\"开始使用\",\"link\":\"/guide/getting-started\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}]}],\"socialLinks\":[{\"icon\":\"github\",\"link\":\"https://github.com/Zhr-ARM/free-knowledge-base\"}],\"footer\":{\"message\":\"开源协会知识沉淀与资料共享。\",\"copyright\":\"Powered by VitePress and GitHub Pages.\"},\"docFooter\":{\"prev\":\"上一篇\",\"next\":\"下一篇\"},\"outline\":{\"label\":\"本页目录\",\"level\":[2,3]},\"lastUpdated\":{\"text\":\"最后更新\"},\"darkModeSwitchLabel\":\"外观\",\"sidebarMenuLabel\":\"菜单\",\"returnToTopLabel\":\"回到顶部\",\"langMenuLabel\":\"切换语言\",\"externalLinkIcon\":true},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":true}");</script>
     
   </body>
 </html>

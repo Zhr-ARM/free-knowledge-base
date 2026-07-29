@@ -6,20 +6,1127 @@
     <title>STC89C51项目源码 | 开源协会知识库</title>
     <meta name="description" content="沉淀嵌入式与机器人运动控制资料的公开知识库">
     <meta name="generator" content="VitePress v1.6.4">
-    <link rel="preload stylesheet" href="/assets/style.G76BeFzm.css" as="style">
+    <link rel="preload stylesheet" href="/assets/style.MKnyf9dl.css" as="style">
     <link rel="preload stylesheet" href="/vp-icons.css" as="style">
     
-    <script type="module" src="/assets/app.DwSalGCD.js"></script>
+    <script type="module" src="/assets/app.D_iwdCn4.js"></script>
     <link rel="preload" href="/assets/inter-roman-latin.Di8DUHzh.woff2" as="font" type="font/woff2" crossorigin="">
-    <link rel="modulepreload" href="/assets/chunks/theme.CcjBcm4w.js">
+    <link rel="modulepreload" href="/assets/chunks/theme.DbnUY3IV.js">
     <link rel="modulepreload" href="/assets/chunks/framework.BWuWLRhz.js">
-    <link rel="modulepreload" href="/assets/library_generated_doc-a7125a7496.md.CdVH5-lO.lean.js">
+    <link rel="modulepreload" href="/assets/library_generated_doc-a7125a7496.md.CvNDcNb3.lean.js">
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
     <script id="check-dark-mode">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
     <script id="check-mac-os">document.documentElement.classList.toggle("mac",/Mac|iPhone|iPod|iPad/i.test(navigator.platform));</script>
   </head>
   <body>
-    <div id="app"><div class="Layout" data-v-5d98c3a5><!--[--><!--]--><!--[--><span tabindex="-1" data-v-0b0ada53></span><a href="#VPContent" class="VPSkipLink visually-hidden" data-v-0b0ada53>Skip to content</a><!--]--><!----><header class="VPNav" data-v-5d98c3a5 data-v-ae24b3ad><div class="VPNavBar" data-v-ae24b3ad data-v-6aa21345><div class="wrapper" data-v-6aa21345><div class="container" data-v-6aa21345><div class="title" data-v-6aa21345><div class="VPNavBarTitle has-sidebar" data-v-6aa21345 data-v-1168a8e4><a class="title" href="/" data-v-1168a8e4><!--[--><!--]--><!--[--><img class="VPImage logo" src="/association-logo.jpg" alt data-v-8426fc1a><!--]--><span data-v-1168a8e4>开源协会知识库</span><!--[--><!--]--></a></div></div><div class="content" data-v-6aa21345><div class="content-body" data-v-6aa21345><!--[--><!--]--><div class="VPNavBarSearch search" data-v-6aa21345><!--[--><!----><div id="local-search"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search"><span class="DocSearch-Button-Container"><span class="vp-icon DocSearch-Search-Icon"></span><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"><kbd class="DocSearch-Button-Key"></kbd><kbd class="DocSearch-Button-Key">K</kbd></span></button></div><!--]--></div><nav aria-labelledby="main-nav-aria-label" class="VPNavBarMenu menu" data-v-6aa21345 data-v-dc692963><span id="main-nav-aria-label" class="visually-hidden" data-v-dc692963> Main Navigation </span><!--[--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>首页</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/library/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>资料库</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/embedded" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>嵌入式</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/robot-motion-control" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>机器人运动控制</span><!--]--></a><!--]--><!--]--></nav><!----><div class="VPNavBarAppearance appearance" data-v-6aa21345 data-v-6c893767><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-6c893767 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div><div class="VPSocialLinks VPNavBarSocialLinks social-links" data-v-6aa21345 data-v-0394ad82 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div><div class="VPFlyout VPNavBarExtra extra" data-v-6aa21345 data-v-bb2aa2f0 data-v-cf11d7a2><button type="button" class="button" aria-haspopup="true" aria-expanded="false" aria-label="extra navigation" data-v-cf11d7a2><span class="vpi-more-horizontal icon" data-v-cf11d7a2></span></button><div class="menu" data-v-cf11d7a2><div class="VPMenu" data-v-cf11d7a2 data-v-b98bc113><!----><!--[--><!--[--><!----><div class="group" data-v-bb2aa2f0><div class="item appearance" data-v-bb2aa2f0><p class="label" data-v-bb2aa2f0>外观</p><div class="appearance-action" data-v-bb2aa2f0><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-bb2aa2f0 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div></div></div><div class="group" data-v-bb2aa2f0><div class="item social-links" data-v-bb2aa2f0><div class="VPSocialLinks social-links-list" data-v-bb2aa2f0 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div></div></div><!--]--><!--]--></div></div></div><!--[--><!--]--><button type="button" class="VPNavBarHamburger hamburger" aria-label="mobile navigation" aria-expanded="false" aria-controls="VPNavScreen" data-v-6aa21345 data-v-e5dd9c1c><span class="container" data-v-e5dd9c1c><span class="top" data-v-e5dd9c1c></span><span class="middle" data-v-e5dd9c1c></span><span class="bottom" data-v-e5dd9c1c></span></span></button></div></div></div></div><div class="divider" data-v-6aa21345><div class="divider-line" data-v-6aa21345></div></div></div><!----></header><div class="VPLocalNav has-sidebar empty" data-v-5d98c3a5 data-v-a6f0e41e><div class="container" data-v-a6f0e41e><button class="menu" aria-expanded="false" aria-controls="VPSidebarNav" data-v-a6f0e41e><span class="vpi-align-left menu-icon" data-v-a6f0e41e></span><span class="menu-text" data-v-a6f0e41e>菜单</span></button><div class="VPLocalNavOutlineDropdown" style="--vp-vh:0px;" data-v-a6f0e41e data-v-8a42e2b4><button data-v-8a42e2b4>回到顶部</button><!----></div></div></div><aside class="VPSidebar" data-v-5d98c3a5 data-v-319d5ca6><div class="curtain" data-v-319d5ca6></div><nav class="nav" id="VPSidebarNav" aria-labelledby="sidebar-aria-label" tabindex="-1" data-v-319d5ca6><span class="visually-hidden" id="sidebar-aria-label" data-v-319d5ca6> Sidebar Navigation </span><!--[--><!--]--><!--[--><div class="no-transition group" data-v-c40bc020><section class="VPSidebarItem level-0" data-v-c40bc020 data-v-b3fd67f8><div class="item" role="button" tabindex="0" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><h2 class="text" data-v-b3fd67f8>开源协会知识库</h2><!----></div><div class="items" data-v-b3fd67f8><!--[--><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/getting-started" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>开始使用</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/library/" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>资料库</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/embedded" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>嵌入式</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/robot-motion-control" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>机器人运动控制</p><!--]--></a><!----></div><!----></div><!--]--></div></section></div><!--]--><!--[--><!--]--></nav></aside><div class="VPContent has-sidebar" id="VPContent" data-v-5d98c3a5 data-v-1428d186><div class="VPDoc has-sidebar has-aside" data-v-1428d186 data-v-39a288b8><!--[--><!--]--><div class="container" data-v-39a288b8><div class="aside" data-v-39a288b8><div class="aside-curtain" data-v-39a288b8></div><div class="aside-container" data-v-39a288b8><div class="aside-content" data-v-39a288b8><div class="VPDocAside" data-v-39a288b8 data-v-3f215769><!--[--><!--]--><!--[--><!--]--><nav aria-labelledby="doc-outline-aria-label" class="VPDocAsideOutline" data-v-3f215769 data-v-a5bbad30><div class="content" data-v-a5bbad30><div class="outline-marker" data-v-a5bbad30></div><div aria-level="2" class="outline-title" id="doc-outline-aria-label" role="heading" data-v-a5bbad30>本页目录</div><ul class="VPDocOutlineItem root" data-v-a5bbad30 data-v-b933a997><!--[--><!--]--></ul></div></nav><!--[--><!--]--><div class="spacer" data-v-3f215769></div><!--[--><!--]--><!----><!--[--><!--]--><!--[--><!--]--></div></div></div></div><div class="content" data-v-39a288b8><div class="content-container" data-v-39a288b8><!--[--><!--]--><main class="main" data-v-39a288b8><div style="position:relative;" class="vp-doc _library_generated_doc-a7125a7496 external-link-icon-enabled" data-v-39a288b8><div><h1 id="stc89c51项目源码" tabindex="-1">STC89C51项目源码 <a class="header-anchor" href="#stc89c51项目源码" aria-label="Permalink to &quot;STC89C51项目源码&quot;">​</a></h1><div class="kb-file-meta"><span><strong>目录</strong>嵌入式 / 51单片机 / 基础练习</span><span><strong>格式</strong>ZIP</span><span><strong>大小</strong>17.0 KB</span></div><p>此文件提供原始格式下载。</p><p class="kb-download-actions"><a class="kb-download-button" href="/uploads/raw/%E5%B5%8C%E5%85%A5%E5%BC%8F/02-51%E5%8D%95%E7%89%87%E6%9C%BA/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0/STC89C51%E9%A1%B9%E7%9B%AE%E6%BA%90%E7%A0%81.zip" download>下载 ZIP 文件</a></p></div></div></main><footer class="VPDocFooter" data-v-39a288b8 data-v-e257564d><!--[--><!--]--><!----><nav class="prev-next" aria-labelledby="doc-footer-aria-label" data-v-e257564d><span class="visually-hidden" id="doc-footer-aria-label" data-v-e257564d>Pager</span><div class="pager" data-v-e257564d><!----></div><div class="pager" data-v-e257564d><a class="VPLink link pager-link next" href="/guide/getting-started" data-v-e257564d><!--[--><span class="desc" data-v-e257564d>下一篇</span><span class="title" data-v-e257564d>开始使用</span><!--]--></a></div></nav></footer><!--[--><!--]--></div></div></div><!--[--><!--]--></div></div><footer class="VPFooter has-sidebar" data-v-5d98c3a5 data-v-e315a0ad><div class="container" data-v-e315a0ad><p class="message" data-v-e315a0ad>开源协会知识沉淀与资料共享。</p><p class="copyright" data-v-e315a0ad>Powered by VitePress and GitHub Pages.</p></div></footer><!--[--><!--]--></div></div>
-    <script>window.__VP_HASH_MAP__=JSON.parse("{\"guide_embedded.md\":\"BHAe_NYR\",\"guide_getting-started.md\":\"Bqpeg4mo\",\"guide_robot-motion-control.md\":\"BW8G4pa-\",\"index.md\":\"SpcP3ZNM\",\"library_generated_doc-0c87426632.md\":\"Cg5sZMeW\",\"library_generated_doc-0edadc79e9.md\":\"B8crb2LR\",\"library_generated_doc-115616aa75.md\":\"BQJQlqyg\",\"library_generated_doc-11d294a6fa.md\":\"pSvVu923\",\"library_generated_doc-1338744994.md\":\"BfoeQSIy\",\"library_generated_doc-1694ce68fa.md\":\"B1mDKs1L\",\"library_generated_doc-19e950c8bd.md\":\"CmDWcQC4\",\"library_generated_doc-1c8356e419.md\":\"B4SpI7gK\",\"library_generated_doc-1cad1cfa7a.md\":\"DDMqQCST\",\"library_generated_doc-1d874c7346.md\":\"jwdtQIWV\",\"library_generated_doc-1df552e31c.md\":\"BbSzQgHU\",\"library_generated_doc-1f7eeb2478.md\":\"D6p5R4BN\",\"library_generated_doc-23e64d7aa3.md\":\"DS7rIAyT\",\"library_generated_doc-25c2ca1a00.md\":\"B2dNyLn1\",\"library_generated_doc-277853480e.md\":\"C4HCVLz6\",\"library_generated_doc-2806056aab.md\":\"kZU9ztrN\",\"library_generated_doc-2f286a2cac.md\":\"BCdO-MsH\",\"library_generated_doc-30964a207a.md\":\"BS8qlWet\",\"library_generated_doc-33eb0e4d89.md\":\"igTIH4q6\",\"library_generated_doc-3694ef88db.md\":\"BYbhcqoV\",\"library_generated_doc-37a55a2dda.md\":\"BCF_9pPl\",\"library_generated_doc-420b513a36.md\":\"Bk3dbD6x\",\"library_generated_doc-447b7a2ba9.md\":\"BZA0eY7n\",\"library_generated_doc-448f4f56b5.md\":\"Bx1SH5EE\",\"library_generated_doc-44cfd64a5d.md\":\"CoCU3cZE\",\"library_generated_doc-504a0bb11d.md\":\"BPlAdKRp\",\"library_generated_doc-5714cd02f9.md\":\"D1bOfiz8\",\"library_generated_doc-5a6d823e8e.md\":\"BoXekZIf\",\"library_generated_doc-5d17bfe9d0.md\":\"B4EexyXA\",\"library_generated_doc-60bded06db.md\":\"COYXe0Ec\",\"library_generated_doc-63a039f8e7.md\":\"CbUK0Tg2\",\"library_generated_doc-63af9b29de.md\":\"ChLVQk_s\",\"library_generated_doc-64ed09afa1.md\":\"BUtoE6dP\",\"library_generated_doc-651a4b046d.md\":\"DRV3UtSJ\",\"library_generated_doc-68d1ef7f2c.md\":\"C7P0LOIk\",\"library_generated_doc-6d3dc02122.md\":\"Btlkx1ZR\",\"library_generated_doc-6e56514662.md\":\"CwUvOJbd\",\"library_generated_doc-6fdf145080.md\":\"BxhFdQak\",\"library_generated_doc-72586a38eb.md\":\"DLhWCOZp\",\"library_generated_doc-7360882287.md\":\"DvSqj4CF\",\"library_generated_doc-755776bcf2.md\":\"8nYDLt_D\",\"library_generated_doc-77311ccf4e.md\":\"ChSKaX0-\",\"library_generated_doc-775125e152.md\":\"BJBc6Xx-\",\"library_generated_doc-7a0752f103.md\":\"BVHO029M\",\"library_generated_doc-831d61553e.md\":\"CadO59h8\",\"library_generated_doc-89874c5de2.md\":\"DDTCGuzN\",\"library_generated_doc-8c467c633f.md\":\"CdEwNxmu\",\"library_generated_doc-8ef8cfc49c.md\":\"BB3Ntirn\",\"library_generated_doc-9053c27312.md\":\"BQuYgxCo\",\"library_generated_doc-90ea137ffb.md\":\"DHZBqOjK\",\"library_generated_doc-91fec6c102.md\":\"DOEetHuq\",\"library_generated_doc-95f2617b53.md\":\"BiDMlVqu\",\"library_generated_doc-97ec301176.md\":\"C6PV08t4\",\"library_generated_doc-985d3f547d.md\":\"BYu6cRD9\",\"library_generated_doc-9aaa85564c.md\":\"BYkObiYN\",\"library_generated_doc-a09b57432c.md\":\"CFH5AugM\",\"library_generated_doc-a3f843c655.md\":\"BLk4EXf-\",\"library_generated_doc-a7125a7496.md\":\"CdVH5-lO\",\"library_generated_doc-a9b939c1d7.md\":\"DuGxIA_5\",\"library_generated_doc-ad65f16e01.md\":\"CV-oKDRD\",\"library_generated_doc-b082a5098c.md\":\"BeWR2P77\",\"library_generated_doc-b137af2c9c.md\":\"C_uXnIhD\",\"library_generated_doc-b16199b132.md\":\"B_2sowo8\",\"library_generated_doc-b1ee804a03.md\":\"C8g2cPLX\",\"library_generated_doc-b23eeebff1.md\":\"BfmZhlb0\",\"library_generated_doc-b41bf628de.md\":\"CwrwXAQ_\",\"library_generated_doc-b68590b8ac.md\":\"rHFIIIDr\",\"library_generated_doc-b710258ab5.md\":\"eHSg6IvP\",\"library_generated_doc-b8d8c8547a.md\":\"Bi--A27B\",\"library_generated_doc-b9d0ee371d.md\":\"CknRKVPv\",\"library_generated_doc-bed41b3e47.md\":\"CHt7_QOo\",\"library_generated_doc-bf24e716d3.md\":\"CZY6VRxA\",\"library_generated_doc-c6f390b099.md\":\"m6L8nd_A\",\"library_generated_doc-c75aa7bcf0.md\":\"CyVdVZtk\",\"library_generated_doc-ca880c8c69.md\":\"DDb611wd\",\"library_generated_doc-cd6c0d2060.md\":\"Bz-uok5J\",\"library_generated_doc-cec4c39766.md\":\"Ds-83jm4\",\"library_generated_doc-cfe5ed322b.md\":\"CX8oSRXi\",\"library_generated_doc-cff0ffbcf5.md\":\"D6d1BJ2P\",\"library_generated_doc-d1f02d7b86.md\":\"BAN9IrKu\",\"library_generated_doc-d721f2bfc8.md\":\"ooAlFpgc\",\"library_generated_doc-d801e39e19.md\":\"DzGuoynA\",\"library_generated_doc-d8a0dbf87d.md\":\"DRanZLJU\",\"library_generated_doc-d8b12e4169.md\":\"DWzUu8lk\",\"library_generated_doc-db83f17c96.md\":\"LU-wQ1ll\",\"library_generated_doc-ddacb55a96.md\":\"9vpL5FYY\",\"library_generated_doc-de4b40d6f1.md\":\"JrrhNxjc\",\"library_generated_doc-de9ddd00fc.md\":\"DzX2bt7-\",\"library_generated_doc-df40b62ca2.md\":\"CeoSEycV\",\"library_generated_doc-e3a1c1ca16.md\":\"BnkPqoYD\",\"library_generated_doc-e3de3bfe1a.md\":\"C2bvlYHi\",\"library_generated_doc-e461e6f214.md\":\"IO8JxY9o\",\"library_generated_doc-e54d2ce749.md\":\"D_eqa_aU\",\"library_generated_doc-e5579098a7.md\":\"B23kQfXd\",\"library_generated_doc-e660c8856a.md\":\"HsnlPoJK\",\"library_generated_doc-ea3865b43c.md\":\"DiXLdTIr\",\"library_generated_doc-ea8d1cd1a1.md\":\"BMCX_3lL\",\"library_generated_doc-eb4b03f30e.md\":\"CUeySxlg\",\"library_generated_doc-ef02588d18.md\":\"Czmu3Vpn\",\"library_generated_doc-ef6bcf86df.md\":\"BJouzUjL\",\"library_generated_doc-f057f3c7c3.md\":\"0lN_HW1G\",\"library_generated_doc-f38fd52503.md\":\"cTSZ1jKX\",\"library_generated_doc-f4fe6565c2.md\":\"zeghf7CG\",\"library_generated_doc-f5ed4331ce.md\":\"BLIfnXT-\",\"library_generated_doc-f64e7a02fb.md\":\"CZrG-lqu\",\"library_generated_doc-fcc7daedff.md\":\"CQ1NqbSU\",\"library_generated_doc-fdb02902fe.md\":\"BY6zJvmC\",\"library_generated_doc-ff72dbc431.md\":\"BQlf8kKB\",\"library_generated_doc-ffc4010b5b.md\":\"ICMFuvch\",\"library_index.md\":\"CN9CO2Lp\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"开源协会知识库\",\"description\":\"沉淀嵌入式与机器人运动控制资料的公开知识库\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{\"logo\":\"/association-logo.jpg\",\"search\":{\"provider\":\"local\"},\"nav\":[{\"text\":\"首页\",\"link\":\"/\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}],\"sidebar\":[{\"text\":\"开源协会知识库\",\"items\":[{\"text\":\"开始使用\",\"link\":\"/guide/getting-started\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}]}],\"socialLinks\":[{\"icon\":\"github\",\"link\":\"https://github.com/Zhr-ARM/free-knowledge-base\"}],\"footer\":{\"message\":\"开源协会知识沉淀与资料共享。\",\"copyright\":\"Powered by VitePress and GitHub Pages.\"},\"docFooter\":{\"prev\":\"上一篇\",\"next\":\"下一篇\"},\"outline\":{\"label\":\"本页目录\",\"level\":[2,3]},\"lastUpdated\":{\"text\":\"最后更新\"},\"darkModeSwitchLabel\":\"外观\",\"sidebarMenuLabel\":\"菜单\",\"returnToTopLabel\":\"回到顶部\",\"langMenuLabel\":\"切换语言\",\"externalLinkIcon\":true},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":true}");</script>
+    <div id="app"><div class="Layout" data-v-5d98c3a5><!--[--><!--]--><!--[--><span tabindex="-1" data-v-0b0ada53></span><a href="#VPContent" class="VPSkipLink visually-hidden" data-v-0b0ada53>Skip to content</a><!--]--><!----><header class="VPNav" data-v-5d98c3a5 data-v-ae24b3ad><div class="VPNavBar" data-v-ae24b3ad data-v-6aa21345><div class="wrapper" data-v-6aa21345><div class="container" data-v-6aa21345><div class="title" data-v-6aa21345><div class="VPNavBarTitle has-sidebar" data-v-6aa21345 data-v-1168a8e4><a class="title" href="/" data-v-1168a8e4><!--[--><!--]--><!--[--><img class="VPImage logo" src="/association-logo.jpg" alt data-v-8426fc1a><!--]--><span data-v-1168a8e4>开源协会知识库</span><!--[--><!--]--></a></div></div><div class="content" data-v-6aa21345><div class="content-body" data-v-6aa21345><!--[--><!--]--><div class="VPNavBarSearch search" data-v-6aa21345><!--[--><!----><div id="local-search"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search"><span class="DocSearch-Button-Container"><span class="vp-icon DocSearch-Search-Icon"></span><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"><kbd class="DocSearch-Button-Key"></kbd><kbd class="DocSearch-Button-Key">K</kbd></span></button></div><!--]--></div><nav aria-labelledby="main-nav-aria-label" class="VPNavBarMenu menu" data-v-6aa21345 data-v-dc692963><span id="main-nav-aria-label" class="visually-hidden" data-v-dc692963> Main Navigation </span><!--[--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>首页</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/library/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>资料库</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/embedded" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>嵌入式</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/robot-motion-control" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>机器人运动控制</span><!--]--></a><!--]--><!--]--></nav><!----><div class="VPNavBarAppearance appearance" data-v-6aa21345 data-v-6c893767><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-6c893767 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div><div class="VPSocialLinks VPNavBarSocialLinks social-links" data-v-6aa21345 data-v-0394ad82 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div><div class="VPFlyout VPNavBarExtra extra" data-v-6aa21345 data-v-bb2aa2f0 data-v-cf11d7a2><button type="button" class="button" aria-haspopup="true" aria-expanded="false" aria-label="extra navigation" data-v-cf11d7a2><span class="vpi-more-horizontal icon" data-v-cf11d7a2></span></button><div class="menu" data-v-cf11d7a2><div class="VPMenu" data-v-cf11d7a2 data-v-b98bc113><!----><!--[--><!--[--><!----><div class="group" data-v-bb2aa2f0><div class="item appearance" data-v-bb2aa2f0><p class="label" data-v-bb2aa2f0>外观</p><div class="appearance-action" data-v-bb2aa2f0><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-bb2aa2f0 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div></div></div><div class="group" data-v-bb2aa2f0><div class="item social-links" data-v-bb2aa2f0><div class="VPSocialLinks social-links-list" data-v-bb2aa2f0 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div></div></div><!--]--><!--]--></div></div></div><!--[--><!--]--><button type="button" class="VPNavBarHamburger hamburger" aria-label="mobile navigation" aria-expanded="false" aria-controls="VPNavScreen" data-v-6aa21345 data-v-e5dd9c1c><span class="container" data-v-e5dd9c1c><span class="top" data-v-e5dd9c1c></span><span class="middle" data-v-e5dd9c1c></span><span class="bottom" data-v-e5dd9c1c></span></span></button></div></div></div></div><div class="divider" data-v-6aa21345><div class="divider-line" data-v-6aa21345></div></div></div><!----></header><div class="VPLocalNav has-sidebar empty" data-v-5d98c3a5 data-v-a6f0e41e><div class="container" data-v-a6f0e41e><button class="menu" aria-expanded="false" aria-controls="VPSidebarNav" data-v-a6f0e41e><span class="vpi-align-left menu-icon" data-v-a6f0e41e></span><span class="menu-text" data-v-a6f0e41e>菜单</span></button><div class="VPLocalNavOutlineDropdown" style="--vp-vh:0px;" data-v-a6f0e41e data-v-8a42e2b4><button data-v-8a42e2b4>回到顶部</button><!----></div></div></div><aside class="VPSidebar" data-v-5d98c3a5 data-v-319d5ca6><div class="curtain" data-v-319d5ca6></div><nav class="nav" id="VPSidebarNav" aria-labelledby="sidebar-aria-label" tabindex="-1" data-v-319d5ca6><span class="visually-hidden" id="sidebar-aria-label" data-v-319d5ca6> Sidebar Navigation </span><!--[--><!--]--><!--[--><div class="no-transition group" data-v-c40bc020><section class="VPSidebarItem level-0" data-v-c40bc020 data-v-b3fd67f8><div class="item" role="button" tabindex="0" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><h2 class="text" data-v-b3fd67f8>开源协会知识库</h2><!----></div><div class="items" data-v-b3fd67f8><!--[--><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/getting-started" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>开始使用</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/library/" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>资料库</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/embedded" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>嵌入式</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/robot-motion-control" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>机器人运动控制</p><!--]--></a><!----></div><!----></div><!--]--></div></section></div><!--]--><!--[--><!--]--></nav></aside><div class="VPContent has-sidebar" id="VPContent" data-v-5d98c3a5 data-v-1428d186><div class="VPDoc has-sidebar has-aside" data-v-1428d186 data-v-39a288b8><!--[--><!--]--><div class="container" data-v-39a288b8><div class="aside" data-v-39a288b8><div class="aside-curtain" data-v-39a288b8></div><div class="aside-container" data-v-39a288b8><div class="aside-content" data-v-39a288b8><div class="VPDocAside" data-v-39a288b8 data-v-3f215769><!--[--><!--]--><!--[--><!--]--><nav aria-labelledby="doc-outline-aria-label" class="VPDocAsideOutline" data-v-3f215769 data-v-a5bbad30><div class="content" data-v-a5bbad30><div class="outline-marker" data-v-a5bbad30></div><div aria-level="2" class="outline-title" id="doc-outline-aria-label" role="heading" data-v-a5bbad30>本页目录</div><ul class="VPDocOutlineItem root" data-v-a5bbad30 data-v-b933a997><!--[--><!--]--></ul></div></nav><!--[--><!--]--><div class="spacer" data-v-3f215769></div><!--[--><!--]--><!----><!--[--><!--]--><!--[--><!--]--></div></div></div></div><div class="content" data-v-39a288b8><div class="content-container" data-v-39a288b8><!--[--><!--]--><main class="main" data-v-39a288b8><div style="position:relative;" class="vp-doc _library_generated_doc-a7125a7496 external-link-icon-enabled" data-v-39a288b8><div><h1 id="stc89c51项目源码" tabindex="-1">STC89C51项目源码 <a class="header-anchor" href="#stc89c51项目源码" aria-label="Permalink to &quot;STC89C51项目源码&quot;">​</a></h1><div class="kb-file-meta"><span><strong>目录</strong>嵌入式 / 51单片机 / 基础练习</span><span><strong>格式</strong>ZIP</span><span><strong>大小</strong>17.0 KB</span></div><p class="kb-download-actions"><a class="kb-download-button kb-download-button-secondary" href="/uploads/raw/%E5%B5%8C%E5%85%A5%E5%BC%8F/02-51%E5%8D%95%E7%89%87%E6%9C%BA/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0/STC89C51%E9%A1%B9%E7%9B%AE%E6%BA%90%E7%A0%81.zip" download>下载完整源码包</a></p><h2 id="在线预览" tabindex="-1">在线预览 <a class="header-anchor" href="#在线预览" aria-label="Permalink to &quot;在线预览&quot;">​</a></h2><div class="kb-preview-summary"><span><strong>16</strong> 个文件</span><span><strong>3</strong> 个目录</span><span><strong>56.6 KB</strong> 解压后大小</span></div><div class="kb-archive-preview"><div class="kb-extension-list" aria-label="文件类型统计"><span><strong>H</strong>5</span><span><strong>C</strong>4</span><span><strong>YML</strong>2</span><span><strong>JSON</strong>1</span><span><strong>UVOPT</strong>1</span><span><strong>UVPROJ</strong>1</span><span><strong>TXT</strong>1</span><span><strong>A51</strong>1</span></div><details class="kb-preview-panel kb-archive-index"><summary>查看完整目录 · 16 个文件</summary><pre>   1.5 KB  .eide/eide.yml
+    689 B  .eide/files.options.yml
+     50 B  .eide/stc.flash.json
+   3.5 KB  driver/dht22.c
+    452 B  driver/dht22.h
+    409 B  driver/hardware.c
+    240 B  driver/hardware.h
+   9.0 KB  driver/OLED_Font.h
+   7.4 KB  driver/oled.c
+    692 B  driver/oled.h
+   7.1 KB  main.uvopt
+  14.6 KB  main.uvproj
+    299 B  README.txt
+   6.2 KB  STARTUP.A51
+   4.5 KB  user/main.c
+    138 B  user/main.h</pre></details><section class="kb-source-previews" aria-labelledby="doc-a7125a7496-source-heading"><h3 id="doc-a7125a7496-source-heading">可读文件预览</h3><details class="kb-preview-panel kb-code-preview" open><summary><span>README.txt</span><small>299 B</small></summary><pre><code>STC89C51项目源码
+
+本压缩包由开源协会知识库从学习目录中自动精选生成。
+已排除安装包、视频、编译缓存、目标文件、可执行文件、私钥和大型第三方依赖。
+部分工程需要通过对应 IDE、SDK 或配置文件重新生成依赖后再编译。</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>driver/dht22.c</span><small>3.5 KB</small></summary><pre><code>#include &quot;dht22.h&quot;
+#include &lt;intrins.h&gt;
+
+sbit DHT_IO = DHT_PIN;
+
+int DHT_Temperature = 0;
+int DHT_Humidity = 0;
+
+// 毫秒延时
+void DHT_DelayMs(unsigned int ms) {
+    unsigned int i, j;
+    for (i = ms; i &gt; 0; i--)
+        for (j = 90; j &gt; 0; j--);
+}
+
+void DHT22_Init(void) {
+    DHT_IO = 1;
+    DHT_DelayMs(1000);
+}
+
+unsigned char DHT22_Read(void) {
+    unsigned char i, idx;
+    unsigned char U8comdata;
+    unsigned char Data[5] = {0};
+    unsigned char check_sum;
+    
+    // 计数器，使用 char 类型让循环跑得更快
+    unsigned char count = 0;
+
+    // 关中断！防止中断打断敏感时序
+    bit EA_SAVE = EA;
+    EA = 0;
+
+    // --- 1. 主机发送起始信号 ---
+    DHT_IO = 0;
+    DHT_DelayMs(20); // 拉低 &gt;18ms
+    DHT_IO = 1;
+    
+    // 延时 30us 等待
+    _nop_(); _nop_(); _nop_(); _nop_(); 
+    _nop_(); _nop_(); _nop_(); _nop_();
+
+    // --- 2. 握手阶段 (防死机) ---
+    // 每一个 while 里面都加了简单的防死机计数 (count)
+    // 250次循环对于 8MHz 来说大约是 1-2ms，足够了
+    
+    // 等待变低 (响应开始)
+    count = 0;
+    while (DHT_IO) { if (++count &gt; 250) { EA = EA_SAVE; return 1; } }
+    
+    // 等待变高 (响应结束)
+    count = 0;
+    while (!DHT_IO) { if (++count &gt; 250) { EA = EA_SAVE; return 1; } }
+
+    // 等待变低 (准备传输)
+    count = 0;
+    while (DHT_IO) { if (++count &gt; 250) { EA = EA_SAVE; return 1; } }
+
+    // --- 3. 读取 40 位数据 ---
+    for (idx = 0; idx &lt; 5; idx++) {
+        U8comdata = 0;
+        for (i = 0; i &lt; 8; i++) {
+            
+            // 1. 等待上一位低电平结束 (也就是等待位开始)
+            // 正常应该是 50us
+            count = 0;
+            while (!DHT_IO) {
+                // 如果这里超时，说明传感器不发数据了
+                if (++count &gt; 250) { EA = EA_SAVE; return 2; } 
+            }
+
+            // 2. 核心：测量高电平长度
+            // 0: 26us
+            // 1: 70us
+            // 我们通过数循环次数来判断
+            count = 0;
+            while (DHT_IO) {
+                count++;
+                // 30是安全上限，防止卡死
+                if (count &gt; 30) { EA = EA_SAVE; return 3; } 
+            }
+
+            // 3. 判定逻辑 (针对 8MHz 调校)
+            // 在 8MHz 下，C语言的 while 循环跑一圈很慢 (约10-12us)
+            // &#39;0&#39; (26us) -&gt; count 大约是 2
+            // &#39;1&#39; (70us) -&gt; count 大约是 6-7
+            // 所以我们把阈值设为 4
+            
+            U8comdata &lt;&lt;= 1;
+            if (count &gt; 4) {
+                U8comdata |= 1;
+            }
+        }
+        Data[idx] = U8comdata;
+    }
+
+    // 恢复中断
+    EA = EA_SAVE;
+    DHT_IO = 1;
+
+    // --- 4. 校验 ---
+    check_sum = Data[0] + Data[1] + Data[2] + Data[3];
+    
+    // 为了方便调试，如果校验错，我们依然把读到的值放进去，
+    // 这样你能在屏幕上看到一个“奇怪”的数值，而不是 Err 4
+    // 这一步在正式产品中不要，但现在调试很有用！
+    
+    DHT_Humidity = (Data[0] &lt;&lt; 8) | Data[1];
+    DHT_Temperature = ((Data[2] &amp; 0x7F) &lt;&lt; 8) | Data[3];
+    if (Data[2] &amp; 0x80) DHT_Temperature = -DHT_Temperature;
+
+    if (check_sum == Data[4]) {
+        return 0; // 成功
+    } else {
+        // 如果校验失败，返回 4
+        // 但此时全局变量里已经有值了，你可以看看是多少，帮我判断阈值
+        return 4; 
+    }
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>user/main.c</span><small>4.5 KB</small></summary><pre><code>#include &quot;main.h&quot;
+#include &lt;stdlib.h&gt; // 引入 abs 函数
+#include &lt;stdio.h&gt;
+#include &quot;hardware.h&quot;
+#include &quot;oled.h&quot;
+#include &quot;dht22.h&quot;
+
+sbit PWM_PIN = P2^0;
+// 全局变量
+uint8_t timer_count = 0; // 0.1ms 计数器
+uint8_t duty_cycle = 15; // 占空比值：5对应0度，15对应90度，25对应180度
+
+uint32_t time1s=0;
+uint32_t time2s=0;
+
+void Timer0_Init(void)		//1毫秒@8MHz
+{
+	TMOD &amp;= 0xF0;			//设置定时器模式
+	TL0 = 0xC0;				//设置定时初始值
+	TH0 = 0xE0;				//设置定时初始值
+	TF0 = 0;				//清除TF0标志
+	TR0 = 1;				//定时器0开始计时
+	ET0 = 1;				//使能定时器0中断
+	EA = 1;
+}
+/******LED使用********/
+bit led_flag=0;
+uint8_t led_time=0;
+/********BEEP使用*********/
+bit beep_flag=0;
+uint32_t beep_time=0;
+unsigned char status=0;
+
+/**
+ * @brief 定时器1初始化函数 (针对 8MHz 晶振)
+ * 目标：约 0.1ms (100.5us) 中断一次
+ */
+void InitTimer1()
+{
+    TMOD &amp;= 0x0F;      // 清除T1配置
+    TMOD |= 0x10;      // 模式1 (16位)
+    
+    // 8MHz 晶振下的初值: 0xFFBD
+    TH1 = 0xFF; 
+    TL1 = 0xBD;
+    
+    ET1 = 1;           // 开启定时器1中断
+    EA = 1;            // 开启总中断
+    TR1 = 1;           // 启动定时器1
+}
+
+void main(void)
+{
+    Timer0_Init();
+    P1_7 = 0;
+	P2_3 = 0; 
+    OLED_Init();
+    OLED_Clear();
+	OLED_ShowString(1, 1, &quot;Hello, CDUT!&quot;);
+    DHT22_Init();duty_cycle = 15;
+    InitTimer1();
+    duty_cycle = 5; // 设置初始占空比为 5 (0度)
+    while(1)
+    {
+        P2_3 = 0; 
+        if(time1s&gt;=500)
+        {
+            time1s = 0; // 立即清零，防止重复进入
+            if(duty_cycle&gt;=25)
+            {
+                duty_cycle=5;
+            }
+            else
+            {
+                duty_cycle+=5;
+            }
+            if(led_flag == 0) // 阶段1：逐个点亮 (P1.0 -&gt; P1.6)
+            {
+                led_time++;
+                if(led_time &lt;= 7)
+                {
+                    // 0xFF &lt;&lt; 1 = 1111 1110 (P1.0 亮)
+                    // 0xFF &lt;&lt; 7 = 1000 0000 (P1.0-P1.6 亮)
+                    P1 &amp;= (0xFF &lt;&lt; led_time);
+                }
+                else
+                {
+                    led_time = 0;
+                    led_flag = 1; // 切换到熄灭模式
+                }
+            }
+            else // 阶段2：逐个熄灭 (P1.0 -&gt; P1.6)
+            {
+                led_time++;
+                if(led_time &lt;= 7)
+                {
+                    // 0xFF &lt;&lt; 1 = 1111 1110; 取反 = 0000 0001 (P1.0 灭)
+                    // 0xFF &lt;&lt; 7 = 1000 0000; 取反 = 0111 1111 (P1.0-P1.6 灭)
+                    P1 |= ~(0xFF &lt;&lt; led_time);
+                }
+                else
+                {
+                    led_time = 0;
+                    led_flag = 0; // 切换回点亮模式
+                }
+            }
+        }
+        
+        if(beep_time&gt;=250)
+        {
+            beep_flag=0;
+            beep_time=0;
+        }
+        // 强制控制 P1.7，覆盖上方 LED 逻辑对 P1.7 的潜在影响
+        if(beep_flag==1)
+            P1_7 = 1;
+        else
+            P1_7 = 0;
+        if(time2s&gt;=500)
+        {
+            status = DHT22_Read(); // 获取返回值
+            if (status == 0 || status == 4) 
+            {
+                char buffer[16];
+                int temp_int = DHT_Temperature / 10;
+                int temp_frac = abs(DHT_Temperature % 10);
+                int humi_int = DHT_Humidity / 10;
+                int humi_frac = abs(DHT_Humidity % 10);
+
+                sprintf(buffer, &quot;T:%d.%d %s&quot;, temp_int, temp_frac, (status==4)?&quot;*&quot;:&quot; &quot;);
+                OLED_ShowString(2, 1, buffer); // 如果有*号，说明校验错但有数据
+                
+                sprintf(buffer, &quot;H:%d.%d%%&quot;, humi_int, humi_frac);
+                OLED_ShowString(3, 1, buffer);
+            }
+            else
+            {
+                char err_buf[16];
+                sprintf(err_buf, &quot;Err: %d&quot;, (int)status);
+                OLED_ShowString(2, 1, err_buf);
+            }
+            time2s=0;
+        }
+    }
+}
+
+void Timer0_Isr(void) interrupt 1
+{
+    // 必须重装载初值，否则定时器周期不正确
+    TL0 = 0xC0;
+    TH0 = 0xE0; 
+    time1s++;
+    time2s++;
+	key_scan();
+	if(key_value!=0&amp;&amp;beep_flag==0)
+	{
+		beep_flag=1;
+	}
+	if(beep_flag==1)
+	{
+		beep_time++;
+	}
+}
+
+/**
+ * @brief 定时器1中断服务程序 (针对 8MHz 晶振)
+ */
+void Timer1_ISR() interrupt 3
+{
+    // === 必须在这里也修改初值 ===
+    TH1 = 0xFF;
+    TL1 = 0xBD;
+    
+    timer_count++; 
+    
+    if(timer_count &gt;= 200) // 约 20ms 周期
+    {
+        timer_count = 0;
+    }
+    
+    if(timer_count &lt; duty_cycle)
+    {
+        PWM_PIN = 1; 
+    }
+    else
+    {
+        PWM_PIN = 0; 
+    }
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>driver/hardware.c</span><small>409 B</small></summary><pre><code>#include &quot;hardware.h&quot;
+
+uint8_t key_value=0;
+uint8_t key_state=0;
+
+void key_scan(void)
+{
+	if(P0_0==0)
+	{
+		key_value=key1;
+		key_state++;
+	}
+	else if(P0_1 == 0)
+	{
+		key_value=key2;
+		key_state++;
+	}
+	else if(P0_2 == 0)
+	{
+		key_value = key3;
+		key_state++;
+	}
+	else if (P3_2 == 1)
+	{
+		key_value = key4;
+		key_state++;
+	}
+	else
+	{
+		key_value = nokey;
+		key_state = 0;
+	}
+}
+
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>driver/oled.c</span><small>7.4 KB</small></summary><pre><code>#include &quot;OLED_Font.h&quot;
+#include &quot;oled.h&quot;
+/*引脚配置*/
+sbit OLED_SCL = P0^5;
+sbit OLED_SDA = P0^6;
+
+#define OLED_W_SCL OLED_SCL
+#define OLED_W_SDA OLED_SDA
+
+/**
+  * @brief  I2C开始
+  * @param  无
+  * @retval 无
+  */
+void OLED_I2C_Start(void)
+{
+	OLED_W_SDA=1;
+	OLED_W_SCL=1;
+	OLED_W_SDA=0;
+	OLED_W_SCL=0;
+}
+
+/**
+  * @brief  I2C停止
+  * @param  无
+  * @retval 无
+  */
+void OLED_I2C_Stop(void)
+{
+	OLED_W_SDA=0;
+	OLED_W_SCL=1;
+	OLED_W_SDA=1;
+}
+void IIC_Wait_Ack()
+{
+	OLED_W_SCL=1;
+	OLED_W_SCL=0;
+}
+/**
+  * @brief  I2C发送一个字节
+  * @param  Byte 要发送的一个字节
+  * @retval 无
+  */
+void OLED_I2C_SendByte(unsigned char Byte)
+{
+	unsigned char i;
+	OLED_W_SCL=0;
+	for (i = 0; i &lt; 8; i++)
+	{
+		OLED_W_SDA=Byte &amp; (0x80 &gt;&gt; i);
+		OLED_W_SCL=1;
+		OLED_W_SCL=0;
+	}
+	
+}
+
+/**
+  * @brief  OLED写命令
+  * @param  Command 要写入的命令
+  * @retval 无
+  */
+void OLED_WriteCommand(unsigned char Command)
+{
+	OLED_I2C_Start();
+	OLED_I2C_SendByte(0x78);		//从机地址
+	IIC_Wait_Ack();
+	OLED_I2C_SendByte(0x00);		//写命令
+	IIC_Wait_Ack();
+	OLED_I2C_SendByte(Command); 
+	IIC_Wait_Ack();
+	OLED_I2C_Stop();
+}
+
+/**
+  * @brief  OLED写数据
+  * @param  Data 要写入的数据
+  * @retval 无
+  */
+void OLED_WriteData(unsigned char Data)
+{
+	OLED_I2C_Start();
+	OLED_I2C_SendByte(0x78);		//从机地址
+	IIC_Wait_Ack();
+	OLED_I2C_SendByte(0x40);		//写数据
+	IIC_Wait_Ack();
+	OLED_I2C_SendByte(Data);
+	IIC_Wait_Ack();
+	OLED_I2C_Stop();
+}
+
+/**
+  * @brief  OLED设置光标位置
+  * @param  Y 以左上角为原点，向下方向的坐标，范围：0~7
+  * @param  X 以左上角为原点，向右方向的坐标，范围：0~127
+  * @retval 无
+  */
+void OLED_SetCursor(unsigned char Y, unsigned char X)
+{
+	OLED_WriteCommand(0xB0 | Y);					//设置Y位置
+	OLED_WriteCommand(0x10 | ((X &amp; 0xF0) &gt;&gt; 4));	//设置X位置高4位
+	OLED_WriteCommand((X &amp; 0x0F));			//设置X位置低4位
+}
+
+/**
+  * @brief  OLED清屏
+  * @param  无
+  * @retval 无
+  */
+void OLED_Clear(void)
+{  
+	unsigned char i, j;
+	for (j = 0; j &lt; 8; j++)
+	{
+		OLED_SetCursor(j, 0);
+		for(i = 0; i &lt; 128; i++)
+		{
+			OLED_WriteData(0x00);
+		}
+	}
+}
+
+/**
+  * @brief  OLED显示一个字符
+  * @param  Line 行位置，范围：1~4
+  * @param  Column 列位置，范围：1~16
+  * @param  Char 要显示的一个字符，范围：ASCII可见字符
+  * @retval 无
+  */
+void OLED_ShowChar(unsigned char Line, unsigned char Column, char Char)
+{      	
+	unsigned char i;
+	OLED_SetCursor((Line - 1) * 2, (Column - 1) * 8);		//设置光标位置在上半部分
+	for (i = 0; i &lt; 8; i++)
+	{
+		OLED_WriteData(OLED_F8x16[Char - &#39; &#39;][i]);			//显示上半部分内容
+	}
+	OLED_SetCursor((Line - 1) * 2 + 1, (Column - 1) * 8);	//设置光标位置在下半部分
+	for (i = 0; i &lt; 8; i++)
+	{
+		OLED_WriteData(OLED_F8x16[Char - &#39; &#39;][i + 8]);		//显示下半部分内容
+	}
+}
+
+/**
+  * @brief  OLED显示字符串
+  * @param  Line 起始行位置，范围：1~4
+  * @param  Column 起始列位置，范围：1~16
+  * @param  String 要显示的字符串，范围：ASCII可见字符
+  * @retval 无
+  */
+void OLED_ShowString(unsigned char Line, unsigned char Column, char *String)
+{
+	unsigned char i;
+	for (i = 0; String[i] != &#39;\0&#39;; i++)
+	{
+		OLED_ShowChar(Line, Column + i, String[i]);
+	}
+}
+
+/**
+  * @brief  OLED次方函数
+  * @retval 返回值等于X的Y次方
+  */
+unsigned int OLED_Pow(unsigned int X, unsigned int Y)
+{
+	unsigned int Result = 1;
+	while (Y--)
+	{
+		Result *= X;
+	}
+	return Result;
+}
+
+/**
+  * @brief  OLED显示数字（十进制，正数）
+  * @param  Line 起始行位置，范围：1~4
+  * @param  Column 起始列位置，范围：1~16
+  * @param  Number 要显示的数字，范围：0~4294967295
+  * @param  Length 要显示数字的长度，范围：1~10
+  * @retval 无
+  */
+void OLED_ShowNum(unsigned char Line, unsigned char Column, unsigned int Number, unsigned char Length)
+{
+	unsigned char i;
+	for (i = 0; i &lt; Length; i++)							
+	{
+		OLED_ShowChar(Line, Column + i, Number / OLED_Pow(10, Length - i - 1) % 10 + &#39;0&#39;);
+	}
+}
+
+/**
+  * @brief  OLED显示数字（十进制，带符号数）
+  * @param  Line 起始行位置，范围：1~4
+  * @param  Column 起始列位置，范围：1~16
+  * @param  Number 要显示的数字，范围：-2147483648~2147483647
+  * @param  Length 要显示数字的长度，范围：1~10
+  * @retval 无
+  */
+void OLED_ShowSignedNum(unsigned char Line, unsigned char Column, int Number, unsigned char Length)
+{
+	unsigned char i;
+	unsigned int Number1;
+	if (Number &gt;= 0)
+	{
+		OLED_ShowChar(Line, Column, &#39;+&#39;);
+		Number1 = Number;
+	}
+	else
+	{
+		OLED_ShowChar(Line, Column, &#39;-&#39;);
+		Number1 = -Number;
+	}
+	for (i = 0; i &lt; Length; i++)							
+	{
+		OLED_ShowChar(Line, Column + i + 1, Number1 / OLED_Pow(10, Length - i - 1) % 10 + &#39;0&#39;);
+	}
+}
+
+/**
+  * @brief  OLED显示数字（十六进制，正数）
+  * @param  Line 起始行位置，范围：1~4
+  * @param  Column 起始列位置，范围：1~16
+  * @param  Number 要显示的数字，范围：0~0xFFFFFFFF
+  * @param  Length 要显示数字的长度，范围：1~8
+  * @retval 无
+  */
+void OLED_ShowHexNum(unsigned char Line, unsigned char Column, unsigned int Number, unsigned char Length)
+{
+	unsigned char i, SingleNumber;
+	for (i = 0; i &lt; Length; i++)							
+	{
+		SingleNumber = Number / OLED_Pow(16, Length - i - 1) % 16;
+		if (SingleNumber &lt; 10)
+		{
+			OLED_ShowChar(Line, Column + i, SingleNumber + &#39;0&#39;);
+		}
+		else
+		{
+			OLED_ShowChar(Line, Column + i, SingleNumber - 10 + &#39;A&#39;);
+		}
+	}
+}
+
+/**
+  * @brief  OLED显示数字（二进制，正数）
+  * @param  Line 起始行位置，范围：1~4
+  * @param  Column 起始列位置，范围：1~16
+  * @param  Number 要显示的数字，范围：0~1111 1111 1111 1111
+  * @param  Length 要显示数字的长度，范围：1~16
+  * @retval 无
+  */
+void OLED_ShowBinNum(unsigned char Line, unsigned char Column, unsigned int Number, unsigned char Length)
+{
+	unsigned char i;
+	for (i = 0; i &lt; Length; i++)							
+	{
+		OLED_ShowChar(Line, Column + i, Number / OLED_Pow(2, Length - i - 1) % 2 + &#39;0&#39;);
+	}
+}
+
+/**
+  * @brief  OLED初始化
+  * @param  无
+  * @retval 无
+  */
+void OLED_Init(void)
+{
+	OLED_WriteCommand(0xAE);	//关闭显示
+	
+	OLED_WriteCommand(0xD5);	//设置显示时钟分频比/振荡器频率
+	OLED_WriteCommand(0x80);
+	
+	OLED_WriteCommand(0xA8);	//设置多路复用率
+	OLED_WriteCommand(0x3F);
+	
+	OLED_WriteCommand(0xD3);	//设置显示偏移
+	OLED_WriteCommand(0x00);
+	
+	OLED_WriteCommand(0x40);	//设置显示开始行
+	
+	OLED_WriteCommand(0xA1);	//设置左右方向，0xA1正常 0xA0左右反置
+	
+	OLED_WriteCommand(0xC8);	//设置上下方向，0xC8正常 0xC0上下反置
+
+	OLED_WriteCommand(0xDA);	//设置COM引脚硬件配置
+	OLED_WriteCommand(0x12);
+	
+	OLED_WriteCommand(0x81);	//设置对比度控制
+	OLED_WriteCommand(0xCF);
+
+	OLED_WriteCommand(0xD9);	//设置预充电周期
+	OLED_WriteCommand(0xF1);
+
+	OLED_WriteCommand(0xDB);	//设置VCOMH取消选择级别
+	OLED_WriteCommand(0x30);
+
+	OLED_WriteCommand(0xA4);	//设置整个显示打开/关闭
+
+	OLED_WriteCommand(0xA6);	//设置正常/倒转显示
+
+	OLED_WriteCommand(0x8D);	//设置充电泵
+	OLED_WriteCommand(0x14);
+
+	OLED_WriteCommand(0xAF);	//开启显示
+		
+	OLED_Clear();				//OLED清屏
+}
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>driver/dht22.h</span><small>452 B</small></summary><pre><code>#ifndef __DHT22_H__
+#define __DHT22_H__
+
+#include &quot;main.h&quot;
+
+// ================= 配置区 =================
+// 确认你的硬件接在哪里！这里设为 P2.7
+#define DHT_PIN P2^7  
+// =========================================
+
+extern int DHT_Temperature;
+extern int DHT_Humidity;
+
+void DHT22_Init(void);
+// 返回值：0=成功, 1=无响应, 2=数据0超时, 3=数据1超时, 4=校验错误
+unsigned char DHT22_Read(void);
+
+#endif</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>user/main.h</span><small>138 B</small></summary><pre><code>#ifndef __MAIN_H__
+#define __MAIN_H__
+
+#include &lt;REGX51.H&gt;
+
+typedef unsigned char uint8_t;
+typedef unsigned int  uint32_t;
+
+#endif</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>driver/hardware.h</span><small>240 B</small></summary><pre><code>#ifndef __HARDWARE_H__
+#define __HARDWARE_H__
+
+#include &quot;main.h&quot;
+
+#define key1 1
+#define key2 2
+#define key3 3
+#define key4 4
+#define nokey 0
+
+extern uint8_t key_value;
+extern uint8_t key_state;
+
+void key_scan(void);
+
+#endif</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>.eide/eide.yml</span><small>1.5 KB</small></summary><pre><code>version: &quot;4.1&quot;
+name: main
+type: C51
+deviceName: null
+packDir: null
+srcDirs: []
+virtualFolder:
+  name: &lt;virtual_root&gt;
+  files: []
+  folders:
+    - name: user
+      files:
+        - path: STARTUP.A51
+        - path: user/main.c
+      folders: []
+    - name: driver
+      files:
+        - path: driver/hardware.c
+        - path: driver/hardware.h
+        - path: driver/oled.c
+        - path: driver/oled.h
+        - path: driver/OLED_Font.h
+        - path: driver/dht22.c
+        - path: driver/dht22.h
+      folders: []
+dependenceList: []
+outDir: build
+miscInfo:
+  uid: 16c090c82adaa02ac30f30ffa3154440
+targets:
+  Target 1:
+    cppPreprocessAttrs:
+      defineList: []
+      incList:
+        - d:/KEIL_MDK/mdk/C51/INC/Atmel
+        - driver
+        - user
+      libList: []
+    excludeList: []
+    toolchain: Keil_C51
+    toolchainConfigMap:
+      Keil_C51:
+        options:
+          version: 2
+          afterBuildTasks: []
+          asm-compiler: {}
+          beforeBuildTasks: []
+          c/cpp-compiler:
+            optimization-level: level-8
+            optimization-type: SPEED
+          global:
+            ram-mode: SMALL
+            rom-mode: LARGE
+          linker:
+            misc-controls: &quot;&quot;
+            output-format: elf
+            remove-unused: true
+    uploadConfigMap:
+      Custom:
+        bin: &quot;&quot;
+        commandLine: &quot;&quot;
+        eraseChipCommand: &quot;&quot;
+      stcgal:
+        bin: &quot;&quot;
+        eepromImgPath: &quot;null&quot;
+        extraOptions: &quot;&quot;
+        options: .eide/stc.flash.json
+    uploader: stcgal
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>.eide/files.options.yml</span><small>689 B</small></summary><pre><code>##########################################################################################
+#                        Append Compiler Options For Source Files
+##########################################################################################
+
+# syntax:
+#   &lt;your pattern&gt;: &lt;compiler options&gt;
+# For get pattern syntax, please refer to: https://www.npmjs.com/package/micromatch
+#
+# examples:
+#   &#39;main.cpp&#39;:           --cpp11 -Og ...
+#   &#39;src/*.c&#39;:            -gnu -O2 ...
+#   &#39;src/lib/**/*.cpp&#39;:   --cpp11 -Os ...
+#   &#39;!Application/*.c&#39;:   -O0
+#   &#39;**/*.c&#39;:             -O2 -gnu ...
+
+version: &quot;2.1&quot;
+options:
+    Target 1:
+        files: {}
+        virtualPathFiles: {}
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>driver/OLED_Font.h</span><small>9.0 KB</small></summary><pre><code>#ifndef __OLED_FONT_H
+#define __OLED_FONT_H
+
+/*OLED字模库，宽8像素，高16像素*/
+const unsigned char code OLED_F8x16[][16]=
+{
+	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,//  0
+	
+	0x00,0x00,0x00,0xF8,0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x33,0x30,0x00,0x00,0x00,//! 1
+	
+	0x00,0x10,0x0C,0x06,0x10,0x0C,0x06,0x00,
+	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,//&quot; 2
+	
+	0x40,0xC0,0x78,0x40,0xC0,0x78,0x40,0x00,
+	0x04,0x3F,0x04,0x04,0x3F,0x04,0x04,0x00,//# 3
+	
+	0x00,0x70,0x88,0xFC,0x08,0x30,0x00,0x00,
+	0x00,0x18,0x20,0xFF,0x21,0x1E,0x00,0x00,//$ 4
+	
+	0xF0,0x08,0xF0,0x00,0xE0,0x18,0x00,0x00,
+	0x00,0x21,0x1C,0x03,0x1E,0x21,0x1E,0x00,//% 5
+	
+	0x00,0xF0,0x08,0x88,0x70,0x00,0x00,0x00,
+	0x1E,0x21,0x23,0x24,0x19,0x27,0x21,0x10,//&amp; 6
+	
+	0x10,0x16,0x0E,0x00,0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,//&#39; 7
+	
+	0x00,0x00,0x00,0xE0,0x18,0x04,0x02,0x00,
+	0x00,0x00,0x00,0x07,0x18,0x20,0x40,0x00,//( 8
+	
+	0x00,0x02,0x04,0x18,0xE0,0x00,0x00,0x00,
+	0x00,0x40,0x20,0x18,0x07,0x00,0x00,0x00,//) 9
+	
+	0x40,0x40,0x80,0xF0,0x80,0x40,0x40,0x00,
+	0x02,0x02,0x01,0x0F,0x01,0x02,0x02,0x00,//* 10
+	
+	0x00,0x00,0x00,0xF0,0x00,0x00,0x00,0x00,
+	0x01,0x01,0x01,0x1F,0x01,0x01,0x01,0x00,//+ 11
+	
+	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+	0x80,0xB0,0x70,0x00,0x00,0x00,0x00,0x00,//, 12
+	
+	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+	0x00,0x01,0x01,0x01,0x01,0x01,0x01,0x01,//- 13
+	
+	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+	0x00,0x30,0x30,0x00,0x00,0x00,0x00,0x00,//. 14
+	
+	0x00,0x00,0x00,0x00,0x80,0x60,0x18,0x04,
+	0x00,0x60,0x18,0x06,0x01,0x00,0x00,0x00,/// 15
+	
+	0x00,0xE0,0x10,0x08,0x08,0x10,0xE0,0x00,
+	0x00,0x0F,0x10,0x20,0x20,0x10,0x0F,0x00,//0 16
+	
+	0x00,0x10,0x10,0xF8,0x00,0x00,0x00,0x00,
+	0x00,0x20,0x20,0x3F,0x20,0x20,0x00,0x00,//1 17
+	
+	0x00,0x70,0x08,0x08,0x08,0x88,0x70,0x00,
+	0x00,0x30,0x28,0x24,0x22,0x21,0x30,0x00,//2 18
+	
+	0x00,0x30,0x08,0x88,0x88,0x48,0x30,0x00,
+	0x00,0x18,0x20,0x20,0x20,0x11,0x0E,0x00,//3 19
+	
+	0x00,0x00,0xC0,0x20,0x10,0xF8,0x00,0x00,
+	0x00,0x07,0x04,0x24,0x24,0x3F,0x24,0x00,//4 20
+	
+	0x00,0xF8,0x08,0x88,0x88,0x08,0x08,0x00,
+	0x00,0x19,0x21,0x20,0x20,0x11,0x0E,0x00,//5 21
+	
+	0x00,0xE0,0x10,0x88,0x88,0x18,0x00,0x00,
+	0x00,0x0F,0x11,0x20,0x20,0x11,0x0E,0x00,//6 22
+	
+	0x00,0x38,0x08,0x08,0xC8,0x38,0x08,0x00,
+	0x00,0x00,0x00,0x3F,0x00,0x00,0x00,0x00,//7 23
+	
+	0x00,0x70,0x88,0x08,0x08,0x88,0x70,0x00,
+	0x00,0x1C,0x22,0x21,0x21,0x22,0x1C,0x00,//8 24
+	
+	0x00,0xE0,0x10,0x08,0x08,0x10,0xE0,0x00,
+	0x00,0x00,0x31,0x22,0x22,0x11,0x0F,0x00,//9 25
+	
+	0x00,0x00,0x00,0xC0,0xC0,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x30,0x30,0x00,0x00,0x00,//: 26
+	
+	0x00,0x00,0x00,0x80,0x00,0x00,0x00,0x00,
+	0x00,0x00,0x80,0x60,0x00,0x00,0x00,0x00,//; 27
+	
+	0x00,0x00,0x80,0x40,0x20,0x10,0x08,0x00,
+	0x00,0x01,0x02,0x04,0x08,0x10,0x20,0x00,//&lt; 28
+	
+	0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x00,
+	0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x00,//= 29
+	
+	0x00,0x08,0x10,0x20,0x40,0x80,0x00,0x00,
+	0x00,0x20,0x10,0x08,0x04,0x02,0x01,0x00,//&gt; 30
+	
+	0x00,0x70,0x48,0x08,0x08,0x08,0xF0,0x00,
+	0x00,0x00,0x00,0x30,0x36,0x01,0x00,0x00,//? 31
+	
+	0xC0,0x30,0xC8,0x28,0xE8,0x10,0xE0,0x00,
+	0x07,0x18,0x27,0x24,0x23,0x14,0x0B,0x00,//@ 32
+	
+	0x00,0x00,0xC0,0x38,0xE0,0x00,0x00,0x00,
+	0x20,0x3C,0x23,0x02,0x02,0x27,0x38,0x20,//A 33
+	
+	0x08,0xF8,0x88,0x88,0x88,0x70,0x00,0x00,
+	0x20,0x3F,0x20,0x20,0x20,0x11,0x0E,0x00,//B 34
+	
+	0xC0,0x30,0x08,0x08,0x08,0x08,0x38,0x00,
+	0x07,0x18,0x20,0x20,0x20,0x10,0x08,0x00,//C 35
+	
+	0x08,0xF8,0x08,0x08,0x08,0x10,0xE0,0x00,
+	0x20,0x3F,0x20,0x20,0x20,0x10,0x0F,0x00,//D 36
+	
+	0x08,0xF8,0x88,0x88,0xE8,0x08,0x10,0x00,
+	0x20,0x3F,0x20,0x20,0x23,0x20,0x18,0x00,//E 37
+	
+	0x08,0xF8,0x88,0x88,0xE8,0x08,0x10,0x00,
+	0x20,0x3F,0x20,0x00,0x03,0x00,0x00,0x00,//F 38
+	
+	0xC0,0x30,0x08,0x08,0x08,0x38,0x00,0x00,
+	0x07,0x18,0x20,0x20,0x22,0x1E,0x02,0x00,//G 39
+	
+	0x08,0xF8,0x08,0x00,0x00,0x08,0xF8,0x08,
+	0x20,0x3F,0x21,0x01,0x01,0x21,0x3F,0x20,//H 40
+	
+	0x00,0x08,0x08,0xF8,0x08,0x08,0x00,0x00,
+	0x00,0x20,0x20,0x3F,0x20,0x20,0x00,0x00,//I 41
+	
+	0x00,0x00,0x08,0x08,0xF8,0x08,0x08,0x00,
+	0xC0,0x80,0x80,0x80,0x7F,0x00,0x00,0x00,//J 42
+	
+	0x08,0xF8,0x88,0xC0,0x28,0x18,0x08,0x00,
+	0x20,0x3F,0x20,0x01,0x26,0x38,0x20,0x00,//K 43
+	
+	0x08,0xF8,0x08,0x00,0x00,0x00,0x00,0x00,
+	0x20,0x3F,0x20,0x20,0x20,0x20,0x30,0x00,//L 44
+	
+	0x08,0xF8,0xF8,0x00,0xF8,0xF8,0x08,0x00,
+	0x20,0x3F,0x00,0x3F,0x00,0x3F,0x20,0x00,//M 45
+	
+	0x08,0xF8,0x30,0xC0,0x00,0x08,0xF8,0x08,
+	0x20,0x3F,0x20,0x00,0x07,0x18,0x3F,0x00,//N 46
+	
+	0xE0,0x10,0x08,0x08,0x08,0x10,0xE0,0x00,
+	0x0F,0x10,0x20,0x20,0x20,0x10,0x0F,0x00,//O 47
+	
+	0x08,0xF8,0x08,0x08,0x08,0x08,0xF0,0x00,
+	0x20,0x3F,0x21,0x01,0x01,0x01,0x00,0x00,//P 48
+	
+	0xE0,0x10,0x08,0x08,0x08,0x10,0xE0,0x00,
+	0x0F,0x18,0x24,0x24,0x38,0x50,0x4F,0x00,//Q 49
+	
+	0x08,0xF8,0x88,0x88,0x88,0x88,0x70,0x00,
+	0x20,0x3F,0x20,0x00,0x03,0x0C,0x30,0x20,//R 50
+	
+	0x00,0x70,0x88,0x08,0x08,0x08,0x38,0x00,
+	0x00,0x38,0x20,0x21,0x21,0x22,0x1C,0x00,//S 51
+	
+	0x18,0x08,0x08,0xF8,0x08,0x08,0x18,0x00,
+	0x00,0x00,0x20,0x3F,0x20,0x00,0x00,0x00,//T 52
+	
+	0x08,0xF8,0x08,0x00,0x00,0x08,0xF8,0x08,
+	0x00,0x1F,0x20,0x20,0x20,0x20,0x1F,0x00,//U 53
+	
+	0x08,0x78,0x88,0x00,0x00,0xC8,0x38,0x08,
+	0x00,0x00,0x07,0x38,0x0E,0x01,0x00,0x00,//V 54
+	
+	0xF8,0x08,0x00,0xF8,0x00,0x08,0xF8,0x00,
+	0x03,0x3C,0x07,0x00,0x07,0x3C,0x03,0x00,//W 55
+	
+	0x08,0x18,0x68,0x80,0x80,0x68,0x18,0x08,
+	0x20,0x30,0x2C,0x03,0x03,0x2C,0x30,0x20,//X 56
+	
+	0x08,0x38,0xC8,0x00,0xC8,0x38,0x08,0x00,
+	0x00,0x00,0x20,0x3F,0x20,0x00,0x00,0x00,//Y 57
+	
+	0x10,0x08,0x08,0x08,0xC8,0x38,0x08,0x00,
+	0x20,0x38,0x26,0x21,0x20,0x20,0x18,0x00,//Z 58
+	
+	0x00,0x00,0x00,0xFE,0x02,0x02,0x02,0x00,
+	0x00,0x00,0x00,0x7F,0x40,0x40,0x40,0x00,//[ 59
+	
+	0x00,0x0C,0x30,0xC0,0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x01,0x06,0x38,0xC0,0x00,//\ 60
+	
+	0x00,0x02,0x02,0x02,0xFE,0x00,0x00,0x00,
+	0x00,0x40,0x40,0x40,0x7F,0x00,0x00,0x00,//] 61
+	
+	0x00,0x00,0x04,0x02,0x02,0x02,0x04,0x00,
+	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,//^ 62
+	
+	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+	0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,//_ 63
+	
+	0x00,0x02,0x02,0x04,0x00,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,//` 64
+	
+	0x00,0x00,0x80,0x80,0x80,0x80,0x00,0x00,
+	0x00,0x19,0x24,0x22,0x22,0x22,0x3F,0x20,//a 65
+	
+	0x08,0xF8,0x00,0x80,0x80,0x00,0x00,0x00,
+	0x00,0x3F,0x11,0x20,0x20,0x11,0x0E,0x00,//b 66
+	
+	0x00,0x00,0x00,0x80,0x80,0x80,0x00,0x00,
+	0x00,0x0E,0x11,0x20,0x20,0x20,0x11,0x00,//c 67
+	
+	0x00,0x00,0x00,0x80,0x80,0x88,0xF8,0x00,
+	0x00,0x0E,0x11,0x20,0x20,0x10,0x3F,0x20,//d 68
+	
+	0x00,0x00,0x80,0x80,0x80,0x80,0x00,0x00,
+	0x00,0x1F,0x22,0x22,0x22,0x22,0x13,0x00,//e 69
+	
+	0x00,0x80,0x80,0xF0,0x88,0x88,0x88,0x18,
+	0x00,0x20,0x20,0x3F,0x20,0x20,0x00,0x00,//f 70
+	
+	0x00,0x00,0x80,0x80,0x80,0x80,0x80,0x00,
+	0x00,0x6B,0x94,0x94,0x94,0x93,0x60,0x00,//g 71
+	
+	0x08,0xF8,0x00,0x80,0x80,0x80,0x00,0x00,
+	0x20,0x3F,0x21,0x00,0x00,0x20,0x3F,0x20,//h 72
+	
+	0x00,0x80,0x98,0x98,0x00,0x00,0x00,0x00,
+	0x00,0x20,0x20,0x3F,0x20,0x20,0x00,0x00,//i 73
+	
+	0x00,0x00,0x00,0x80,0x98,0x98,0x00,0x00,
+	0x00,0xC0,0x80,0x80,0x80,0x7F,0x00,0x00,//j 74
+	
+	0x08,0xF8,0x00,0x00,0x80,0x80,0x80,0x00,
+	0x20,0x3F,0x24,0x02,0x2D,0x30,0x20,0x00,//k 75
+	
+	0x00,0x08,0x08,0xF8,0x00,0x00,0x00,0x00,
+	0x00,0x20,0x20,0x3F,0x20,0x20,0x00,0x00,//l 76
+	
+	0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x00,
+	0x20,0x3F,0x20,0x00,0x3F,0x20,0x00,0x3F,//m 77
+	
+	0x80,0x80,0x00,0x80,0x80,0x80,0x00,0x00,
+	0x20,0x3F,0x21,0x00,0x00,0x20,0x3F,0x20,//n 78
+	
+	0x00,0x00,0x80,0x80,0x80,0x80,0x00,0x00,
+	0x00,0x1F,0x20,0x20,0x20,0x20,0x1F,0x00,//o 79
+	
+	0x80,0x80,0x00,0x80,0x80,0x00,0x00,0x00,
+	0x80,0xFF,0xA1,0x20,0x20,0x11,0x0E,0x00,//p 80
+	
+	0x00,0x00,0x00,0x80,0x80,0x80,0x80,0x00,
+	0x00,0x0E,0x11,0x20,0x20,0xA0,0xFF,0x80,//q 81
+	
+	0x80,0x80,0x80,0x00,0x80,0x80,0x80,0x00,
+	0x20,0x20,0x3F,0x21,0x20,0x00,0x01,0x00,//r 82
+	
+	0x00,0x00,0x80,0x80,0x80,0x80,0x80,0x00,
+	0x00,0x33,0x24,0x24,0x24,0x24,0x19,0x00,//s 83
+	
+	0x00,0x80,0x80,0xE0,0x80,0x80,0x00,0x00,
+	0x00,0x00,0x00,0x1F,0x20,0x20,0x00,0x00,//t 84
+	
+	0x80,0x80,0x00,0x00,0x00,0x80,0x80,0x00,
+	0x00,0x1F,0x20,0x20,0x20,0x10,0x3F,0x20,//u 85
+	
+	0x80,0x80,0x80,0x00,0x00,0x80,0x80,0x80,
+	0x00,0x01,0x0E,0x30,0x08,0x06,0x01,0x00,//v 86
+	
+	0x80,0x80,0x00,0x80,0x00,0x80,0x80,0x80,
+	0x0F,0x30,0x0C,0x03,0x0C,0x30,0x0F,0x00,//w 87
+	
+	0x00,0x80,0x80,0x00,0x80,0x80,0x80,0x00,
+	0x00,0x20,0x31,0x2E,0x0E,0x31,0x20,0x00,//x 88
+	
+	0x80,0x80,0x80,0x00,0x00,0x80,0x80,0x80,
+	0x80,0x81,0x8E,0x70,0x18,0x06,0x01,0x00,//y 89
+	
+	0x00,0x80,0x80,0x80,0x80,0x80,0x80,0x00,
+	0x00,0x21,0x30,0x2C,0x22,0x21,0x30,0x00,//z 90
+	
+	0x00,0x00,0x00,0x00,0x80,0x7C,0x02,0x02,
+	0x00,0x00,0x00,0x00,0x00,0x3F,0x40,0x40,//{ 91
+	
+	0x00,0x00,0x00,0x00,0xFF,0x00,0x00,0x00,
+	0x00,0x00,0x00,0x00,0xFF,0x00,0x00,0x00,//| 92
+	
+	0x00,0x02,0x02,0x7C,0x80,0x00,0x00,0x00,
+	0x00,0x40,0x40,0x3F,0x00,0x00,0x00,0x00,//} 93
+	
+	0x00,0x06,0x01,0x01,0x02,0x02,0x04,0x04,
+	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,//~ 94
+};
+
+#endif
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>.eide/stc.flash.json</span><small>50 B</small></summary><pre><code>{
+    &quot;device&quot;: &quot;auto&quot;,
+    &quot;baudrate&quot;: &quot;115200&quot;
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>driver/oled.h</span><small>692 B</small></summary><pre><code>#ifndef __OLED_H
+#define __OLED_H
+
+#include &quot;main.h&quot;
+
+void OLED_Init(void);
+void OLED_Clear(void);
+void OLED_ShowChar(unsigned char Line, unsigned char Column, char Char);
+void OLED_ShowString(unsigned char Line, unsigned char Column, char *String);
+void OLED_ShowNum(unsigned char Line, unsigned char Column, unsigned int Number, unsigned char Length);
+void OLED_ShowSignedNum(unsigned char Line, unsigned char Column, int Number, unsigned char Length);
+void OLED_ShowHexNum(unsigned char Line, unsigned char Column, unsigned int Number, unsigned char Length);
+void OLED_ShowBinNum(unsigned char Line, unsigned char Column, unsigned int Number, unsigned char Length);
+
+#endif
+</code></pre></details></section></div></div></div></main><footer class="VPDocFooter" data-v-39a288b8 data-v-e257564d><!--[--><!--]--><!----><nav class="prev-next" aria-labelledby="doc-footer-aria-label" data-v-e257564d><span class="visually-hidden" id="doc-footer-aria-label" data-v-e257564d>Pager</span><div class="pager" data-v-e257564d><!----></div><div class="pager" data-v-e257564d><a class="VPLink link pager-link next" href="/guide/getting-started" data-v-e257564d><!--[--><span class="desc" data-v-e257564d>下一篇</span><span class="title" data-v-e257564d>开始使用</span><!--]--></a></div></nav></footer><!--[--><!--]--></div></div></div><!--[--><!--]--></div></div><footer class="VPFooter has-sidebar" data-v-5d98c3a5 data-v-e315a0ad><div class="container" data-v-e315a0ad><p class="message" data-v-e315a0ad>开源协会知识沉淀与资料共享。</p><p class="copyright" data-v-e315a0ad>Powered by VitePress and GitHub Pages.</p></div></footer><!--[--><!--]--></div></div>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"guide_embedded.md\":\"BHAe_NYR\",\"guide_getting-started.md\":\"Bqpeg4mo\",\"guide_robot-motion-control.md\":\"BW8G4pa-\",\"index.md\":\"SpcP3ZNM\",\"library_generated_doc-0c87426632.md\":\"Cg5sZMeW\",\"library_generated_doc-0edadc79e9.md\":\"B8crb2LR\",\"library_generated_doc-115616aa75.md\":\"BQJQlqyg\",\"library_generated_doc-11d294a6fa.md\":\"pSvVu923\",\"library_generated_doc-1338744994.md\":\"BfoeQSIy\",\"library_generated_doc-1694ce68fa.md\":\"B1mDKs1L\",\"library_generated_doc-19e950c8bd.md\":\"CmDWcQC4\",\"library_generated_doc-1c8356e419.md\":\"B4SpI7gK\",\"library_generated_doc-1cad1cfa7a.md\":\"DDMqQCST\",\"library_generated_doc-1d874c7346.md\":\"CmorYCMW\",\"library_generated_doc-1df552e31c.md\":\"BbSzQgHU\",\"library_generated_doc-1f7eeb2478.md\":\"D6p5R4BN\",\"library_generated_doc-23e64d7aa3.md\":\"DS7rIAyT\",\"library_generated_doc-25c2ca1a00.md\":\"B2dNyLn1\",\"library_generated_doc-277853480e.md\":\"C4HCVLz6\",\"library_generated_doc-2806056aab.md\":\"kZU9ztrN\",\"library_generated_doc-2f286a2cac.md\":\"BCdO-MsH\",\"library_generated_doc-30964a207a.md\":\"DE2saZaM\",\"library_generated_doc-33eb0e4d89.md\":\"igTIH4q6\",\"library_generated_doc-3694ef88db.md\":\"BYbhcqoV\",\"library_generated_doc-37a55a2dda.md\":\"BCF_9pPl\",\"library_generated_doc-420b513a36.md\":\"Bk3dbD6x\",\"library_generated_doc-447b7a2ba9.md\":\"BZA0eY7n\",\"library_generated_doc-448f4f56b5.md\":\"Bx1SH5EE\",\"library_generated_doc-44cfd64a5d.md\":\"k8J9-W73\",\"library_generated_doc-504a0bb11d.md\":\"BPlAdKRp\",\"library_generated_doc-5714cd02f9.md\":\"D1bOfiz8\",\"library_generated_doc-5a6d823e8e.md\":\"BoYHIzky\",\"library_generated_doc-5d17bfe9d0.md\":\"B4EexyXA\",\"library_generated_doc-60bded06db.md\":\"XXaEbtjY\",\"library_generated_doc-63a039f8e7.md\":\"CbUK0Tg2\",\"library_generated_doc-63af9b29de.md\":\"ChLVQk_s\",\"library_generated_doc-64ed09afa1.md\":\"BUtoE6dP\",\"library_generated_doc-651a4b046d.md\":\"DRV3UtSJ\",\"library_generated_doc-68d1ef7f2c.md\":\"J2InFLp8\",\"library_generated_doc-6d3dc02122.md\":\"Btlkx1ZR\",\"library_generated_doc-6e56514662.md\":\"CwUvOJbd\",\"library_generated_doc-6fdf145080.md\":\"BxhFdQak\",\"library_generated_doc-72586a38eb.md\":\"DLhWCOZp\",\"library_generated_doc-7360882287.md\":\"DvSqj4CF\",\"library_generated_doc-755776bcf2.md\":\"C8jnx4FB\",\"library_generated_doc-77311ccf4e.md\":\"ChSKaX0-\",\"library_generated_doc-775125e152.md\":\"BJBc6Xx-\",\"library_generated_doc-7a0752f103.md\":\"BVHO029M\",\"library_generated_doc-831d61553e.md\":\"CadO59h8\",\"library_generated_doc-89874c5de2.md\":\"DwPp4SqP\",\"library_generated_doc-8c467c633f.md\":\"CdEwNxmu\",\"library_generated_doc-8ef8cfc49c.md\":\"BB3Ntirn\",\"library_generated_doc-9053c27312.md\":\"BQuYgxCo\",\"library_generated_doc-90ea137ffb.md\":\"DHZBqOjK\",\"library_generated_doc-91fec6c102.md\":\"DOEetHuq\",\"library_generated_doc-95f2617b53.md\":\"BiDMlVqu\",\"library_generated_doc-97ec301176.md\":\"C6PV08t4\",\"library_generated_doc-985d3f547d.md\":\"BYu6cRD9\",\"library_generated_doc-9aaa85564c.md\":\"BYkObiYN\",\"library_generated_doc-a09b57432c.md\":\"CFH5AugM\",\"library_generated_doc-a3f843c655.md\":\"BLk4EXf-\",\"library_generated_doc-a7125a7496.md\":\"CvNDcNb3\",\"library_generated_doc-a9b939c1d7.md\":\"B_-j7xWJ\",\"library_generated_doc-ad65f16e01.md\":\"CV-oKDRD\",\"library_generated_doc-b082a5098c.md\":\"BeWR2P77\",\"library_generated_doc-b137af2c9c.md\":\"C_uXnIhD\",\"library_generated_doc-b16199b132.md\":\"B_2sowo8\",\"library_generated_doc-b1ee804a03.md\":\"C8g2cPLX\",\"library_generated_doc-b23eeebff1.md\":\"BfmZhlb0\",\"library_generated_doc-b41bf628de.md\":\"CwrwXAQ_\",\"library_generated_doc-b68590b8ac.md\":\"rHFIIIDr\",\"library_generated_doc-b710258ab5.md\":\"Dp5da2no\",\"library_generated_doc-b8d8c8547a.md\":\"Bi--A27B\",\"library_generated_doc-b9d0ee371d.md\":\"CknRKVPv\",\"library_generated_doc-bed41b3e47.md\":\"CHt7_QOo\",\"library_generated_doc-bf24e716d3.md\":\"CZY6VRxA\",\"library_generated_doc-c6f390b099.md\":\"m6L8nd_A\",\"library_generated_doc-c75aa7bcf0.md\":\"CyVdVZtk\",\"library_generated_doc-ca880c8c69.md\":\"DDb611wd\",\"library_generated_doc-cd6c0d2060.md\":\"Bz-uok5J\",\"library_generated_doc-cec4c39766.md\":\"Ds-83jm4\",\"library_generated_doc-cfe5ed322b.md\":\"CX8oSRXi\",\"library_generated_doc-cff0ffbcf5.md\":\"D6d1BJ2P\",\"library_generated_doc-d1f02d7b86.md\":\"BAN9IrKu\",\"library_generated_doc-d721f2bfc8.md\":\"ooAlFpgc\",\"library_generated_doc-d801e39e19.md\":\"DzGuoynA\",\"library_generated_doc-d8a0dbf87d.md\":\"DRanZLJU\",\"library_generated_doc-d8b12e4169.md\":\"DWzUu8lk\",\"library_generated_doc-db83f17c96.md\":\"LU-wQ1ll\",\"library_generated_doc-ddacb55a96.md\":\"9vpL5FYY\",\"library_generated_doc-de4b40d6f1.md\":\"JrrhNxjc\",\"library_generated_doc-de9ddd00fc.md\":\"DzX2bt7-\",\"library_generated_doc-df40b62ca2.md\":\"B17oF7ev\",\"library_generated_doc-e3a1c1ca16.md\":\"CcrVyjtV\",\"library_generated_doc-e3de3bfe1a.md\":\"C2bvlYHi\",\"library_generated_doc-e461e6f214.md\":\"D8PjdL5D\",\"library_generated_doc-e54d2ce749.md\":\"D_eqa_aU\",\"library_generated_doc-e5579098a7.md\":\"B23kQfXd\",\"library_generated_doc-e660c8856a.md\":\"HsnlPoJK\",\"library_generated_doc-ea3865b43c.md\":\"DiXLdTIr\",\"library_generated_doc-ea8d1cd1a1.md\":\"BMCX_3lL\",\"library_generated_doc-eb4b03f30e.md\":\"CUeySxlg\",\"library_generated_doc-ef02588d18.md\":\"Czmu3Vpn\",\"library_generated_doc-ef6bcf86df.md\":\"BJouzUjL\",\"library_generated_doc-f057f3c7c3.md\":\"0lN_HW1G\",\"library_generated_doc-f38fd52503.md\":\"cTSZ1jKX\",\"library_generated_doc-f4fe6565c2.md\":\"zeghf7CG\",\"library_generated_doc-f5ed4331ce.md\":\"BLIfnXT-\",\"library_generated_doc-f64e7a02fb.md\":\"CZrG-lqu\",\"library_generated_doc-fcc7daedff.md\":\"CQ1NqbSU\",\"library_generated_doc-fdb02902fe.md\":\"BAYoCMk4\",\"library_generated_doc-ff72dbc431.md\":\"BQlf8kKB\",\"library_generated_doc-ffc4010b5b.md\":\"ICMFuvch\",\"library_index.md\":\"CN9CO2Lp\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"开源协会知识库\",\"description\":\"沉淀嵌入式与机器人运动控制资料的公开知识库\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{\"logo\":\"/association-logo.jpg\",\"search\":{\"provider\":\"local\"},\"nav\":[{\"text\":\"首页\",\"link\":\"/\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}],\"sidebar\":[{\"text\":\"开源协会知识库\",\"items\":[{\"text\":\"开始使用\",\"link\":\"/guide/getting-started\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}]}],\"socialLinks\":[{\"icon\":\"github\",\"link\":\"https://github.com/Zhr-ARM/free-knowledge-base\"}],\"footer\":{\"message\":\"开源协会知识沉淀与资料共享。\",\"copyright\":\"Powered by VitePress and GitHub Pages.\"},\"docFooter\":{\"prev\":\"上一篇\",\"next\":\"下一篇\"},\"outline\":{\"label\":\"本页目录\",\"level\":[2,3]},\"lastUpdated\":{\"text\":\"最后更新\"},\"darkModeSwitchLabel\":\"外观\",\"sidebarMenuLabel\":\"菜单\",\"returnToTopLabel\":\"回到顶部\",\"langMenuLabel\":\"切换语言\",\"externalLinkIcon\":true},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":true}");</script>
     
   </body>
 </html>

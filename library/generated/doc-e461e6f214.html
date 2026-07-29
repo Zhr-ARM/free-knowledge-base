@@ -6,20 +6,1055 @@
     <title>ESP32-IDF练习源码 | 开源协会知识库</title>
     <meta name="description" content="沉淀嵌入式与机器人运动控制资料的公开知识库">
     <meta name="generator" content="VitePress v1.6.4">
-    <link rel="preload stylesheet" href="/assets/style.G76BeFzm.css" as="style">
+    <link rel="preload stylesheet" href="/assets/style.MKnyf9dl.css" as="style">
     <link rel="preload stylesheet" href="/vp-icons.css" as="style">
     
-    <script type="module" src="/assets/app.DwSalGCD.js"></script>
+    <script type="module" src="/assets/app.D_iwdCn4.js"></script>
     <link rel="preload" href="/assets/inter-roman-latin.Di8DUHzh.woff2" as="font" type="font/woff2" crossorigin="">
-    <link rel="modulepreload" href="/assets/chunks/theme.CcjBcm4w.js">
+    <link rel="modulepreload" href="/assets/chunks/theme.DbnUY3IV.js">
     <link rel="modulepreload" href="/assets/chunks/framework.BWuWLRhz.js">
-    <link rel="modulepreload" href="/assets/library_generated_doc-e461e6f214.md.IO8JxY9o.lean.js">
+    <link rel="modulepreload" href="/assets/library_generated_doc-e461e6f214.md.D8PjdL5D.lean.js">
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
     <script id="check-dark-mode">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
     <script id="check-mac-os">document.documentElement.classList.toggle("mac",/Mac|iPhone|iPod|iPad/i.test(navigator.platform));</script>
   </head>
   <body>
-    <div id="app"><div class="Layout" data-v-5d98c3a5><!--[--><!--]--><!--[--><span tabindex="-1" data-v-0b0ada53></span><a href="#VPContent" class="VPSkipLink visually-hidden" data-v-0b0ada53>Skip to content</a><!--]--><!----><header class="VPNav" data-v-5d98c3a5 data-v-ae24b3ad><div class="VPNavBar" data-v-ae24b3ad data-v-6aa21345><div class="wrapper" data-v-6aa21345><div class="container" data-v-6aa21345><div class="title" data-v-6aa21345><div class="VPNavBarTitle has-sidebar" data-v-6aa21345 data-v-1168a8e4><a class="title" href="/" data-v-1168a8e4><!--[--><!--]--><!--[--><img class="VPImage logo" src="/association-logo.jpg" alt data-v-8426fc1a><!--]--><span data-v-1168a8e4>开源协会知识库</span><!--[--><!--]--></a></div></div><div class="content" data-v-6aa21345><div class="content-body" data-v-6aa21345><!--[--><!--]--><div class="VPNavBarSearch search" data-v-6aa21345><!--[--><!----><div id="local-search"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search"><span class="DocSearch-Button-Container"><span class="vp-icon DocSearch-Search-Icon"></span><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"><kbd class="DocSearch-Button-Key"></kbd><kbd class="DocSearch-Button-Key">K</kbd></span></button></div><!--]--></div><nav aria-labelledby="main-nav-aria-label" class="VPNavBarMenu menu" data-v-6aa21345 data-v-dc692963><span id="main-nav-aria-label" class="visually-hidden" data-v-dc692963> Main Navigation </span><!--[--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>首页</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/library/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>资料库</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/embedded" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>嵌入式</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/robot-motion-control" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>机器人运动控制</span><!--]--></a><!--]--><!--]--></nav><!----><div class="VPNavBarAppearance appearance" data-v-6aa21345 data-v-6c893767><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-6c893767 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div><div class="VPSocialLinks VPNavBarSocialLinks social-links" data-v-6aa21345 data-v-0394ad82 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div><div class="VPFlyout VPNavBarExtra extra" data-v-6aa21345 data-v-bb2aa2f0 data-v-cf11d7a2><button type="button" class="button" aria-haspopup="true" aria-expanded="false" aria-label="extra navigation" data-v-cf11d7a2><span class="vpi-more-horizontal icon" data-v-cf11d7a2></span></button><div class="menu" data-v-cf11d7a2><div class="VPMenu" data-v-cf11d7a2 data-v-b98bc113><!----><!--[--><!--[--><!----><div class="group" data-v-bb2aa2f0><div class="item appearance" data-v-bb2aa2f0><p class="label" data-v-bb2aa2f0>外观</p><div class="appearance-action" data-v-bb2aa2f0><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-bb2aa2f0 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div></div></div><div class="group" data-v-bb2aa2f0><div class="item social-links" data-v-bb2aa2f0><div class="VPSocialLinks social-links-list" data-v-bb2aa2f0 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div></div></div><!--]--><!--]--></div></div></div><!--[--><!--]--><button type="button" class="VPNavBarHamburger hamburger" aria-label="mobile navigation" aria-expanded="false" aria-controls="VPNavScreen" data-v-6aa21345 data-v-e5dd9c1c><span class="container" data-v-e5dd9c1c><span class="top" data-v-e5dd9c1c></span><span class="middle" data-v-e5dd9c1c></span><span class="bottom" data-v-e5dd9c1c></span></span></button></div></div></div></div><div class="divider" data-v-6aa21345><div class="divider-line" data-v-6aa21345></div></div></div><!----></header><div class="VPLocalNav has-sidebar empty" data-v-5d98c3a5 data-v-a6f0e41e><div class="container" data-v-a6f0e41e><button class="menu" aria-expanded="false" aria-controls="VPSidebarNav" data-v-a6f0e41e><span class="vpi-align-left menu-icon" data-v-a6f0e41e></span><span class="menu-text" data-v-a6f0e41e>菜单</span></button><div class="VPLocalNavOutlineDropdown" style="--vp-vh:0px;" data-v-a6f0e41e data-v-8a42e2b4><button data-v-8a42e2b4>回到顶部</button><!----></div></div></div><aside class="VPSidebar" data-v-5d98c3a5 data-v-319d5ca6><div class="curtain" data-v-319d5ca6></div><nav class="nav" id="VPSidebarNav" aria-labelledby="sidebar-aria-label" tabindex="-1" data-v-319d5ca6><span class="visually-hidden" id="sidebar-aria-label" data-v-319d5ca6> Sidebar Navigation </span><!--[--><!--]--><!--[--><div class="no-transition group" data-v-c40bc020><section class="VPSidebarItem level-0" data-v-c40bc020 data-v-b3fd67f8><div class="item" role="button" tabindex="0" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><h2 class="text" data-v-b3fd67f8>开源协会知识库</h2><!----></div><div class="items" data-v-b3fd67f8><!--[--><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/getting-started" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>开始使用</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/library/" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>资料库</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/embedded" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>嵌入式</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/robot-motion-control" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>机器人运动控制</p><!--]--></a><!----></div><!----></div><!--]--></div></section></div><!--]--><!--[--><!--]--></nav></aside><div class="VPContent has-sidebar" id="VPContent" data-v-5d98c3a5 data-v-1428d186><div class="VPDoc has-sidebar has-aside" data-v-1428d186 data-v-39a288b8><!--[--><!--]--><div class="container" data-v-39a288b8><div class="aside" data-v-39a288b8><div class="aside-curtain" data-v-39a288b8></div><div class="aside-container" data-v-39a288b8><div class="aside-content" data-v-39a288b8><div class="VPDocAside" data-v-39a288b8 data-v-3f215769><!--[--><!--]--><!--[--><!--]--><nav aria-labelledby="doc-outline-aria-label" class="VPDocAsideOutline" data-v-3f215769 data-v-a5bbad30><div class="content" data-v-a5bbad30><div class="outline-marker" data-v-a5bbad30></div><div aria-level="2" class="outline-title" id="doc-outline-aria-label" role="heading" data-v-a5bbad30>本页目录</div><ul class="VPDocOutlineItem root" data-v-a5bbad30 data-v-b933a997><!--[--><!--]--></ul></div></nav><!--[--><!--]--><div class="spacer" data-v-3f215769></div><!--[--><!--]--><!----><!--[--><!--]--><!--[--><!--]--></div></div></div></div><div class="content" data-v-39a288b8><div class="content-container" data-v-39a288b8><!--[--><!--]--><main class="main" data-v-39a288b8><div style="position:relative;" class="vp-doc _library_generated_doc-e461e6f214 external-link-icon-enabled" data-v-39a288b8><div><h1 id="esp32-idf练习源码" tabindex="-1">ESP32-IDF练习源码 <a class="header-anchor" href="#esp32-idf练习源码" aria-label="Permalink to &quot;ESP32-IDF练习源码&quot;">​</a></h1><div class="kb-file-meta"><span><strong>目录</strong>嵌入式 / ESP32</span><span><strong>格式</strong>ZIP</span><span><strong>大小</strong>621.5 KB</span></div><p>此文件提供原始格式下载。</p><p class="kb-download-actions"><a class="kb-download-button" href="/uploads/raw/%E5%B5%8C%E5%85%A5%E5%BC%8F/04-ESP32/ESP32-IDF%E7%BB%83%E4%B9%A0%E6%BA%90%E7%A0%81.zip" download>下载 ZIP 文件</a></p></div></div></main><footer class="VPDocFooter" data-v-39a288b8 data-v-e257564d><!--[--><!--]--><!----><nav class="prev-next" aria-labelledby="doc-footer-aria-label" data-v-e257564d><span class="visually-hidden" id="doc-footer-aria-label" data-v-e257564d>Pager</span><div class="pager" data-v-e257564d><!----></div><div class="pager" data-v-e257564d><a class="VPLink link pager-link next" href="/guide/getting-started" data-v-e257564d><!--[--><span class="desc" data-v-e257564d>下一篇</span><span class="title" data-v-e257564d>开始使用</span><!--]--></a></div></nav></footer><!--[--><!--]--></div></div></div><!--[--><!--]--></div></div><footer class="VPFooter has-sidebar" data-v-5d98c3a5 data-v-e315a0ad><div class="container" data-v-e315a0ad><p class="message" data-v-e315a0ad>开源协会知识沉淀与资料共享。</p><p class="copyright" data-v-e315a0ad>Powered by VitePress and GitHub Pages.</p></div></footer><!--[--><!--]--></div></div>
-    <script>window.__VP_HASH_MAP__=JSON.parse("{\"guide_embedded.md\":\"BHAe_NYR\",\"guide_getting-started.md\":\"Bqpeg4mo\",\"guide_robot-motion-control.md\":\"BW8G4pa-\",\"index.md\":\"SpcP3ZNM\",\"library_generated_doc-0c87426632.md\":\"Cg5sZMeW\",\"library_generated_doc-0edadc79e9.md\":\"B8crb2LR\",\"library_generated_doc-115616aa75.md\":\"BQJQlqyg\",\"library_generated_doc-11d294a6fa.md\":\"pSvVu923\",\"library_generated_doc-1338744994.md\":\"BfoeQSIy\",\"library_generated_doc-1694ce68fa.md\":\"B1mDKs1L\",\"library_generated_doc-19e950c8bd.md\":\"CmDWcQC4\",\"library_generated_doc-1c8356e419.md\":\"B4SpI7gK\",\"library_generated_doc-1cad1cfa7a.md\":\"DDMqQCST\",\"library_generated_doc-1d874c7346.md\":\"jwdtQIWV\",\"library_generated_doc-1df552e31c.md\":\"BbSzQgHU\",\"library_generated_doc-1f7eeb2478.md\":\"D6p5R4BN\",\"library_generated_doc-23e64d7aa3.md\":\"DS7rIAyT\",\"library_generated_doc-25c2ca1a00.md\":\"B2dNyLn1\",\"library_generated_doc-277853480e.md\":\"C4HCVLz6\",\"library_generated_doc-2806056aab.md\":\"kZU9ztrN\",\"library_generated_doc-2f286a2cac.md\":\"BCdO-MsH\",\"library_generated_doc-30964a207a.md\":\"BS8qlWet\",\"library_generated_doc-33eb0e4d89.md\":\"igTIH4q6\",\"library_generated_doc-3694ef88db.md\":\"BYbhcqoV\",\"library_generated_doc-37a55a2dda.md\":\"BCF_9pPl\",\"library_generated_doc-420b513a36.md\":\"Bk3dbD6x\",\"library_generated_doc-447b7a2ba9.md\":\"BZA0eY7n\",\"library_generated_doc-448f4f56b5.md\":\"Bx1SH5EE\",\"library_generated_doc-44cfd64a5d.md\":\"CoCU3cZE\",\"library_generated_doc-504a0bb11d.md\":\"BPlAdKRp\",\"library_generated_doc-5714cd02f9.md\":\"D1bOfiz8\",\"library_generated_doc-5a6d823e8e.md\":\"BoXekZIf\",\"library_generated_doc-5d17bfe9d0.md\":\"B4EexyXA\",\"library_generated_doc-60bded06db.md\":\"COYXe0Ec\",\"library_generated_doc-63a039f8e7.md\":\"CbUK0Tg2\",\"library_generated_doc-63af9b29de.md\":\"ChLVQk_s\",\"library_generated_doc-64ed09afa1.md\":\"BUtoE6dP\",\"library_generated_doc-651a4b046d.md\":\"DRV3UtSJ\",\"library_generated_doc-68d1ef7f2c.md\":\"C7P0LOIk\",\"library_generated_doc-6d3dc02122.md\":\"Btlkx1ZR\",\"library_generated_doc-6e56514662.md\":\"CwUvOJbd\",\"library_generated_doc-6fdf145080.md\":\"BxhFdQak\",\"library_generated_doc-72586a38eb.md\":\"DLhWCOZp\",\"library_generated_doc-7360882287.md\":\"DvSqj4CF\",\"library_generated_doc-755776bcf2.md\":\"8nYDLt_D\",\"library_generated_doc-77311ccf4e.md\":\"ChSKaX0-\",\"library_generated_doc-775125e152.md\":\"BJBc6Xx-\",\"library_generated_doc-7a0752f103.md\":\"BVHO029M\",\"library_generated_doc-831d61553e.md\":\"CadO59h8\",\"library_generated_doc-89874c5de2.md\":\"DDTCGuzN\",\"library_generated_doc-8c467c633f.md\":\"CdEwNxmu\",\"library_generated_doc-8ef8cfc49c.md\":\"BB3Ntirn\",\"library_generated_doc-9053c27312.md\":\"BQuYgxCo\",\"library_generated_doc-90ea137ffb.md\":\"DHZBqOjK\",\"library_generated_doc-91fec6c102.md\":\"DOEetHuq\",\"library_generated_doc-95f2617b53.md\":\"BiDMlVqu\",\"library_generated_doc-97ec301176.md\":\"C6PV08t4\",\"library_generated_doc-985d3f547d.md\":\"BYu6cRD9\",\"library_generated_doc-9aaa85564c.md\":\"BYkObiYN\",\"library_generated_doc-a09b57432c.md\":\"CFH5AugM\",\"library_generated_doc-a3f843c655.md\":\"BLk4EXf-\",\"library_generated_doc-a7125a7496.md\":\"CdVH5-lO\",\"library_generated_doc-a9b939c1d7.md\":\"DuGxIA_5\",\"library_generated_doc-ad65f16e01.md\":\"CV-oKDRD\",\"library_generated_doc-b082a5098c.md\":\"BeWR2P77\",\"library_generated_doc-b137af2c9c.md\":\"C_uXnIhD\",\"library_generated_doc-b16199b132.md\":\"B_2sowo8\",\"library_generated_doc-b1ee804a03.md\":\"C8g2cPLX\",\"library_generated_doc-b23eeebff1.md\":\"BfmZhlb0\",\"library_generated_doc-b41bf628de.md\":\"CwrwXAQ_\",\"library_generated_doc-b68590b8ac.md\":\"rHFIIIDr\",\"library_generated_doc-b710258ab5.md\":\"eHSg6IvP\",\"library_generated_doc-b8d8c8547a.md\":\"Bi--A27B\",\"library_generated_doc-b9d0ee371d.md\":\"CknRKVPv\",\"library_generated_doc-bed41b3e47.md\":\"CHt7_QOo\",\"library_generated_doc-bf24e716d3.md\":\"CZY6VRxA\",\"library_generated_doc-c6f390b099.md\":\"m6L8nd_A\",\"library_generated_doc-c75aa7bcf0.md\":\"CyVdVZtk\",\"library_generated_doc-ca880c8c69.md\":\"DDb611wd\",\"library_generated_doc-cd6c0d2060.md\":\"Bz-uok5J\",\"library_generated_doc-cec4c39766.md\":\"Ds-83jm4\",\"library_generated_doc-cfe5ed322b.md\":\"CX8oSRXi\",\"library_generated_doc-cff0ffbcf5.md\":\"D6d1BJ2P\",\"library_generated_doc-d1f02d7b86.md\":\"BAN9IrKu\",\"library_generated_doc-d721f2bfc8.md\":\"ooAlFpgc\",\"library_generated_doc-d801e39e19.md\":\"DzGuoynA\",\"library_generated_doc-d8a0dbf87d.md\":\"DRanZLJU\",\"library_generated_doc-d8b12e4169.md\":\"DWzUu8lk\",\"library_generated_doc-db83f17c96.md\":\"LU-wQ1ll\",\"library_generated_doc-ddacb55a96.md\":\"9vpL5FYY\",\"library_generated_doc-de4b40d6f1.md\":\"JrrhNxjc\",\"library_generated_doc-de9ddd00fc.md\":\"DzX2bt7-\",\"library_generated_doc-df40b62ca2.md\":\"CeoSEycV\",\"library_generated_doc-e3a1c1ca16.md\":\"BnkPqoYD\",\"library_generated_doc-e3de3bfe1a.md\":\"C2bvlYHi\",\"library_generated_doc-e461e6f214.md\":\"IO8JxY9o\",\"library_generated_doc-e54d2ce749.md\":\"D_eqa_aU\",\"library_generated_doc-e5579098a7.md\":\"B23kQfXd\",\"library_generated_doc-e660c8856a.md\":\"HsnlPoJK\",\"library_generated_doc-ea3865b43c.md\":\"DiXLdTIr\",\"library_generated_doc-ea8d1cd1a1.md\":\"BMCX_3lL\",\"library_generated_doc-eb4b03f30e.md\":\"CUeySxlg\",\"library_generated_doc-ef02588d18.md\":\"Czmu3Vpn\",\"library_generated_doc-ef6bcf86df.md\":\"BJouzUjL\",\"library_generated_doc-f057f3c7c3.md\":\"0lN_HW1G\",\"library_generated_doc-f38fd52503.md\":\"cTSZ1jKX\",\"library_generated_doc-f4fe6565c2.md\":\"zeghf7CG\",\"library_generated_doc-f5ed4331ce.md\":\"BLIfnXT-\",\"library_generated_doc-f64e7a02fb.md\":\"CZrG-lqu\",\"library_generated_doc-fcc7daedff.md\":\"CQ1NqbSU\",\"library_generated_doc-fdb02902fe.md\":\"BY6zJvmC\",\"library_generated_doc-ff72dbc431.md\":\"BQlf8kKB\",\"library_generated_doc-ffc4010b5b.md\":\"ICMFuvch\",\"library_index.md\":\"CN9CO2Lp\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"开源协会知识库\",\"description\":\"沉淀嵌入式与机器人运动控制资料的公开知识库\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{\"logo\":\"/association-logo.jpg\",\"search\":{\"provider\":\"local\"},\"nav\":[{\"text\":\"首页\",\"link\":\"/\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}],\"sidebar\":[{\"text\":\"开源协会知识库\",\"items\":[{\"text\":\"开始使用\",\"link\":\"/guide/getting-started\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}]}],\"socialLinks\":[{\"icon\":\"github\",\"link\":\"https://github.com/Zhr-ARM/free-knowledge-base\"}],\"footer\":{\"message\":\"开源协会知识沉淀与资料共享。\",\"copyright\":\"Powered by VitePress and GitHub Pages.\"},\"docFooter\":{\"prev\":\"上一篇\",\"next\":\"下一篇\"},\"outline\":{\"label\":\"本页目录\",\"level\":[2,3]},\"lastUpdated\":{\"text\":\"最后更新\"},\"darkModeSwitchLabel\":\"外观\",\"sidebarMenuLabel\":\"菜单\",\"returnToTopLabel\":\"回到顶部\",\"langMenuLabel\":\"切换语言\",\"externalLinkIcon\":true},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":true}");</script>
+    <div id="app"><div class="Layout" data-v-5d98c3a5><!--[--><!--]--><!--[--><span tabindex="-1" data-v-0b0ada53></span><a href="#VPContent" class="VPSkipLink visually-hidden" data-v-0b0ada53>Skip to content</a><!--]--><!----><header class="VPNav" data-v-5d98c3a5 data-v-ae24b3ad><div class="VPNavBar" data-v-ae24b3ad data-v-6aa21345><div class="wrapper" data-v-6aa21345><div class="container" data-v-6aa21345><div class="title" data-v-6aa21345><div class="VPNavBarTitle has-sidebar" data-v-6aa21345 data-v-1168a8e4><a class="title" href="/" data-v-1168a8e4><!--[--><!--]--><!--[--><img class="VPImage logo" src="/association-logo.jpg" alt data-v-8426fc1a><!--]--><span data-v-1168a8e4>开源协会知识库</span><!--[--><!--]--></a></div></div><div class="content" data-v-6aa21345><div class="content-body" data-v-6aa21345><!--[--><!--]--><div class="VPNavBarSearch search" data-v-6aa21345><!--[--><!----><div id="local-search"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search"><span class="DocSearch-Button-Container"><span class="vp-icon DocSearch-Search-Icon"></span><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"><kbd class="DocSearch-Button-Key"></kbd><kbd class="DocSearch-Button-Key">K</kbd></span></button></div><!--]--></div><nav aria-labelledby="main-nav-aria-label" class="VPNavBarMenu menu" data-v-6aa21345 data-v-dc692963><span id="main-nav-aria-label" class="visually-hidden" data-v-dc692963> Main Navigation </span><!--[--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>首页</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/library/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>资料库</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/embedded" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>嵌入式</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/robot-motion-control" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>机器人运动控制</span><!--]--></a><!--]--><!--]--></nav><!----><div class="VPNavBarAppearance appearance" data-v-6aa21345 data-v-6c893767><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-6c893767 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div><div class="VPSocialLinks VPNavBarSocialLinks social-links" data-v-6aa21345 data-v-0394ad82 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div><div class="VPFlyout VPNavBarExtra extra" data-v-6aa21345 data-v-bb2aa2f0 data-v-cf11d7a2><button type="button" class="button" aria-haspopup="true" aria-expanded="false" aria-label="extra navigation" data-v-cf11d7a2><span class="vpi-more-horizontal icon" data-v-cf11d7a2></span></button><div class="menu" data-v-cf11d7a2><div class="VPMenu" data-v-cf11d7a2 data-v-b98bc113><!----><!--[--><!--[--><!----><div class="group" data-v-bb2aa2f0><div class="item appearance" data-v-bb2aa2f0><p class="label" data-v-bb2aa2f0>外观</p><div class="appearance-action" data-v-bb2aa2f0><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-bb2aa2f0 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div></div></div><div class="group" data-v-bb2aa2f0><div class="item social-links" data-v-bb2aa2f0><div class="VPSocialLinks social-links-list" data-v-bb2aa2f0 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div></div></div><!--]--><!--]--></div></div></div><!--[--><!--]--><button type="button" class="VPNavBarHamburger hamburger" aria-label="mobile navigation" aria-expanded="false" aria-controls="VPNavScreen" data-v-6aa21345 data-v-e5dd9c1c><span class="container" data-v-e5dd9c1c><span class="top" data-v-e5dd9c1c></span><span class="middle" data-v-e5dd9c1c></span><span class="bottom" data-v-e5dd9c1c></span></span></button></div></div></div></div><div class="divider" data-v-6aa21345><div class="divider-line" data-v-6aa21345></div></div></div><!----></header><div class="VPLocalNav has-sidebar empty" data-v-5d98c3a5 data-v-a6f0e41e><div class="container" data-v-a6f0e41e><button class="menu" aria-expanded="false" aria-controls="VPSidebarNav" data-v-a6f0e41e><span class="vpi-align-left menu-icon" data-v-a6f0e41e></span><span class="menu-text" data-v-a6f0e41e>菜单</span></button><div class="VPLocalNavOutlineDropdown" style="--vp-vh:0px;" data-v-a6f0e41e data-v-8a42e2b4><button data-v-8a42e2b4>回到顶部</button><!----></div></div></div><aside class="VPSidebar" data-v-5d98c3a5 data-v-319d5ca6><div class="curtain" data-v-319d5ca6></div><nav class="nav" id="VPSidebarNav" aria-labelledby="sidebar-aria-label" tabindex="-1" data-v-319d5ca6><span class="visually-hidden" id="sidebar-aria-label" data-v-319d5ca6> Sidebar Navigation </span><!--[--><!--]--><!--[--><div class="no-transition group" data-v-c40bc020><section class="VPSidebarItem level-0" data-v-c40bc020 data-v-b3fd67f8><div class="item" role="button" tabindex="0" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><h2 class="text" data-v-b3fd67f8>开源协会知识库</h2><!----></div><div class="items" data-v-b3fd67f8><!--[--><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/getting-started" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>开始使用</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/library/" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>资料库</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/embedded" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>嵌入式</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/robot-motion-control" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>机器人运动控制</p><!--]--></a><!----></div><!----></div><!--]--></div></section></div><!--]--><!--[--><!--]--></nav></aside><div class="VPContent has-sidebar" id="VPContent" data-v-5d98c3a5 data-v-1428d186><div class="VPDoc has-sidebar has-aside" data-v-1428d186 data-v-39a288b8><!--[--><!--]--><div class="container" data-v-39a288b8><div class="aside" data-v-39a288b8><div class="aside-curtain" data-v-39a288b8></div><div class="aside-container" data-v-39a288b8><div class="aside-content" data-v-39a288b8><div class="VPDocAside" data-v-39a288b8 data-v-3f215769><!--[--><!--]--><!--[--><!--]--><nav aria-labelledby="doc-outline-aria-label" class="VPDocAsideOutline" data-v-3f215769 data-v-a5bbad30><div class="content" data-v-a5bbad30><div class="outline-marker" data-v-a5bbad30></div><div aria-level="2" class="outline-title" id="doc-outline-aria-label" role="heading" data-v-a5bbad30>本页目录</div><ul class="VPDocOutlineItem root" data-v-a5bbad30 data-v-b933a997><!--[--><!--]--></ul></div></nav><!--[--><!--]--><div class="spacer" data-v-3f215769></div><!--[--><!--]--><!----><!--[--><!--]--><!--[--><!--]--></div></div></div></div><div class="content" data-v-39a288b8><div class="content-container" data-v-39a288b8><!--[--><!--]--><main class="main" data-v-39a288b8><div style="position:relative;" class="vp-doc _library_generated_doc-e461e6f214 external-link-icon-enabled" data-v-39a288b8><div><h1 id="esp32-idf练习源码" tabindex="-1">ESP32-IDF练习源码 <a class="header-anchor" href="#esp32-idf练习源码" aria-label="Permalink to &quot;ESP32-IDF练习源码&quot;">​</a></h1><div class="kb-file-meta"><span><strong>目录</strong>嵌入式 / ESP32</span><span><strong>格式</strong>ZIP</span><span><strong>大小</strong>621.5 KB</span></div><p class="kb-download-actions"><a class="kb-download-button kb-download-button-secondary" href="/uploads/raw/%E5%B5%8C%E5%85%A5%E5%BC%8F/04-ESP32/ESP32-IDF%E7%BB%83%E4%B9%A0%E6%BA%90%E7%A0%81.zip" download>下载完整源码包</a></p><h2 id="在线预览" tabindex="-1">在线预览 <a class="header-anchor" href="#在线预览" aria-label="Permalink to &quot;在线预览&quot;">​</a></h2><div class="kb-preview-summary"><span><strong>501</strong> 个文件</span><span><strong>255</strong> 个目录</span><span><strong>2.4 MB</strong> 解压后大小</span></div><div class="kb-archive-preview"><div class="kb-extension-list" aria-label="文件类型统计"><span><strong>C</strong>167</span><span><strong>H</strong>155</span><span><strong>TXT</strong>88</span><span><strong>MD</strong>31</span><span><strong>JSON</strong>29</span><span><strong>CSV</strong>29</span><span><strong>PY</strong>2</span></div><details class="kb-preview-panel kb-archive-index"><summary>查看完整目录 · 501 个文件</summary><pre>    416 B  01_led/.devcontainer/devcontainer.json
+    372 B  01_led/CMakeLists.txt
+    279 B  01_led/components/BSP/CMakeLists.txt
+   1.5 KB  01_led/components/BSP/LED/led.c
+   1.5 KB  01_led/components/BSP/LED/led.h
+     77 B  01_led/main/CMakeLists.txt
+    574 B  01_led/main/main.c
+    244 B  01_led/partitions.csv
+   1.7 KB  01_led/README.md
+    416 B  02_key_led_EXTI_UART/.devcontainer/devcontainer.json
+    379 B  02_key_led_EXTI_UART/CMakeLists.txt
+    389 B  02_key_led_EXTI_UART/components/CMakeLists.txt
+    965 B  02_key_led_EXTI_UART/components/EXIT/exit.c
+    187 B  02_key_led_EXTI_UART/components/EXIT/exit.h
+   1.1 KB  02_key_led_EXTI_UART/components/KEY/key.c
+    260 B  02_key_led_EXTI_UART/components/KEY/key.h
+    518 B  02_key_led_EXTI_UART/components/LED/led.c
+    590 B  02_key_led_EXTI_UART/components/LED/led.h
+    975 B  02_key_led_EXTI_UART/components/UART/uart.c
+    324 B  02_key_led_EXTI_UART/components/UART/uart.h
+     77 B  02_key_led_EXTI_UART/main/CMakeLists.txt
+   1.4 KB  02_key_led_EXTI_UART/main/main.c
+    244 B  02_key_led_EXTI_UART/partitions-16MiB.csv
+   1.7 KB  02_key_led_EXTI_UART/README.md
+    416 B  03_ESPTIMER/.devcontainer/devcontainer.json
+    377 B  03_ESPTIMER/CMakeLists.txt
+    322 B  03_ESPTIMER/components/CMakeLists.txt
+    518 B  03_ESPTIMER/components/LED/led.c
+    590 B  03_ESPTIMER/components/LED/led.h
+   1.0 KB  03_ESPTIMER/components/TIME/time.c
+    147 B  03_ESPTIMER/components/TIME/time.h
+     77 B  03_ESPTIMER/main/CMakeLists.txt
+    695 B  03_ESPTIMER/main/main.c
+    244 B  03_ESPTIMER/partitions.csv
+   1.7 KB  03_ESPTIMER/README.md
+    416 B  04_GPTIMER/.devcontainer/devcontainer.json
+    376 B  04_GPTIMER/CMakeLists.txt
+    322 B  04_GPTIMER/components/CMakeLists.txt
+    518 B  04_GPTIMER/components/LED/led.c
+    590 B  04_GPTIMER/components/LED/led.h
+   3.4 KB  04_GPTIMER/components/TIME/gptime.c
+    627 B  04_GPTIMER/components/TIME/gptime.h
+     77 B  04_GPTIMER/main/CMakeLists.txt
+   1.2 KB  04_GPTIMER/main/main.c
+    244 B  04_GPTIMER/partitions.csv
+   1.7 KB  04_GPTIMER/README.md
+    416 B  05_watch_dog/.devcontainer/devcontainer.json
+    378 B  05_watch_dog/CMakeLists.txt
+    346 B  05_watch_dog/components/CMakeLists.txt
+   1.6 KB  05_watch_dog/components/KEY/key.c
+    533 B  05_watch_dog/components/KEY/key.h
+    518 B  05_watch_dog/components/LED/led.c
+    590 B  05_watch_dog/components/LED/led.h
+   1.3 KB  05_watch_dog/components/WDT/wdt.c
+    479 B  05_watch_dog/components/WDT/wdt.h
+     77 B  05_watch_dog/main/CMakeLists.txt
+   1.0 KB  05_watch_dog/main/main.c
+    244 B  05_watch_dog/partitions.csv
+   1.7 KB  05_watch_dog/README.md
+    416 B  06_SW_PWM/.devcontainer/devcontainer.json
+    375 B  06_SW_PWM/CMakeLists.txt
+    277 B  06_SW_PWM/components/CMakeLists.txt
+   1.6 KB  06_SW_PWM/components/SW_PWM/pwm.c
+    323 B  06_SW_PWM/components/SW_PWM/pwm.h
+     77 B  06_SW_PWM/main/CMakeLists.txt
+    918 B  06_SW_PWM/main/main.c
+    244 B  06_SW_PWM/partitions.csv
+   1.7 KB  06_SW_PWM/README.md
+    416 B  07_HW_PWM/.devcontainer/devcontainer.json
+    378 B  07_HW_PWM/CMakeLists.txt
+    277 B  07_HW_PWM/components/CMakeLists.txt
+   1.7 KB  07_HW_PWM/components/HW_PWM/pwm.c
+    742 B  07_HW_PWM/components/HW_PWM/pwm.h
+     77 B  07_HW_PWM/main/CMakeLists.txt
+    611 B  07_HW_PWM/main/main.c
+    244 B  07_HW_PWM/partitions.csv
+   1.7 KB  07_HW_PWM/README.md
+    416 B  08_IIC_EXIO/.devcontainer/devcontainer.json
+    380 B  08_IIC_EXIO/CMakeLists.txt
+    329 B  08_IIC_EXIO/components/CMakeLists.txt
+   3.6 KB  08_IIC_EXIO/components/IIC/iic.c
+   2.1 KB  08_IIC_EXIO/components/IIC/iic.h
+    518 B  08_IIC_EXIO/components/LED/led.c
+    590 B  08_IIC_EXIO/components/LED/led.h
+   5.8 KB  08_IIC_EXIO/components/XL9555/xl9555.c
+   3.3 KB  08_IIC_EXIO/components/XL9555/xl9555.h
+     77 B  08_IIC_EXIO/main/CMakeLists.txt
+   2.3 KB  08_IIC_EXIO/main/main.c
+    244 B  08_IIC_EXIO/partitions.csv
+   1.7 KB  08_IIC_EXIO/README.md
+    416 B  09_IIC_EEPROM/.devcontainer/devcontainer.json
+    382 B  09_IIC_EEPROM/CMakeLists.txt
+   5.2 KB  09_IIC_EEPROM/components/24CXX/24cxx.c
+   1.2 KB  09_IIC_EEPROM/components/24CXX/24cxx.h
+    359 B  09_IIC_EEPROM/components/CMakeLists.txt
+   4.6 KB  09_IIC_EEPROM/components/IIC/iic.c
+   1.5 KB  09_IIC_EEPROM/components/IIC/iic.h
+    518 B  09_IIC_EEPROM/components/LED/led.c
+    590 B  09_IIC_EEPROM/components/LED/led.h
+   5.8 KB  09_IIC_EEPROM/components/XL9555/xl9555.c
+   3.3 KB  09_IIC_EEPROM/components/XL9555/xl9555.h
+     77 B  09_IIC_EEPROM/main/CMakeLists.txt
+   2.7 KB  09_IIC_EEPROM/main/main.c
+    244 B  09_IIC_EEPROM/partitions.csv
+   1.7 KB  09_IIC_EEPROM/README.md
+    416 B  10_SPI_LCD/.devcontainer/devcontainer.json
+    379 B  10_SPI_LCD/CMakeLists.txt
+    421 B  10_SPI_LCD/components/CMakeLists.txt
+   5.6 KB  10_SPI_LCD/components/IIC/iic.c
+   2.9 KB  10_SPI_LCD/components/IIC/iic.h
+  22.3 KB  10_SPI_LCD/components/LCD/lcd.c
+   6.2 KB  10_SPI_LCD/components/LCD/lcd.h
+  70.9 KB  10_SPI_LCD/components/LCD/lcdfont.h
+    518 B  10_SPI_LCD/components/LED/led.c
+    590 B  10_SPI_LCD/components/LED/led.h
+   2.5 KB  10_SPI_LCD/components/SPI/spi.c
+    736 B  10_SPI_LCD/components/SPI/spi.h
+   6.5 KB  10_SPI_LCD/components/XL9555/xl9555.c
+   4.0 KB  10_SPI_LCD/components/XL9555/xl9555.h
+     77 B  10_SPI_LCD/main/CMakeLists.txt
+   2.6 KB  10_SPI_LCD/main/main.c
+    244 B  10_SPI_LCD/partitions.csv
+   1.7 KB  10_SPI_LCD/README.md
+    416 B  11_RTC/.devcontainer/devcontainer.json
+    375 B  11_RTC/CMakeLists.txt
+    455 B  11_RTC/components/CMakeLists.txt
+   5.6 KB  11_RTC/components/IIC/iic.c
+   2.9 KB  11_RTC/components/IIC/iic.h
+  22.3 KB  11_RTC/components/LCD/lcd.c
+   6.2 KB  11_RTC/components/LCD/lcd.h
+  70.9 KB  11_RTC/components/LCD/lcdfont.h
+    518 B  11_RTC/components/LED/led.c
+    590 B  11_RTC/components/LED/led.h
+   2.4 KB  11_RTC/components/RTC/esprtc.c
+    842 B  11_RTC/components/RTC/esprtc.h
+   2.5 KB  11_RTC/components/SPI/spi.c
+    736 B  11_RTC/components/SPI/spi.h
+   6.5 KB  11_RTC/components/XL9555/xl9555.c
+   4.0 KB  11_RTC/components/XL9555/xl9555.h
+     77 B  11_RTC/main/CMakeLists.txt
+   2.3 KB  11_RTC/main/main.c
+    244 B  11_RTC/partitions.csv
+   1.7 KB  11_RTC/README.md
+    416 B  12_ADC/.devcontainer/devcontainer.json
+    375 B  12_ADC/CMakeLists.txt
+   1.4 KB  12_ADC/components/ADC/adc.c
+    488 B  12_ADC/components/ADC/adc.h
+    476 B  12_ADC/components/CMakeLists.txt
+   5.6 KB  12_ADC/components/IIC/iic.c
+   2.9 KB  12_ADC/components/IIC/iic.h
+  22.3 KB  12_ADC/components/LCD/lcd.c
+   6.2 KB  12_ADC/components/LCD/lcd.h
+  70.9 KB  12_ADC/components/LCD/lcdfont.h
+    518 B  12_ADC/components/LED/led.c
+    590 B  12_ADC/components/LED/led.h
+   2.5 KB  12_ADC/components/SPI/spi.c
+    736 B  12_ADC/components/SPI/spi.h
+   6.5 KB  12_ADC/components/XL9555/xl9555.c
+   4.0 KB  12_ADC/components/XL9555/xl9555.h
+     77 B  12_ADC/main/CMakeLists.txt
+   2.4 KB  12_ADC/main/main.c
+    244 B  12_ADC/partitions.csv
+   1.7 KB  12_ADC/README.md
+    416 B  13_AP3216C/.devcontainer/devcontainer.json
+    379 B  13_AP3216C/CMakeLists.txt
+   3.5 KB  13_AP3216C/components/AP3216C/ap3216c.c
+    627 B  13_AP3216C/components/AP3216C/ap3216c.h
+    464 B  13_AP3216C/components/CMakeLists.txt
+   5.6 KB  13_AP3216C/components/IIC/iic.c
+   2.9 KB  13_AP3216C/components/IIC/iic.h
+  22.3 KB  13_AP3216C/components/LCD/lcd.c
+   6.2 KB  13_AP3216C/components/LCD/lcd.h
+  70.9 KB  13_AP3216C/components/LCD/lcdfont.h
+    518 B  13_AP3216C/components/LED/led.c
+    590 B  13_AP3216C/components/LED/led.h
+   2.5 KB  13_AP3216C/components/SPI/spi.c
+    736 B  13_AP3216C/components/SPI/spi.h
+   6.5 KB  13_AP3216C/components/XL9555/xl9555.c
+   4.0 KB  13_AP3216C/components/XL9555/xl9555.h
+     77 B  13_AP3216C/main/CMakeLists.txt
+   2.0 KB  13_AP3216C/main/main.c
+    244 B  13_AP3216C/partitions.csv
+   1.7 KB  13_AP3216C/README.md
+    416 B  14_infrared_trans/.devcontainer/devcontainer.json
+    386 B  14_infrared_trans/CMakeLists.txt
+    465 B  14_infrared_trans/components/CMakeLists.txt
+  11.1 KB  14_infrared_trans/components/EMISSION/emission.c
+   1.5 KB  14_infrared_trans/components/EMISSION/emission.h
+   6.7 KB  14_infrared_trans/components/EMISSION/ir_nec_encoder.c
+   1.0 KB  14_infrared_trans/components/EMISSION/ir_nec_encoder.h
+   5.6 KB  14_infrared_trans/components/IIC/iic.c
+   2.9 KB  14_infrared_trans/components/IIC/iic.h
+  22.3 KB  14_infrared_trans/components/LCD/lcd.c
+   6.2 KB  14_infrared_trans/components/LCD/lcd.h
+  70.9 KB  14_infrared_trans/components/LCD/lcdfont.h
+    518 B  14_infrared_trans/components/LED/led.c
+    590 B  14_infrared_trans/components/LED/led.h
+   2.5 KB  14_infrared_trans/components/SPI/spi.c
+    736 B  14_infrared_trans/components/SPI/spi.h
+   6.5 KB  14_infrared_trans/components/XL9555/xl9555.c
+   4.0 KB  14_infrared_trans/components/XL9555/xl9555.h
+     77 B  14_infrared_trans/main/CMakeLists.txt
+   1.3 KB  14_infrared_trans/main/main.c
+    244 B  14_infrared_trans/partitions.csv
+   1.7 KB  14_infrared_trans/README.md
+    416 B  15_infrared_recv/.devcontainer/devcontainer.json
+    385 B  15_infrared_recv/CMakeLists.txt
+    461 B  15_infrared_recv/components/CMakeLists.txt
+   5.6 KB  15_infrared_recv/components/IIC/iic.c
+   2.9 KB  15_infrared_recv/components/IIC/iic.h
+  22.3 KB  15_infrared_recv/components/LCD/lcd.c
+   6.2 KB  15_infrared_recv/components/LCD/lcd.h
+  70.9 KB  15_infrared_recv/components/LCD/lcdfont.h
+    518 B  15_infrared_recv/components/LED/led.c
+    590 B  15_infrared_recv/components/LED/led.h
+   6.7 KB  15_infrared_recv/components/REMOTE/ir_nec_encoder.c
+   1.0 KB  15_infrared_recv/components/REMOTE/ir_nec_encoder.h
+  12.0 KB  15_infrared_recv/components/REMOTE/remote.c
+   2.3 KB  15_infrared_recv/components/REMOTE/remote.h
+   2.5 KB  15_infrared_recv/components/SPI/spi.c
+    736 B  15_infrared_recv/components/SPI/spi.h
+   6.5 KB  15_infrared_recv/components/XL9555/xl9555.c
+   4.0 KB  15_infrared_recv/components/XL9555/xl9555.h
+     77 B  15_infrared_recv/main/CMakeLists.txt
+   1.2 KB  15_infrared_recv/main/main.c
+    244 B  15_infrared_recv/partitions.csv
+   1.7 KB  15_infrared_recv/README.md
+    416 B  16_internal_temp/.devcontainer/devcontainer.json
+    385 B  16_internal_temp/CMakeLists.txt
+    461 B  16_internal_temp/components/CMakeLists.txt
+   5.6 KB  16_internal_temp/components/IIC/iic.c
+   2.9 KB  16_internal_temp/components/IIC/iic.h
+  22.3 KB  16_internal_temp/components/LCD/lcd.c
+   6.2 KB  16_internal_temp/components/LCD/lcd.h
+  70.9 KB  16_internal_temp/components/LCD/lcdfont.h
+    518 B  16_internal_temp/components/LED/led.c
+    590 B  16_internal_temp/components/LED/led.h
+   1.1 KB  16_internal_temp/components/SENSOR/sensor.c
+    582 B  16_internal_temp/components/SENSOR/sensor.h
+   2.5 KB  16_internal_temp/components/SPI/spi.c
+    736 B  16_internal_temp/components/SPI/spi.h
+   6.5 KB  16_internal_temp/components/XL9555/xl9555.c
+   4.0 KB  16_internal_temp/components/XL9555/xl9555.h
+     77 B  16_internal_temp/main/CMakeLists.txt
+   2.3 KB  16_internal_temp/main/main.c
+    244 B  16_internal_temp/partitions.csv
+   1.7 KB  16_internal_temp/README.md
+    416 B  17_ds18b20/.devcontainer/devcontainer.json
+    379 B  17_ds18b20/CMakeLists.txt
+    463 B  17_ds18b20/components/CMakeLists.txt
+   5.2 KB  17_ds18b20/components/DS18B20/ds18b20.c
+   1.3 KB  17_ds18b20/components/DS18B20/ds18b20.h
+   5.6 KB  17_ds18b20/components/IIC/iic.c
+   2.9 KB  17_ds18b20/components/IIC/iic.h
+  22.3 KB  17_ds18b20/components/LCD/lcd.c
+   6.2 KB  17_ds18b20/components/LCD/lcd.h
+  70.9 KB  17_ds18b20/components/LCD/lcdfont.h
+    518 B  17_ds18b20/components/LED/led.c
+    590 B  17_ds18b20/components/LED/led.h
+   2.5 KB  17_ds18b20/components/SPI/spi.c
+    736 B  17_ds18b20/components/SPI/spi.h
+   6.5 KB  17_ds18b20/components/XL9555/xl9555.c
+   4.0 KB  17_ds18b20/components/XL9555/xl9555.h
+     77 B  17_ds18b20/main/CMakeLists.txt
+   2.8 KB  17_ds18b20/main/main.c
+    244 B  17_ds18b20/partitions.csv
+   1.7 KB  17_ds18b20/README.md
+    416 B  18_dht11/.devcontainer/devcontainer.json
+    379 B  18_dht11/CMakeLists.txt
+    459 B  18_dht11/components/CMakeLists.txt
+   4.4 KB  18_dht11/components/DHT11/dht11.c
+   1.8 KB  18_dht11/components/DHT11/dht11.h
+   5.6 KB  18_dht11/components/IIC/iic.c
+   2.9 KB  18_dht11/components/IIC/iic.h
+  22.3 KB  18_dht11/components/LCD/lcd.c
+   6.2 KB  18_dht11/components/LCD/lcd.h
+  70.9 KB  18_dht11/components/LCD/lcdfont.h
+    518 B  18_dht11/components/LED/led.c
+    590 B  18_dht11/components/LED/led.h
+   2.5 KB  18_dht11/components/SPI/spi.c
+    736 B  18_dht11/components/SPI/spi.h
+   6.5 KB  18_dht11/components/XL9555/xl9555.c
+   4.0 KB  18_dht11/components/XL9555/xl9555.h
+     77 B  18_dht11/main/CMakeLists.txt
+   2.5 KB  18_dht11/main/main.c
+    244 B  18_dht11/partitions.csv
+   1.7 KB  18_dht11/README.md
+    416 B  19_rng/.devcontainer/devcontainer.json
+    379 B  19_rng/CMakeLists.txt
+    489 B  19_rng/components/CMakeLists.txt
+   5.6 KB  19_rng/components/IIC/iic.c
+   2.9 KB  19_rng/components/IIC/iic.h
+   1.7 KB  19_rng/components/KEY/key.c
+    525 B  19_rng/components/KEY/key.h
+  22.3 KB  19_rng/components/LCD/lcd.c
+   6.2 KB  19_rng/components/LCD/lcd.h
+  70.9 KB  19_rng/components/LCD/lcdfont.h
+    518 B  19_rng/components/LED/led.c
+    590 B  19_rng/components/LED/led.h
+    599 B  19_rng/components/RNG/rng.c
+    444 B  19_rng/components/RNG/rng.h
+   2.5 KB  19_rng/components/SPI/spi.c
+    736 B  19_rng/components/SPI/spi.h
+   6.5 KB  19_rng/components/XL9555/xl9555.c
+   4.0 KB  19_rng/components/XL9555/xl9555.h
+     77 B  19_rng/main/CMakeLists.txt
+   2.5 KB  19_rng/main/main.c
+    244 B  19_rng/partitions.csv
+   1.7 KB  19_rng/README.md
+    416 B  20_QMA6100P/.devcontainer/devcontainer.json
+    380 B  20_QMA6100P/CMakeLists.txt
+    465 B  20_QMA6100P/components/CMakeLists.txt
+   5.6 KB  20_QMA6100P/components/IIC/iic.c
+   2.9 KB  20_QMA6100P/components/IIC/iic.h
+  22.3 KB  20_QMA6100P/components/LCD/lcd.c
+   6.2 KB  20_QMA6100P/components/LCD/lcd.h
+  70.9 KB  20_QMA6100P/components/LCD/lcdfont.h
+    518 B  20_QMA6100P/components/LED/led.c
+    590 B  20_QMA6100P/components/LED/led.h
+   6.4 KB  20_QMA6100P/components/QMA6100P/qma6100p.c
+   3.2 KB  20_QMA6100P/components/QMA6100P/qma6100p.h
+   2.5 KB  20_QMA6100P/components/SPI/spi.c
+    736 B  20_QMA6100P/components/SPI/spi.h
+   6.5 KB  20_QMA6100P/components/XL9555/xl9555.c
+   4.0 KB  20_QMA6100P/components/XL9555/xl9555.h
+     77 B  20_QMA6100P/main/CMakeLists.txt
+   2.9 KB  20_QMA6100P/main/main.c
+    244 B  20_QMA6100P/partitions.csv
+   1.7 KB  20_QMA6100P/README.md
+    416 B  21_wifi_scan/.devcontainer/devcontainer.json
+    381 B  21_wifi_scan/CMakeLists.txt
+    493 B  21_wifi_scan/components/CMakeLists.txt
+   5.6 KB  21_wifi_scan/components/IIC/iic.c
+   2.9 KB  21_wifi_scan/components/IIC/iic.h
+  22.3 KB  21_wifi_scan/components/LCD/lcd.c
+   6.2 KB  21_wifi_scan/components/LCD/lcd.h
+  70.9 KB  21_wifi_scan/components/LCD/lcdfont.h
+    518 B  21_wifi_scan/components/LED/led.c
+    590 B  21_wifi_scan/components/LED/led.h
+   2.5 KB  21_wifi_scan/components/SPI/spi.c
+    736 B  21_wifi_scan/components/SPI/spi.h
+   5.4 KB  21_wifi_scan/components/WIFI/wifi.c
+    162 B  21_wifi_scan/components/WIFI/wifi.h
+   6.5 KB  21_wifi_scan/components/XL9555/xl9555.c
+   4.0 KB  21_wifi_scan/components/XL9555/xl9555.h
+     77 B  21_wifi_scan/main/CMakeLists.txt
+   1.5 KB  21_wifi_scan/main/main.c
+    244 B  21_wifi_scan/partitions.csv
+   1.7 KB  21_wifi_scan/README.md
+    416 B  22_wifi_connect/.devcontainer/devcontainer.json
+    384 B  22_wifi_connect/CMakeLists.txt
+    493 B  22_wifi_connect/components/CMakeLists.txt
+   5.6 KB  22_wifi_connect/components/IIC/iic.c
+   2.9 KB  22_wifi_connect/components/IIC/iic.h
+  22.3 KB  22_wifi_connect/components/LCD/lcd.c
+   6.2 KB  22_wifi_connect/components/LCD/lcd.h
+  70.9 KB  22_wifi_connect/components/LCD/lcdfont.h
+    518 B  22_wifi_connect/components/LED/led.c
+    590 B  22_wifi_connect/components/LED/led.h
+   2.5 KB  22_wifi_connect/components/SPI/spi.c
+    736 B  22_wifi_connect/components/SPI/spi.h
+   4.0 KB  22_wifi_connect/components/WIFI/wifi.c
+    759 B  22_wifi_connect/components/WIFI/wifi.h
+   6.5 KB  22_wifi_connect/components/XL9555/xl9555.c
+   4.0 KB  22_wifi_connect/components/XL9555/xl9555.h
+     77 B  22_wifi_connect/main/CMakeLists.txt
+   1.3 KB  22_wifi_connect/main/main.c
+    244 B  22_wifi_connect/partitions.csv
+   1.7 KB  22_wifi_connect/README.md
+    416 B  23_wifi_hotpot/.devcontainer/devcontainer.json
+    383 B  23_wifi_hotpot/CMakeLists.txt
+    493 B  23_wifi_hotpot/components/CMakeLists.txt
+   5.6 KB  23_wifi_hotpot/components/IIC/iic.c
+   2.9 KB  23_wifi_hotpot/components/IIC/iic.h
+  22.3 KB  23_wifi_hotpot/components/LCD/lcd.c
+   6.2 KB  23_wifi_hotpot/components/LCD/lcd.h
+  70.9 KB  23_wifi_hotpot/components/LCD/lcdfont.h
+    518 B  23_wifi_hotpot/components/LED/led.c
+    590 B  23_wifi_hotpot/components/LED/led.h
+   2.5 KB  23_wifi_hotpot/components/SPI/spi.c
+    736 B  23_wifi_hotpot/components/SPI/spi.h
+   3.1 KB  23_wifi_hotpot/components/WIFI/wifi.c
+    403 B  23_wifi_hotpot/components/WIFI/wifi.h
+   6.5 KB  23_wifi_hotpot/components/XL9555/xl9555.c
+   4.0 KB  23_wifi_hotpot/components/XL9555/xl9555.h
+     77 B  23_wifi_hotpot/main/CMakeLists.txt
+   1.3 KB  23_wifi_hotpot/main/main.c
+    244 B  23_wifi_hotpot/partitions.csv
+   1.7 KB  23_wifi_hotpot/README.md
+    416 B  24_wifi_UDP/.devcontainer/devcontainer.json
+    378 B  24_wifi_UDP/CMakeLists.txt
+   3.4 KB  24_wifi_UDP/components/APP/lwip_demo.c
+    462 B  24_wifi_UDP/components/APP/lwip_demo.h
+   5.5 KB  24_wifi_UDP/components/APP/wifi_config.c
+    725 B  24_wifi_UDP/components/APP/wifi_config.h
+    477 B  24_wifi_UDP/components/CMakeLists.txt
+   5.6 KB  24_wifi_UDP/components/IIC/iic.c
+   2.9 KB  24_wifi_UDP/components/IIC/iic.h
+  22.3 KB  24_wifi_UDP/components/LCD/lcd.c
+   6.2 KB  24_wifi_UDP/components/LCD/lcd.h
+  70.9 KB  24_wifi_UDP/components/LCD/lcdfont.h
+    518 B  24_wifi_UDP/components/LED/led.c
+    590 B  24_wifi_UDP/components/LED/led.h
+   2.5 KB  24_wifi_UDP/components/SPI/spi.c
+    736 B  24_wifi_UDP/components/SPI/spi.h
+   6.5 KB  24_wifi_UDP/components/XL9555/xl9555.c
+   4.0 KB  24_wifi_UDP/components/XL9555/xl9555.h
+     77 B  24_wifi_UDP/main/CMakeLists.txt
+   3.6 KB  24_wifi_UDP/main/main.c
+    244 B  24_wifi_UDP/partitions.csv
+   1.7 KB  24_wifi_UDP/README.md
+    416 B  25_wifi_tcpclient/.devcontainer/devcontainer.json
+    386 B  25_wifi_tcpclient/CMakeLists.txt
+   3.9 KB  25_wifi_tcpclient/components/APP/lwip_demo.c
+    462 B  25_wifi_tcpclient/components/APP/lwip_demo.h
+   5.6 KB  25_wifi_tcpclient/components/APP/wifi_config.c
+    725 B  25_wifi_tcpclient/components/APP/wifi_config.h
+    477 B  25_wifi_tcpclient/components/CMakeLists.txt
+   5.6 KB  25_wifi_tcpclient/components/IIC/iic.c
+   2.9 KB  25_wifi_tcpclient/components/IIC/iic.h
+  22.3 KB  25_wifi_tcpclient/components/LCD/lcd.c
+   6.2 KB  25_wifi_tcpclient/components/LCD/lcd.h
+  70.9 KB  25_wifi_tcpclient/components/LCD/lcdfont.h
+    518 B  25_wifi_tcpclient/components/LED/led.c
+    590 B  25_wifi_tcpclient/components/LED/led.h
+   2.5 KB  25_wifi_tcpclient/components/SPI/spi.c
+    736 B  25_wifi_tcpclient/components/SPI/spi.h
+   6.5 KB  25_wifi_tcpclient/components/XL9555/xl9555.c
+   4.0 KB  25_wifi_tcpclient/components/XL9555/xl9555.h
+     77 B  25_wifi_tcpclient/main/CMakeLists.txt
+   3.7 KB  25_wifi_tcpclient/main/main.c
+    244 B  25_wifi_tcpclient/partitions.csv
+   1.7 KB  25_wifi_tcpclient/README.md
+    416 B  26_wifi_tcpserver/.devcontainer/devcontainer.json
+    386 B  26_wifi_tcpserver/CMakeLists.txt
+   4.3 KB  26_wifi_tcpserver/components/APP/lwip_demo.c
+    462 B  26_wifi_tcpserver/components/APP/lwip_demo.h
+   5.6 KB  26_wifi_tcpserver/components/APP/wifi_config.c
+    725 B  26_wifi_tcpserver/components/APP/wifi_config.h
+    500 B  26_wifi_tcpserver/components/CMakeLists.txt
+   5.6 KB  26_wifi_tcpserver/components/IIC/iic.c
+   2.9 KB  26_wifi_tcpserver/components/IIC/iic.h
+  22.3 KB  26_wifi_tcpserver/components/LCD/lcd.c
+   6.2 KB  26_wifi_tcpserver/components/LCD/lcd.h
+  70.9 KB  26_wifi_tcpserver/components/LCD/lcdfont.h
+    518 B  26_wifi_tcpserver/components/LED/led.c
+    590 B  26_wifi_tcpserver/components/LED/led.h
+   2.5 KB  26_wifi_tcpserver/components/SPI/spi.c
+    736 B  26_wifi_tcpserver/components/SPI/spi.h
+   6.5 KB  26_wifi_tcpserver/components/XL9555/xl9555.c
+   4.0 KB  26_wifi_tcpserver/components/XL9555/xl9555.h
+     77 B  26_wifi_tcpserver/main/CMakeLists.txt
+   3.7 KB  26_wifi_tcpserver/main/main.c
+    244 B  26_wifi_tcpserver/partitions.csv
+   1.7 KB  26_wifi_tcpserver/README.md
+    416 B  basic/.devcontainer/devcontainer.json
+    374 B  basic/CMakeLists.txt
+    271 B  basic/components/CMakeLists.txt
+    518 B  basic/components/LED/led.c
+    590 B  basic/components/LED/led.h
+     77 B  basic/main/CMakeLists.txt
+    640 B  basic/main/main.c
+    244 B  basic/partitions.csv
+   1.7 KB  basic/README.md
+    300 B  README.txt
+    416 B  s3n8/basic/.devcontainer/devcontainer.json
+   3.2 KB  s3n8/basic/.github/copilot-instructions.md
+    236 B  s3n8/basic/CMakeLists.txt
+    402 B  s3n8/basic/components/BSP/CMakeLists.txt
+    661 B  s3n8/basic/components/BSP/DELAY/delay.c
+    203 B  s3n8/basic/components/BSP/DELAY/delay.h
+   1.2 KB  s3n8/basic/components/BSP/LED/led.c
+    170 B  s3n8/basic/components/BSP/LED/led.h
+    645 B  s3n8/basic/components/BSP/USART/usart.c
+    107 B  s3n8/basic/components/BSP/USART/usart.h
+     88 B  s3n8/basic/main/CMakeLists.txt
+   2.8 KB  s3n8/basic/main/hello_world_main.c
+      0 B  s3n8/basic/partitions.csv
+   1.5 KB  s3n8/basic/pytest_hello_world.py
+   2.4 KB  s3n8/basic/README.md
+    416 B  s3n8/mqtt/.devcontainer/devcontainer.json
+   3.2 KB  s3n8/mqtt/.github/copilot-instructions.md
+    236 B  s3n8/mqtt/CMakeLists.txt
+    541 B  s3n8/mqtt/components/BSP/CMakeLists.txt
+    661 B  s3n8/mqtt/components/BSP/DELAY/delay.c
+    203 B  s3n8/mqtt/components/BSP/DELAY/delay.h
+   1.2 KB  s3n8/mqtt/components/BSP/LED/led.c
+    170 B  s3n8/mqtt/components/BSP/LED/led.h
+   8.5 KB  s3n8/mqtt/components/BSP/MQTT/mqtt_app.c
+   3.7 KB  s3n8/mqtt/components/BSP/MQTT/mqtt_app.h
+   2.6 KB  s3n8/mqtt/components/BSP/SENSOR/sensor_sim.c
+   1003 B  s3n8/mqtt/components/BSP/SENSOR/sensor_sim.h
+    645 B  s3n8/mqtt/components/BSP/USART/usart.c
+    107 B  s3n8/mqtt/components/BSP/USART/usart.h
+   7.5 KB  s3n8/mqtt/components/BSP/WIFI/wifi.c
+   1.7 KB  s3n8/mqtt/components/BSP/WIFI/wifi.h
+    122 B  s3n8/mqtt/main/CMakeLists.txt
+   6.2 KB  s3n8/mqtt/main/hello_world_main.c
+      0 B  s3n8/mqtt/partitions.csv
+   1.5 KB  s3n8/mqtt/pytest_hello_world.py
+   2.4 KB  s3n8/mqtt/README.md</pre></details><section class="kb-source-previews" aria-labelledby="doc-e461e6f214-source-heading"><h3 id="doc-e461e6f214-source-heading">可读文件预览</h3><details class="kb-preview-panel kb-code-preview" open><summary><span>README.txt</span><small>300 B</small></summary><pre><code>ESP32-IDF练习源码
+
+本压缩包由开源协会知识库从学习目录中自动精选生成。
+已排除安装包、视频、编译缓存、目标文件、可执行文件、私钥和大型第三方依赖。
+部分工程需要通过对应 IDE、SDK 或配置文件重新生成依赖后再编译。</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>01_led/README.md</span><small>1.7 KB</small></summary><pre><code>| Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-C6 | ESP32-H2 | ESP32-S2 | ESP32-S3 |
+| ----------------- | ----- | -------- | -------- | -------- | -------- | -------- | -------- |
+
+# _Sample project_
+
+(See the README.md file in the upper level &#39;examples&#39; directory for more information about examples.)
+
+This is the simplest buildable example. The example is used by command `idf.py create-project`
+that copies the project to user specified path and set it&#39;s name. For more information follow the [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project)
+
+
+
+## How to use example
+We encourage the users to use the example as a template for the new projects.
+A recommended way is to follow the instructions on a [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project).
+
+## Example folder contents
+
+The project **sample_project** contains one source file in C language [main.c](main/main.c). The file is located in folder [main](main).
+
+ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt`
+files that provide set of directives and instructions describing the project&#39;s source files and targets
+(executable, library, or both). 
+
+Below is short explanation of remaining files in the project folder.
+
+```
+├── CMakeLists.txt
+├── main
+│   ├── CMakeLists.txt
+│   └── main.c
+└── README.md                  This is the file you are currently reading
+```
+Additionally, the sample project contains Makefile and component.mk files, used for the legacy Make based build system. 
+They are not used or needed when building with CMake and idf.py.
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>02_key_led_EXTI_UART/README.md</span><small>1.7 KB</small></summary><pre><code>| Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-C6 | ESP32-H2 | ESP32-S2 | ESP32-S3 |
+| ----------------- | ----- | -------- | -------- | -------- | -------- | -------- | -------- |
+
+# _Sample project_
+
+(See the README.md file in the upper level &#39;examples&#39; directory for more information about examples.)
+
+This is the simplest buildable example. The example is used by command `idf.py create-project`
+that copies the project to user specified path and set it&#39;s name. For more information follow the [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project)
+
+
+
+## How to use example
+We encourage the users to use the example as a template for the new projects.
+A recommended way is to follow the instructions on a [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project).
+
+## Example folder contents
+
+The project **sample_project** contains one source file in C language [main.c](main/main.c). The file is located in folder [main](main).
+
+ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt`
+files that provide set of directives and instructions describing the project&#39;s source files and targets
+(executable, library, or both). 
+
+Below is short explanation of remaining files in the project folder.
+
+```
+├── CMakeLists.txt
+├── main
+│   ├── CMakeLists.txt
+│   └── main.c
+└── README.md                  This is the file you are currently reading
+```
+Additionally, the sample project contains Makefile and component.mk files, used for the legacy Make based build system. 
+They are not used or needed when building with CMake and idf.py.
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>01_led/main/main.c</span><small>574 B</small></summary><pre><code>#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;nvs_flash.h&quot;
+#include &quot;led.h&quot;
+/**
+ * @brief 程序入口
+ * @param 无
+ * @retval 无
+ */
+void app_main(void)
+{
+    esp_err_t ret;
+
+    ret = nvs_flash_init(); /* 初始化 NVS */
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    led_init(); /* 初始化 LED */
+    while (1)
+    {
+        LED_TOGGLE();
+        vTaskDelay(500); /* 延时 500ms */
+    }
+}
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>02_key_led_EXTI_UART/main/main.c</span><small>1.4 KB</small></summary><pre><code>#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;nvs_flash.h&quot;
+#include &quot;led.h&quot;
+#include &quot;key.h&quot;
+#include &quot;exit.h&quot;
+#include &quot;uart.h&quot;
+#include &lt;stdio.h&gt;
+#include &quot;string.h&quot;
+
+void app_main(void)
+{
+    uint8_t key;
+    esp_err_t ret;
+    uint8_t len = 0;
+    uint16_t times = 0;
+    unsigned char data[RX_BUF_SIZE] = {0};
+
+    ret = nvs_flash_init(); /* 初始化 NVS */
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    led_init();
+    key_init();
+    exit_init();
+    usart_init(115200);
+    uint8_t buf[30]={0};
+    sprintf((char*)buf,&quot;\nthe message you send is: \r\n&quot;);
+    while (1)
+    {
+        uart_get_buffered_data_len(USART_UX,(size_t *)&amp;len);
+        if(len&gt;0)
+        {
+            memset(data,0,RX_BUF_SIZE);
+            //printf(&quot;\nthe message you send is: \r\n&quot;);
+            uart_write_bytes(USART_UX,(const char*)buf,strlen((const char*)buf));
+            uart_read_bytes(USART_UX, data ,len,100);
+            uart_write_bytes(USART_UX,(const char*)data,strlen((const char*)data));
+        }
+        else
+        {
+            times++;
+            if(times % 500==0)
+            {
+                printf(&quot;Hello CDUT!\r\n&quot;);
+            }
+        }
+        vTaskDelay(10);
+    }
+}
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>03_ESPTIMER/main/main.c</span><small>695 B</small></summary><pre><code>#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;nvs_flash.h&quot;
+#include &quot;esp_system.h&quot;
+#include &quot;esp_chip_info.h&quot;
+#include &quot;esp_psram.h&quot;
+#include &quot;esp_flash.h&quot;
+#include &quot;led.h&quot;
+#include &quot;time.h&quot;
+/**
+ * @brief 程序入口
+ * @param 无
+ * @retval 无
+ */
+void app_main(void)
+{
+    esp_err_t ret;
+    ret = nvs_flash_init();    /* 初始化 NVS */
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    led_init();
+    esptim_int_init(500000);//初始化定时器，tps=500000，即500ms触发一次
+    while (1)
+    {
+
+    }
+}
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>04_GPTIMER/main/main.c</span><small>1.2 KB</small></summary><pre><code>#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;driver/gpio.h&quot;
+#include &quot;nvs_flash.h&quot;
+#include &quot;esp_log.h&quot;
+#include &quot;led.h&quot;
+#include &quot;gptime.h&quot;
+/**
+ * @brief 程序入口
+ * @param 无
+ * @retval 无
+ */
+void app_main(void)
+{
+    uint8_t record;
+    esp_err_t ret;
+    gptimer_event_t g_tim_evente;
+    ret = nvs_flash_init(); /* 初始化 NVS */
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES ||
+        ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    led_init();                   /* 初始化 LED */
+    gptim_int_init(100, 1000000); /* 初始化通用定时器 */
+    while (1)
+    {
+        record = 1;
+        /* 打印通用定时器发生一次计数事件后获取到的值 */
+        if (xQueueReceive(queue, &amp;g_tim_evente, 2000))
+        {
+            ESP_LOGI(&quot;GPTIMER_ALARM&quot;,
+                     &quot;定时器报警, 计数值： %llu&quot;,
+                     g_tim_evente.event_count);
+            record--;
+        }
+        else
+        {
+            ESP_LOGW(&quot;GPTIMER_ALARM&quot;, &quot;错过一次计数事件&quot;);
+        }
+    }
+    vQueueDelete(queue);
+}
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>05_watch_dog/main/main.c</span><small>1.0 KB</small></summary><pre><code>#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;driver/gpio.h&quot;
+#include &quot;nvs_flash.h&quot;
+#include &quot;led.h&quot;
+#include &quot;key.h&quot;
+#include &quot;wdt.h&quot;
+
+
+/**
+ * @brief       程序入口
+ * @param       无
+ * @retval      无
+ */
+void app_main(void)
+{
+    esp_err_t rets;
+    
+    rets = nvs_flash_init();            /* 初始化NVS */
+
+    if (rets == ESP_ERR_NVS_NO_FREE_PAGES || rets == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        rets = nvs_flash_init();
+    }
+
+    led_init();                         /* 初始化LED */
+    key_init();                         /* 初始化按键 */
+    wdt_init(5000, 1000000);            /* 初始化定时器 */
+    LED(0);                             /* LED灯常亮 */
+
+    while (1)
+    {
+        if (key_scan(0) == BOOT_PRES)   /* 如果BOOT按下则喂狗 */
+        {
+            restart_timer(1000000);     /* 喂狗 */
+        }
+
+        vTaskDelay(10);                 /* LED闪烁 */
+    }
+}
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>06_SW_PWM/main/main.c</span><small>918 B</small></summary><pre><code>#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;nvs_flash.h&quot;
+#include &quot;pwm.h&quot;
+
+/**
+ * @brief 程序入口
+ * @param 无
+ * @retval 无
+ */
+void app_main(void)
+{
+    esp_err_t ret;
+    uint8_t dir = 1;
+    uint16_t ledpwmval = 0;
+
+    ret = nvs_flash_init();    /* 初始化 NVS */
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    pwm_init(10,1000);
+    while(1)
+    {
+        vTaskDelay(10);
+        if(dir==1)
+        {
+            ledpwmval += 5;
+        }
+        else
+        {
+            ledpwmval -= 5;
+        }
+        if(ledpwmval&gt;=1005)
+        {
+            dir=0;
+        }
+        else if(ledpwmval&lt;=5)
+        {
+            dir=1;
+        }
+        /* 设置占空比 */
+        pwm_set_duty(ledpwmval);
+    }
+}
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>07_HW_PWM/main/main.c</span><small>611 B</small></summary><pre><code>#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;nvs_flash.h&quot;
+#include &quot;pwm.h&quot;
+
+/**
+ * @brief 程序入口
+ * @param 无
+ * @retval 无
+ */
+void app_main(void)
+{
+    esp_err_t ret;
+
+    ret = nvs_flash_init(); /* 初始化 NVS */
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES ||
+        ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+
+    pwm_init(13,5000); /* 初始化 PWM */
+    while (1)
+    {
+        vTaskDelay(10);
+        pwm_set_duty(LEDC_PWM_DUTY); /* 设置占空比 */
+    }
+}
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>08_IIC_EXIO/main/main.c</span><small>2.3 KB</small></summary><pre><code>#include &quot;freertos/FreeRTOS.h&quot;
+#include &quot;freertos/task.h&quot;
+#include &quot;nvs_flash.h&quot;
+#include &quot;esp_system.h&quot;
+#include &quot;esp_chip_info.h&quot;
+#include &quot;esp_psram.h&quot;
+#include &quot;esp_flash.h&quot;
+#include &quot;led.h&quot;
+#include &quot;xl9555.h&quot;
+#include &quot;iic.h&quot;
+#include &quot;driver/gpio.h&quot;
+
+
+i2c_obj_t i2c0_master;
+void show_mesg(void)
+{
+    /* 串口输出实验信息 */
+    printf(&quot;\n&quot;);
+    printf(&quot;********************************\n&quot;);
+    printf(&quot;ESP32-S3\n&quot;);
+    printf(&quot;EXIO TEST\n&quot;);
+    printf(&quot;ATOM@ALIENTEK\n&quot;);
+    printf(&quot;KEY0:Beep On, KEY1:Beep Off\n&quot;);
+    printf(&quot;KEY2:LED On, KEY3:LED Off\n&quot;);
+    printf(&quot;********************************\n&quot;);
+    printf(&quot;\n&quot;);
+}
+
+/**
+ * @brief 程序入口
+ * @param 无
+ * @retval 无
+ */
+/**
+ * @brief       程序入口
+ * @param       无
+ * @retval      无
+ */
+void app_main(void)
+{
+    uint8_t key;
+    esp_err_t ret;
+    
+    ret = nvs_flash_init();             /* 初始化NVS */
+
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+
+    led_init();                         /* 初始化LED */
+    i2c0_master = iic_init(I2C_NUM_0);  /* 初始化IIC0 */
+    xl9555_init(i2c0_master);           /* 初始化XL9555 */
+    show_mesg();                        /* 显示实验信息 */
+
+    while(1)
+    {
+        key = xl9555_key_scan(0);
+        
+        switch (key)
+        {
+            case KEY0_PRES:
+            {
+                printf(&quot;KEY0 has been pressed \n&quot;);
+                xl9555_pin_write(BEEP_IO, 0);
+                break;
+            }
+            case KEY1_PRES:
+            {
+                printf(&quot;KEY1 has been pressed \n&quot;);
+                xl9555_pin_write(BEEP_IO, 1);
+                break;
+            }
+            case KEY2_PRES:
+            {
+                printf(&quot;KEY2 has been pressed \n&quot;);
+                LED(0);
+                break;
+            }
+            case KEY3_PRES:
+            {
+                printf(&quot;KEY3 has been pressed \n&quot;);
+                LED(1);
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+
+        if (XL9555_INT == 0)
+        {
+            printf(&quot;123&quot;);
+        }
+        vTaskDelay(200);
+    }
+}
+</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>02_key_led_EXTI_UART/components/EXIT/exit.h</span><small>187 B</small></summary><pre><code>#ifndef __EXIT_H__
+#define __EXIT_H__
+
+#include &quot;driver/gpio.h&quot;
+
+#define KEY1_INT_GPIO_PIN GPIO_NUM_0
+#define KEY1 gpio_get_level(KEY1_INT_GPIO_PIN)
+void exit_init(void);
+
+#endif</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>03_ESPTIMER/components/LED/led.h</span><small>590 B</small></summary><pre><code>#ifndef __LED_H__
+#define __LED_H__
+
+#include &quot;driver/gpio.h&quot;
+
+#define LED_GPIO_PIN GPIO_NUM_1
+
+enum GPIO_OUTPUT_STATE
+{
+    PIN_RESET,
+    PIN_SET
+};
+
+#define LED(x)          do { x ?                                      \
+                             gpio_set_level(LED_GPIO_PIN, PIN_SET) :  \
+                             gpio_set_level(LED_GPIO_PIN, PIN_RESET); \
+                        } while(0)  /* LED翻转 */
+
+#define LED_TOGGLE()    do { gpio_set_level(LED_GPIO_PIN, !gpio_get_level(LED_GPIO_PIN)); } while(0)  /* LED翻转 */
+
+void led_init(void);
+
+#endif</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>04_GPTIMER/components/LED/led.h</span><small>590 B</small></summary><pre><code>#ifndef __LED_H__
+#define __LED_H__
+
+#include &quot;driver/gpio.h&quot;
+
+#define LED_GPIO_PIN GPIO_NUM_1
+
+enum GPIO_OUTPUT_STATE
+{
+    PIN_RESET,
+    PIN_SET
+};
+
+#define LED(x)          do { x ?                                      \
+                             gpio_set_level(LED_GPIO_PIN, PIN_SET) :  \
+                             gpio_set_level(LED_GPIO_PIN, PIN_RESET); \
+                        } while(0)  /* LED翻转 */
+
+#define LED_TOGGLE()    do { gpio_set_level(LED_GPIO_PIN, !gpio_get_level(LED_GPIO_PIN)); } while(0)  /* LED翻转 */
+
+void led_init(void);
+
+#endif</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>01_led/.devcontainer/devcontainer.json</span><small>416 B</small></summary><pre><code>{
+	&quot;name&quot;: &quot;ESP-IDF QEMU&quot;,
+	&quot;build&quot;: {
+		&quot;dockerfile&quot;: &quot;Dockerfile&quot;
+	},
+	&quot;customizations&quot;: {
+		&quot;vscode&quot;: {
+			&quot;settings&quot;: {
+				&quot;terminal.integrated.defaultProfile.linux&quot;: &quot;bash&quot;,
+				&quot;idf.espIdfPath&quot;: &quot;/opt/esp/idf&quot;,
+				&quot;idf.toolsPath&quot;: &quot;/opt/esp&quot;,
+				&quot;idf.gitPath&quot;: &quot;/usr/bin/git&quot;
+			},
+			&quot;extensions&quot;: [
+				&quot;espressif.esp-idf-extension&quot;,
+				&quot;espressif.esp-idf-web&quot;
+			]
+		}
+	},
+	&quot;runArgs&quot;: [&quot;--privileged&quot;]
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>02_key_led_EXTI_UART/.devcontainer/devcontainer.json</span><small>416 B</small></summary><pre><code>{
+	&quot;name&quot;: &quot;ESP-IDF QEMU&quot;,
+	&quot;build&quot;: {
+		&quot;dockerfile&quot;: &quot;Dockerfile&quot;
+	},
+	&quot;customizations&quot;: {
+		&quot;vscode&quot;: {
+			&quot;settings&quot;: {
+				&quot;terminal.integrated.defaultProfile.linux&quot;: &quot;bash&quot;,
+				&quot;idf.espIdfPath&quot;: &quot;/opt/esp/idf&quot;,
+				&quot;idf.toolsPath&quot;: &quot;/opt/esp&quot;,
+				&quot;idf.gitPath&quot;: &quot;/usr/bin/git&quot;
+			},
+			&quot;extensions&quot;: [
+				&quot;espressif.esp-idf-extension&quot;,
+				&quot;espressif.esp-idf-web&quot;
+			]
+		}
+	},
+	&quot;runArgs&quot;: [&quot;--privileged&quot;]
+}</code></pre></details></section></div></div></div></main><footer class="VPDocFooter" data-v-39a288b8 data-v-e257564d><!--[--><!--]--><!----><nav class="prev-next" aria-labelledby="doc-footer-aria-label" data-v-e257564d><span class="visually-hidden" id="doc-footer-aria-label" data-v-e257564d>Pager</span><div class="pager" data-v-e257564d><!----></div><div class="pager" data-v-e257564d><a class="VPLink link pager-link next" href="/guide/getting-started" data-v-e257564d><!--[--><span class="desc" data-v-e257564d>下一篇</span><span class="title" data-v-e257564d>开始使用</span><!--]--></a></div></nav></footer><!--[--><!--]--></div></div></div><!--[--><!--]--></div></div><footer class="VPFooter has-sidebar" data-v-5d98c3a5 data-v-e315a0ad><div class="container" data-v-e315a0ad><p class="message" data-v-e315a0ad>开源协会知识沉淀与资料共享。</p><p class="copyright" data-v-e315a0ad>Powered by VitePress and GitHub Pages.</p></div></footer><!--[--><!--]--></div></div>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"guide_embedded.md\":\"BHAe_NYR\",\"guide_getting-started.md\":\"Bqpeg4mo\",\"guide_robot-motion-control.md\":\"BW8G4pa-\",\"index.md\":\"SpcP3ZNM\",\"library_generated_doc-0c87426632.md\":\"Cg5sZMeW\",\"library_generated_doc-0edadc79e9.md\":\"B8crb2LR\",\"library_generated_doc-115616aa75.md\":\"BQJQlqyg\",\"library_generated_doc-11d294a6fa.md\":\"pSvVu923\",\"library_generated_doc-1338744994.md\":\"BfoeQSIy\",\"library_generated_doc-1694ce68fa.md\":\"B1mDKs1L\",\"library_generated_doc-19e950c8bd.md\":\"CmDWcQC4\",\"library_generated_doc-1c8356e419.md\":\"B4SpI7gK\",\"library_generated_doc-1cad1cfa7a.md\":\"DDMqQCST\",\"library_generated_doc-1d874c7346.md\":\"CmorYCMW\",\"library_generated_doc-1df552e31c.md\":\"BbSzQgHU\",\"library_generated_doc-1f7eeb2478.md\":\"D6p5R4BN\",\"library_generated_doc-23e64d7aa3.md\":\"DS7rIAyT\",\"library_generated_doc-25c2ca1a00.md\":\"B2dNyLn1\",\"library_generated_doc-277853480e.md\":\"C4HCVLz6\",\"library_generated_doc-2806056aab.md\":\"kZU9ztrN\",\"library_generated_doc-2f286a2cac.md\":\"BCdO-MsH\",\"library_generated_doc-30964a207a.md\":\"DE2saZaM\",\"library_generated_doc-33eb0e4d89.md\":\"igTIH4q6\",\"library_generated_doc-3694ef88db.md\":\"BYbhcqoV\",\"library_generated_doc-37a55a2dda.md\":\"BCF_9pPl\",\"library_generated_doc-420b513a36.md\":\"Bk3dbD6x\",\"library_generated_doc-447b7a2ba9.md\":\"BZA0eY7n\",\"library_generated_doc-448f4f56b5.md\":\"Bx1SH5EE\",\"library_generated_doc-44cfd64a5d.md\":\"k8J9-W73\",\"library_generated_doc-504a0bb11d.md\":\"BPlAdKRp\",\"library_generated_doc-5714cd02f9.md\":\"D1bOfiz8\",\"library_generated_doc-5a6d823e8e.md\":\"BoYHIzky\",\"library_generated_doc-5d17bfe9d0.md\":\"B4EexyXA\",\"library_generated_doc-60bded06db.md\":\"XXaEbtjY\",\"library_generated_doc-63a039f8e7.md\":\"CbUK0Tg2\",\"library_generated_doc-63af9b29de.md\":\"ChLVQk_s\",\"library_generated_doc-64ed09afa1.md\":\"BUtoE6dP\",\"library_generated_doc-651a4b046d.md\":\"DRV3UtSJ\",\"library_generated_doc-68d1ef7f2c.md\":\"J2InFLp8\",\"library_generated_doc-6d3dc02122.md\":\"Btlkx1ZR\",\"library_generated_doc-6e56514662.md\":\"CwUvOJbd\",\"library_generated_doc-6fdf145080.md\":\"BxhFdQak\",\"library_generated_doc-72586a38eb.md\":\"DLhWCOZp\",\"library_generated_doc-7360882287.md\":\"DvSqj4CF\",\"library_generated_doc-755776bcf2.md\":\"C8jnx4FB\",\"library_generated_doc-77311ccf4e.md\":\"ChSKaX0-\",\"library_generated_doc-775125e152.md\":\"BJBc6Xx-\",\"library_generated_doc-7a0752f103.md\":\"BVHO029M\",\"library_generated_doc-831d61553e.md\":\"CadO59h8\",\"library_generated_doc-89874c5de2.md\":\"DwPp4SqP\",\"library_generated_doc-8c467c633f.md\":\"CdEwNxmu\",\"library_generated_doc-8ef8cfc49c.md\":\"BB3Ntirn\",\"library_generated_doc-9053c27312.md\":\"BQuYgxCo\",\"library_generated_doc-90ea137ffb.md\":\"DHZBqOjK\",\"library_generated_doc-91fec6c102.md\":\"DOEetHuq\",\"library_generated_doc-95f2617b53.md\":\"BiDMlVqu\",\"library_generated_doc-97ec301176.md\":\"C6PV08t4\",\"library_generated_doc-985d3f547d.md\":\"BYu6cRD9\",\"library_generated_doc-9aaa85564c.md\":\"BYkObiYN\",\"library_generated_doc-a09b57432c.md\":\"CFH5AugM\",\"library_generated_doc-a3f843c655.md\":\"BLk4EXf-\",\"library_generated_doc-a7125a7496.md\":\"CvNDcNb3\",\"library_generated_doc-a9b939c1d7.md\":\"B_-j7xWJ\",\"library_generated_doc-ad65f16e01.md\":\"CV-oKDRD\",\"library_generated_doc-b082a5098c.md\":\"BeWR2P77\",\"library_generated_doc-b137af2c9c.md\":\"C_uXnIhD\",\"library_generated_doc-b16199b132.md\":\"B_2sowo8\",\"library_generated_doc-b1ee804a03.md\":\"C8g2cPLX\",\"library_generated_doc-b23eeebff1.md\":\"BfmZhlb0\",\"library_generated_doc-b41bf628de.md\":\"CwrwXAQ_\",\"library_generated_doc-b68590b8ac.md\":\"rHFIIIDr\",\"library_generated_doc-b710258ab5.md\":\"Dp5da2no\",\"library_generated_doc-b8d8c8547a.md\":\"Bi--A27B\",\"library_generated_doc-b9d0ee371d.md\":\"CknRKVPv\",\"library_generated_doc-bed41b3e47.md\":\"CHt7_QOo\",\"library_generated_doc-bf24e716d3.md\":\"CZY6VRxA\",\"library_generated_doc-c6f390b099.md\":\"m6L8nd_A\",\"library_generated_doc-c75aa7bcf0.md\":\"CyVdVZtk\",\"library_generated_doc-ca880c8c69.md\":\"DDb611wd\",\"library_generated_doc-cd6c0d2060.md\":\"Bz-uok5J\",\"library_generated_doc-cec4c39766.md\":\"Ds-83jm4\",\"library_generated_doc-cfe5ed322b.md\":\"CX8oSRXi\",\"library_generated_doc-cff0ffbcf5.md\":\"D6d1BJ2P\",\"library_generated_doc-d1f02d7b86.md\":\"BAN9IrKu\",\"library_generated_doc-d721f2bfc8.md\":\"ooAlFpgc\",\"library_generated_doc-d801e39e19.md\":\"DzGuoynA\",\"library_generated_doc-d8a0dbf87d.md\":\"DRanZLJU\",\"library_generated_doc-d8b12e4169.md\":\"DWzUu8lk\",\"library_generated_doc-db83f17c96.md\":\"LU-wQ1ll\",\"library_generated_doc-ddacb55a96.md\":\"9vpL5FYY\",\"library_generated_doc-de4b40d6f1.md\":\"JrrhNxjc\",\"library_generated_doc-de9ddd00fc.md\":\"DzX2bt7-\",\"library_generated_doc-df40b62ca2.md\":\"B17oF7ev\",\"library_generated_doc-e3a1c1ca16.md\":\"CcrVyjtV\",\"library_generated_doc-e3de3bfe1a.md\":\"C2bvlYHi\",\"library_generated_doc-e461e6f214.md\":\"D8PjdL5D\",\"library_generated_doc-e54d2ce749.md\":\"D_eqa_aU\",\"library_generated_doc-e5579098a7.md\":\"B23kQfXd\",\"library_generated_doc-e660c8856a.md\":\"HsnlPoJK\",\"library_generated_doc-ea3865b43c.md\":\"DiXLdTIr\",\"library_generated_doc-ea8d1cd1a1.md\":\"BMCX_3lL\",\"library_generated_doc-eb4b03f30e.md\":\"CUeySxlg\",\"library_generated_doc-ef02588d18.md\":\"Czmu3Vpn\",\"library_generated_doc-ef6bcf86df.md\":\"BJouzUjL\",\"library_generated_doc-f057f3c7c3.md\":\"0lN_HW1G\",\"library_generated_doc-f38fd52503.md\":\"cTSZ1jKX\",\"library_generated_doc-f4fe6565c2.md\":\"zeghf7CG\",\"library_generated_doc-f5ed4331ce.md\":\"BLIfnXT-\",\"library_generated_doc-f64e7a02fb.md\":\"CZrG-lqu\",\"library_generated_doc-fcc7daedff.md\":\"CQ1NqbSU\",\"library_generated_doc-fdb02902fe.md\":\"BAYoCMk4\",\"library_generated_doc-ff72dbc431.md\":\"BQlf8kKB\",\"library_generated_doc-ffc4010b5b.md\":\"ICMFuvch\",\"library_index.md\":\"CN9CO2Lp\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"开源协会知识库\",\"description\":\"沉淀嵌入式与机器人运动控制资料的公开知识库\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{\"logo\":\"/association-logo.jpg\",\"search\":{\"provider\":\"local\"},\"nav\":[{\"text\":\"首页\",\"link\":\"/\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}],\"sidebar\":[{\"text\":\"开源协会知识库\",\"items\":[{\"text\":\"开始使用\",\"link\":\"/guide/getting-started\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}]}],\"socialLinks\":[{\"icon\":\"github\",\"link\":\"https://github.com/Zhr-ARM/free-knowledge-base\"}],\"footer\":{\"message\":\"开源协会知识沉淀与资料共享。\",\"copyright\":\"Powered by VitePress and GitHub Pages.\"},\"docFooter\":{\"prev\":\"上一篇\",\"next\":\"下一篇\"},\"outline\":{\"label\":\"本页目录\",\"level\":[2,3]},\"lastUpdated\":{\"text\":\"最后更新\"},\"darkModeSwitchLabel\":\"外观\",\"sidebarMenuLabel\":\"菜单\",\"returnToTopLabel\":\"回到顶部\",\"langMenuLabel\":\"切换语言\",\"externalLinkIcon\":true},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":true}");</script>
     
   </body>
 </html>

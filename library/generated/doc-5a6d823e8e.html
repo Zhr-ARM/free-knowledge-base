@@ -6,20 +6,519 @@
     <title>C语言课程源码 | 开源协会知识库</title>
     <meta name="description" content="沉淀嵌入式与机器人运动控制资料的公开知识库">
     <meta name="generator" content="VitePress v1.6.4">
-    <link rel="preload stylesheet" href="/assets/style.G76BeFzm.css" as="style">
+    <link rel="preload stylesheet" href="/assets/style.MKnyf9dl.css" as="style">
     <link rel="preload stylesheet" href="/vp-icons.css" as="style">
     
-    <script type="module" src="/assets/app.DwSalGCD.js"></script>
+    <script type="module" src="/assets/app.D_iwdCn4.js"></script>
     <link rel="preload" href="/assets/inter-roman-latin.Di8DUHzh.woff2" as="font" type="font/woff2" crossorigin="">
-    <link rel="modulepreload" href="/assets/chunks/theme.CcjBcm4w.js">
+    <link rel="modulepreload" href="/assets/chunks/theme.DbnUY3IV.js">
     <link rel="modulepreload" href="/assets/chunks/framework.BWuWLRhz.js">
-    <link rel="modulepreload" href="/assets/library_generated_doc-5a6d823e8e.md.BoXekZIf.lean.js">
+    <link rel="modulepreload" href="/assets/library_generated_doc-5a6d823e8e.md.BoYHIzky.lean.js">
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
     <script id="check-dark-mode">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
     <script id="check-mac-os">document.documentElement.classList.toggle("mac",/Mac|iPhone|iPod|iPad/i.test(navigator.platform));</script>
   </head>
   <body>
-    <div id="app"><div class="Layout" data-v-5d98c3a5><!--[--><!--]--><!--[--><span tabindex="-1" data-v-0b0ada53></span><a href="#VPContent" class="VPSkipLink visually-hidden" data-v-0b0ada53>Skip to content</a><!--]--><!----><header class="VPNav" data-v-5d98c3a5 data-v-ae24b3ad><div class="VPNavBar" data-v-ae24b3ad data-v-6aa21345><div class="wrapper" data-v-6aa21345><div class="container" data-v-6aa21345><div class="title" data-v-6aa21345><div class="VPNavBarTitle has-sidebar" data-v-6aa21345 data-v-1168a8e4><a class="title" href="/" data-v-1168a8e4><!--[--><!--]--><!--[--><img class="VPImage logo" src="/association-logo.jpg" alt data-v-8426fc1a><!--]--><span data-v-1168a8e4>开源协会知识库</span><!--[--><!--]--></a></div></div><div class="content" data-v-6aa21345><div class="content-body" data-v-6aa21345><!--[--><!--]--><div class="VPNavBarSearch search" data-v-6aa21345><!--[--><!----><div id="local-search"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search"><span class="DocSearch-Button-Container"><span class="vp-icon DocSearch-Search-Icon"></span><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"><kbd class="DocSearch-Button-Key"></kbd><kbd class="DocSearch-Button-Key">K</kbd></span></button></div><!--]--></div><nav aria-labelledby="main-nav-aria-label" class="VPNavBarMenu menu" data-v-6aa21345 data-v-dc692963><span id="main-nav-aria-label" class="visually-hidden" data-v-dc692963> Main Navigation </span><!--[--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>首页</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/library/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>资料库</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/embedded" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>嵌入式</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/robot-motion-control" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>机器人运动控制</span><!--]--></a><!--]--><!--]--></nav><!----><div class="VPNavBarAppearance appearance" data-v-6aa21345 data-v-6c893767><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-6c893767 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div><div class="VPSocialLinks VPNavBarSocialLinks social-links" data-v-6aa21345 data-v-0394ad82 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div><div class="VPFlyout VPNavBarExtra extra" data-v-6aa21345 data-v-bb2aa2f0 data-v-cf11d7a2><button type="button" class="button" aria-haspopup="true" aria-expanded="false" aria-label="extra navigation" data-v-cf11d7a2><span class="vpi-more-horizontal icon" data-v-cf11d7a2></span></button><div class="menu" data-v-cf11d7a2><div class="VPMenu" data-v-cf11d7a2 data-v-b98bc113><!----><!--[--><!--[--><!----><div class="group" data-v-bb2aa2f0><div class="item appearance" data-v-bb2aa2f0><p class="label" data-v-bb2aa2f0>外观</p><div class="appearance-action" data-v-bb2aa2f0><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-bb2aa2f0 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div></div></div><div class="group" data-v-bb2aa2f0><div class="item social-links" data-v-bb2aa2f0><div class="VPSocialLinks social-links-list" data-v-bb2aa2f0 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div></div></div><!--]--><!--]--></div></div></div><!--[--><!--]--><button type="button" class="VPNavBarHamburger hamburger" aria-label="mobile navigation" aria-expanded="false" aria-controls="VPNavScreen" data-v-6aa21345 data-v-e5dd9c1c><span class="container" data-v-e5dd9c1c><span class="top" data-v-e5dd9c1c></span><span class="middle" data-v-e5dd9c1c></span><span class="bottom" data-v-e5dd9c1c></span></span></button></div></div></div></div><div class="divider" data-v-6aa21345><div class="divider-line" data-v-6aa21345></div></div></div><!----></header><div class="VPLocalNav has-sidebar empty" data-v-5d98c3a5 data-v-a6f0e41e><div class="container" data-v-a6f0e41e><button class="menu" aria-expanded="false" aria-controls="VPSidebarNav" data-v-a6f0e41e><span class="vpi-align-left menu-icon" data-v-a6f0e41e></span><span class="menu-text" data-v-a6f0e41e>菜单</span></button><div class="VPLocalNavOutlineDropdown" style="--vp-vh:0px;" data-v-a6f0e41e data-v-8a42e2b4><button data-v-8a42e2b4>回到顶部</button><!----></div></div></div><aside class="VPSidebar" data-v-5d98c3a5 data-v-319d5ca6><div class="curtain" data-v-319d5ca6></div><nav class="nav" id="VPSidebarNav" aria-labelledby="sidebar-aria-label" tabindex="-1" data-v-319d5ca6><span class="visually-hidden" id="sidebar-aria-label" data-v-319d5ca6> Sidebar Navigation </span><!--[--><!--]--><!--[--><div class="no-transition group" data-v-c40bc020><section class="VPSidebarItem level-0" data-v-c40bc020 data-v-b3fd67f8><div class="item" role="button" tabindex="0" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><h2 class="text" data-v-b3fd67f8>开源协会知识库</h2><!----></div><div class="items" data-v-b3fd67f8><!--[--><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/getting-started" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>开始使用</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/library/" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>资料库</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/embedded" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>嵌入式</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/robot-motion-control" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>机器人运动控制</p><!--]--></a><!----></div><!----></div><!--]--></div></section></div><!--]--><!--[--><!--]--></nav></aside><div class="VPContent has-sidebar" id="VPContent" data-v-5d98c3a5 data-v-1428d186><div class="VPDoc has-sidebar has-aside" data-v-1428d186 data-v-39a288b8><!--[--><!--]--><div class="container" data-v-39a288b8><div class="aside" data-v-39a288b8><div class="aside-curtain" data-v-39a288b8></div><div class="aside-container" data-v-39a288b8><div class="aside-content" data-v-39a288b8><div class="VPDocAside" data-v-39a288b8 data-v-3f215769><!--[--><!--]--><!--[--><!--]--><nav aria-labelledby="doc-outline-aria-label" class="VPDocAsideOutline" data-v-3f215769 data-v-a5bbad30><div class="content" data-v-a5bbad30><div class="outline-marker" data-v-a5bbad30></div><div aria-level="2" class="outline-title" id="doc-outline-aria-label" role="heading" data-v-a5bbad30>本页目录</div><ul class="VPDocOutlineItem root" data-v-a5bbad30 data-v-b933a997><!--[--><!--]--></ul></div></nav><!--[--><!--]--><div class="spacer" data-v-3f215769></div><!--[--><!--]--><!----><!--[--><!--]--><!--[--><!--]--></div></div></div></div><div class="content" data-v-39a288b8><div class="content-container" data-v-39a288b8><!--[--><!--]--><main class="main" data-v-39a288b8><div style="position:relative;" class="vp-doc _library_generated_doc-5a6d823e8e external-link-icon-enabled" data-v-39a288b8><div><h1 id="c语言课程源码" tabindex="-1">C语言课程源码 <a class="header-anchor" href="#c语言课程源码" aria-label="Permalink to &quot;C语言课程源码&quot;">​</a></h1><div class="kb-file-meta"><span><strong>目录</strong>嵌入式 / 编程基础 / C语言</span><span><strong>格式</strong>ZIP</span><span><strong>大小</strong>55.8 KB</span></div><p>此文件提供原始格式下载。</p><p class="kb-download-actions"><a class="kb-download-button" href="/uploads/raw/%E5%B5%8C%E5%85%A5%E5%BC%8F/01-%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/C%E8%AF%AD%E8%A8%80/C%E8%AF%AD%E8%A8%80%E8%AF%BE%E7%A8%8B%E6%BA%90%E7%A0%81.zip" download>下载 ZIP 文件</a></p></div></div></main><footer class="VPDocFooter" data-v-39a288b8 data-v-e257564d><!--[--><!--]--><!----><nav class="prev-next" aria-labelledby="doc-footer-aria-label" data-v-e257564d><span class="visually-hidden" id="doc-footer-aria-label" data-v-e257564d>Pager</span><div class="pager" data-v-e257564d><!----></div><div class="pager" data-v-e257564d><a class="VPLink link pager-link next" href="/guide/getting-started" data-v-e257564d><!--[--><span class="desc" data-v-e257564d>下一篇</span><span class="title" data-v-e257564d>开始使用</span><!--]--></a></div></nav></footer><!--[--><!--]--></div></div></div><!--[--><!--]--></div></div><footer class="VPFooter has-sidebar" data-v-5d98c3a5 data-v-e315a0ad><div class="container" data-v-e315a0ad><p class="message" data-v-e315a0ad>开源协会知识沉淀与资料共享。</p><p class="copyright" data-v-e315a0ad>Powered by VitePress and GitHub Pages.</p></div></footer><!--[--><!--]--></div></div>
-    <script>window.__VP_HASH_MAP__=JSON.parse("{\"guide_embedded.md\":\"BHAe_NYR\",\"guide_getting-started.md\":\"Bqpeg4mo\",\"guide_robot-motion-control.md\":\"BW8G4pa-\",\"index.md\":\"SpcP3ZNM\",\"library_generated_doc-0c87426632.md\":\"Cg5sZMeW\",\"library_generated_doc-0edadc79e9.md\":\"B8crb2LR\",\"library_generated_doc-115616aa75.md\":\"BQJQlqyg\",\"library_generated_doc-11d294a6fa.md\":\"pSvVu923\",\"library_generated_doc-1338744994.md\":\"BfoeQSIy\",\"library_generated_doc-1694ce68fa.md\":\"B1mDKs1L\",\"library_generated_doc-19e950c8bd.md\":\"CmDWcQC4\",\"library_generated_doc-1c8356e419.md\":\"B4SpI7gK\",\"library_generated_doc-1cad1cfa7a.md\":\"DDMqQCST\",\"library_generated_doc-1d874c7346.md\":\"jwdtQIWV\",\"library_generated_doc-1df552e31c.md\":\"BbSzQgHU\",\"library_generated_doc-1f7eeb2478.md\":\"D6p5R4BN\",\"library_generated_doc-23e64d7aa3.md\":\"DS7rIAyT\",\"library_generated_doc-25c2ca1a00.md\":\"B2dNyLn1\",\"library_generated_doc-277853480e.md\":\"C4HCVLz6\",\"library_generated_doc-2806056aab.md\":\"kZU9ztrN\",\"library_generated_doc-2f286a2cac.md\":\"BCdO-MsH\",\"library_generated_doc-30964a207a.md\":\"BS8qlWet\",\"library_generated_doc-33eb0e4d89.md\":\"igTIH4q6\",\"library_generated_doc-3694ef88db.md\":\"BYbhcqoV\",\"library_generated_doc-37a55a2dda.md\":\"BCF_9pPl\",\"library_generated_doc-420b513a36.md\":\"Bk3dbD6x\",\"library_generated_doc-447b7a2ba9.md\":\"BZA0eY7n\",\"library_generated_doc-448f4f56b5.md\":\"Bx1SH5EE\",\"library_generated_doc-44cfd64a5d.md\":\"CoCU3cZE\",\"library_generated_doc-504a0bb11d.md\":\"BPlAdKRp\",\"library_generated_doc-5714cd02f9.md\":\"D1bOfiz8\",\"library_generated_doc-5a6d823e8e.md\":\"BoXekZIf\",\"library_generated_doc-5d17bfe9d0.md\":\"B4EexyXA\",\"library_generated_doc-60bded06db.md\":\"COYXe0Ec\",\"library_generated_doc-63a039f8e7.md\":\"CbUK0Tg2\",\"library_generated_doc-63af9b29de.md\":\"ChLVQk_s\",\"library_generated_doc-64ed09afa1.md\":\"BUtoE6dP\",\"library_generated_doc-651a4b046d.md\":\"DRV3UtSJ\",\"library_generated_doc-68d1ef7f2c.md\":\"C7P0LOIk\",\"library_generated_doc-6d3dc02122.md\":\"Btlkx1ZR\",\"library_generated_doc-6e56514662.md\":\"CwUvOJbd\",\"library_generated_doc-6fdf145080.md\":\"BxhFdQak\",\"library_generated_doc-72586a38eb.md\":\"DLhWCOZp\",\"library_generated_doc-7360882287.md\":\"DvSqj4CF\",\"library_generated_doc-755776bcf2.md\":\"8nYDLt_D\",\"library_generated_doc-77311ccf4e.md\":\"ChSKaX0-\",\"library_generated_doc-775125e152.md\":\"BJBc6Xx-\",\"library_generated_doc-7a0752f103.md\":\"BVHO029M\",\"library_generated_doc-831d61553e.md\":\"CadO59h8\",\"library_generated_doc-89874c5de2.md\":\"DDTCGuzN\",\"library_generated_doc-8c467c633f.md\":\"CdEwNxmu\",\"library_generated_doc-8ef8cfc49c.md\":\"BB3Ntirn\",\"library_generated_doc-9053c27312.md\":\"BQuYgxCo\",\"library_generated_doc-90ea137ffb.md\":\"DHZBqOjK\",\"library_generated_doc-91fec6c102.md\":\"DOEetHuq\",\"library_generated_doc-95f2617b53.md\":\"BiDMlVqu\",\"library_generated_doc-97ec301176.md\":\"C6PV08t4\",\"library_generated_doc-985d3f547d.md\":\"BYu6cRD9\",\"library_generated_doc-9aaa85564c.md\":\"BYkObiYN\",\"library_generated_doc-a09b57432c.md\":\"CFH5AugM\",\"library_generated_doc-a3f843c655.md\":\"BLk4EXf-\",\"library_generated_doc-a7125a7496.md\":\"CdVH5-lO\",\"library_generated_doc-a9b939c1d7.md\":\"DuGxIA_5\",\"library_generated_doc-ad65f16e01.md\":\"CV-oKDRD\",\"library_generated_doc-b082a5098c.md\":\"BeWR2P77\",\"library_generated_doc-b137af2c9c.md\":\"C_uXnIhD\",\"library_generated_doc-b16199b132.md\":\"B_2sowo8\",\"library_generated_doc-b1ee804a03.md\":\"C8g2cPLX\",\"library_generated_doc-b23eeebff1.md\":\"BfmZhlb0\",\"library_generated_doc-b41bf628de.md\":\"CwrwXAQ_\",\"library_generated_doc-b68590b8ac.md\":\"rHFIIIDr\",\"library_generated_doc-b710258ab5.md\":\"eHSg6IvP\",\"library_generated_doc-b8d8c8547a.md\":\"Bi--A27B\",\"library_generated_doc-b9d0ee371d.md\":\"CknRKVPv\",\"library_generated_doc-bed41b3e47.md\":\"CHt7_QOo\",\"library_generated_doc-bf24e716d3.md\":\"CZY6VRxA\",\"library_generated_doc-c6f390b099.md\":\"m6L8nd_A\",\"library_generated_doc-c75aa7bcf0.md\":\"CyVdVZtk\",\"library_generated_doc-ca880c8c69.md\":\"DDb611wd\",\"library_generated_doc-cd6c0d2060.md\":\"Bz-uok5J\",\"library_generated_doc-cec4c39766.md\":\"Ds-83jm4\",\"library_generated_doc-cfe5ed322b.md\":\"CX8oSRXi\",\"library_generated_doc-cff0ffbcf5.md\":\"D6d1BJ2P\",\"library_generated_doc-d1f02d7b86.md\":\"BAN9IrKu\",\"library_generated_doc-d721f2bfc8.md\":\"ooAlFpgc\",\"library_generated_doc-d801e39e19.md\":\"DzGuoynA\",\"library_generated_doc-d8a0dbf87d.md\":\"DRanZLJU\",\"library_generated_doc-d8b12e4169.md\":\"DWzUu8lk\",\"library_generated_doc-db83f17c96.md\":\"LU-wQ1ll\",\"library_generated_doc-ddacb55a96.md\":\"9vpL5FYY\",\"library_generated_doc-de4b40d6f1.md\":\"JrrhNxjc\",\"library_generated_doc-de9ddd00fc.md\":\"DzX2bt7-\",\"library_generated_doc-df40b62ca2.md\":\"CeoSEycV\",\"library_generated_doc-e3a1c1ca16.md\":\"BnkPqoYD\",\"library_generated_doc-e3de3bfe1a.md\":\"C2bvlYHi\",\"library_generated_doc-e461e6f214.md\":\"IO8JxY9o\",\"library_generated_doc-e54d2ce749.md\":\"D_eqa_aU\",\"library_generated_doc-e5579098a7.md\":\"B23kQfXd\",\"library_generated_doc-e660c8856a.md\":\"HsnlPoJK\",\"library_generated_doc-ea3865b43c.md\":\"DiXLdTIr\",\"library_generated_doc-ea8d1cd1a1.md\":\"BMCX_3lL\",\"library_generated_doc-eb4b03f30e.md\":\"CUeySxlg\",\"library_generated_doc-ef02588d18.md\":\"Czmu3Vpn\",\"library_generated_doc-ef6bcf86df.md\":\"BJouzUjL\",\"library_generated_doc-f057f3c7c3.md\":\"0lN_HW1G\",\"library_generated_doc-f38fd52503.md\":\"cTSZ1jKX\",\"library_generated_doc-f4fe6565c2.md\":\"zeghf7CG\",\"library_generated_doc-f5ed4331ce.md\":\"BLIfnXT-\",\"library_generated_doc-f64e7a02fb.md\":\"CZrG-lqu\",\"library_generated_doc-fcc7daedff.md\":\"CQ1NqbSU\",\"library_generated_doc-fdb02902fe.md\":\"BY6zJvmC\",\"library_generated_doc-ff72dbc431.md\":\"BQlf8kKB\",\"library_generated_doc-ffc4010b5b.md\":\"ICMFuvch\",\"library_index.md\":\"CN9CO2Lp\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"开源协会知识库\",\"description\":\"沉淀嵌入式与机器人运动控制资料的公开知识库\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{\"logo\":\"/association-logo.jpg\",\"search\":{\"provider\":\"local\"},\"nav\":[{\"text\":\"首页\",\"link\":\"/\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}],\"sidebar\":[{\"text\":\"开源协会知识库\",\"items\":[{\"text\":\"开始使用\",\"link\":\"/guide/getting-started\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}]}],\"socialLinks\":[{\"icon\":\"github\",\"link\":\"https://github.com/Zhr-ARM/free-knowledge-base\"}],\"footer\":{\"message\":\"开源协会知识沉淀与资料共享。\",\"copyright\":\"Powered by VitePress and GitHub Pages.\"},\"docFooter\":{\"prev\":\"上一篇\",\"next\":\"下一篇\"},\"outline\":{\"label\":\"本页目录\",\"level\":[2,3]},\"lastUpdated\":{\"text\":\"最后更新\"},\"darkModeSwitchLabel\":\"外观\",\"sidebarMenuLabel\":\"菜单\",\"returnToTopLabel\":\"回到顶部\",\"langMenuLabel\":\"切换语言\",\"externalLinkIcon\":true},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":true}");</script>
+    <div id="app"><div class="Layout" data-v-5d98c3a5><!--[--><!--]--><!--[--><span tabindex="-1" data-v-0b0ada53></span><a href="#VPContent" class="VPSkipLink visually-hidden" data-v-0b0ada53>Skip to content</a><!--]--><!----><header class="VPNav" data-v-5d98c3a5 data-v-ae24b3ad><div class="VPNavBar" data-v-ae24b3ad data-v-6aa21345><div class="wrapper" data-v-6aa21345><div class="container" data-v-6aa21345><div class="title" data-v-6aa21345><div class="VPNavBarTitle has-sidebar" data-v-6aa21345 data-v-1168a8e4><a class="title" href="/" data-v-1168a8e4><!--[--><!--]--><!--[--><img class="VPImage logo" src="/association-logo.jpg" alt data-v-8426fc1a><!--]--><span data-v-1168a8e4>开源协会知识库</span><!--[--><!--]--></a></div></div><div class="content" data-v-6aa21345><div class="content-body" data-v-6aa21345><!--[--><!--]--><div class="VPNavBarSearch search" data-v-6aa21345><!--[--><!----><div id="local-search"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search"><span class="DocSearch-Button-Container"><span class="vp-icon DocSearch-Search-Icon"></span><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"><kbd class="DocSearch-Button-Key"></kbd><kbd class="DocSearch-Button-Key">K</kbd></span></button></div><!--]--></div><nav aria-labelledby="main-nav-aria-label" class="VPNavBarMenu menu" data-v-6aa21345 data-v-dc692963><span id="main-nav-aria-label" class="visually-hidden" data-v-dc692963> Main Navigation </span><!--[--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>首页</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/library/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>资料库</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/embedded" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>嵌入式</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/guide/robot-motion-control" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>机器人运动控制</span><!--]--></a><!--]--><!--]--></nav><!----><div class="VPNavBarAppearance appearance" data-v-6aa21345 data-v-6c893767><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-6c893767 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div><div class="VPSocialLinks VPNavBarSocialLinks social-links" data-v-6aa21345 data-v-0394ad82 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div><div class="VPFlyout VPNavBarExtra extra" data-v-6aa21345 data-v-bb2aa2f0 data-v-cf11d7a2><button type="button" class="button" aria-haspopup="true" aria-expanded="false" aria-label="extra navigation" data-v-cf11d7a2><span class="vpi-more-horizontal icon" data-v-cf11d7a2></span></button><div class="menu" data-v-cf11d7a2><div class="VPMenu" data-v-cf11d7a2 data-v-b98bc113><!----><!--[--><!--[--><!----><div class="group" data-v-bb2aa2f0><div class="item appearance" data-v-bb2aa2f0><p class="label" data-v-bb2aa2f0>外观</p><div class="appearance-action" data-v-bb2aa2f0><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-bb2aa2f0 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div></div></div><div class="group" data-v-bb2aa2f0><div class="item social-links" data-v-bb2aa2f0><div class="VPSocialLinks social-links-list" data-v-bb2aa2f0 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Zhr-ARM/free-knowledge-base" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div></div></div><!--]--><!--]--></div></div></div><!--[--><!--]--><button type="button" class="VPNavBarHamburger hamburger" aria-label="mobile navigation" aria-expanded="false" aria-controls="VPNavScreen" data-v-6aa21345 data-v-e5dd9c1c><span class="container" data-v-e5dd9c1c><span class="top" data-v-e5dd9c1c></span><span class="middle" data-v-e5dd9c1c></span><span class="bottom" data-v-e5dd9c1c></span></span></button></div></div></div></div><div class="divider" data-v-6aa21345><div class="divider-line" data-v-6aa21345></div></div></div><!----></header><div class="VPLocalNav has-sidebar empty" data-v-5d98c3a5 data-v-a6f0e41e><div class="container" data-v-a6f0e41e><button class="menu" aria-expanded="false" aria-controls="VPSidebarNav" data-v-a6f0e41e><span class="vpi-align-left menu-icon" data-v-a6f0e41e></span><span class="menu-text" data-v-a6f0e41e>菜单</span></button><div class="VPLocalNavOutlineDropdown" style="--vp-vh:0px;" data-v-a6f0e41e data-v-8a42e2b4><button data-v-8a42e2b4>回到顶部</button><!----></div></div></div><aside class="VPSidebar" data-v-5d98c3a5 data-v-319d5ca6><div class="curtain" data-v-319d5ca6></div><nav class="nav" id="VPSidebarNav" aria-labelledby="sidebar-aria-label" tabindex="-1" data-v-319d5ca6><span class="visually-hidden" id="sidebar-aria-label" data-v-319d5ca6> Sidebar Navigation </span><!--[--><!--]--><!--[--><div class="no-transition group" data-v-c40bc020><section class="VPSidebarItem level-0" data-v-c40bc020 data-v-b3fd67f8><div class="item" role="button" tabindex="0" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><h2 class="text" data-v-b3fd67f8>开源协会知识库</h2><!----></div><div class="items" data-v-b3fd67f8><!--[--><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/getting-started" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>开始使用</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/library/" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>资料库</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/embedded" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>嵌入式</p><!--]--></a><!----></div><!----></div><div class="VPSidebarItem level-1 is-link" data-v-b3fd67f8><div class="item" data-v-b3fd67f8><div class="indicator" data-v-b3fd67f8></div><a class="VPLink link link" href="/guide/robot-motion-control" data-v-b3fd67f8><!--[--><p class="text" data-v-b3fd67f8>机器人运动控制</p><!--]--></a><!----></div><!----></div><!--]--></div></section></div><!--]--><!--[--><!--]--></nav></aside><div class="VPContent has-sidebar" id="VPContent" data-v-5d98c3a5 data-v-1428d186><div class="VPDoc has-sidebar has-aside" data-v-1428d186 data-v-39a288b8><!--[--><!--]--><div class="container" data-v-39a288b8><div class="aside" data-v-39a288b8><div class="aside-curtain" data-v-39a288b8></div><div class="aside-container" data-v-39a288b8><div class="aside-content" data-v-39a288b8><div class="VPDocAside" data-v-39a288b8 data-v-3f215769><!--[--><!--]--><!--[--><!--]--><nav aria-labelledby="doc-outline-aria-label" class="VPDocAsideOutline" data-v-3f215769 data-v-a5bbad30><div class="content" data-v-a5bbad30><div class="outline-marker" data-v-a5bbad30></div><div aria-level="2" class="outline-title" id="doc-outline-aria-label" role="heading" data-v-a5bbad30>本页目录</div><ul class="VPDocOutlineItem root" data-v-a5bbad30 data-v-b933a997><!--[--><!--]--></ul></div></nav><!--[--><!--]--><div class="spacer" data-v-3f215769></div><!--[--><!--]--><!----><!--[--><!--]--><!--[--><!--]--></div></div></div></div><div class="content" data-v-39a288b8><div class="content-container" data-v-39a288b8><!--[--><!--]--><main class="main" data-v-39a288b8><div style="position:relative;" class="vp-doc _library_generated_doc-5a6d823e8e external-link-icon-enabled" data-v-39a288b8><div><h1 id="c语言课程源码" tabindex="-1">C语言课程源码 <a class="header-anchor" href="#c语言课程源码" aria-label="Permalink to &quot;C语言课程源码&quot;">​</a></h1><div class="kb-file-meta"><span><strong>目录</strong>嵌入式 / 编程基础 / C语言</span><span><strong>格式</strong>ZIP</span><span><strong>大小</strong>55.8 KB</span></div><p class="kb-download-actions"><a class="kb-download-button kb-download-button-secondary" href="/uploads/raw/%E5%B5%8C%E5%85%A5%E5%BC%8F/01-%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/C%E8%AF%AD%E8%A8%80/C%E8%AF%AD%E8%A8%80%E8%AF%BE%E7%A8%8B%E6%BA%90%E7%A0%81.zip" download>下载完整源码包</a></p><h2 id="在线预览" tabindex="-1">在线预览 <a class="header-anchor" href="#在线预览" aria-label="Permalink to &quot;在线预览&quot;">​</a></h2><div class="kb-preview-summary"><span><strong>118</strong> 个文件</span><span><strong>3</strong> 个目录</span><span><strong>88.4 KB</strong> 解压后大小</span></div><div class="kb-archive-preview"><div class="kb-extension-list" aria-label="文件类型统计"><span><strong>C</strong>108</span><span><strong>TXT</strong>6</span><span><strong>H</strong>3</span><span><strong>JSON</strong>1</span></div><details class="kb-preview-panel kb-archive-index"><summary>查看完整目录 · 118 个文件</summary><pre>     84 B  01. 第一个C程序.c
+    432 B  02. 字面常量.c
+    334 B  03. 符号常量与枚举常量.c
+    765 B  04. 变量的定义和初始化.c
+    737 B  05. 局部作用域.c
+    565 B  06. 全局作用域.c
+   1.1 KB  07. 基本算术运算符.c
+    446 B  08. 自增自减运算符.c
+    687 B  09. 隐式类型转换.c
+    589 B  10. 显式类型转换.c
+    703 B  100. calloc函数的用法.c
+    825 B  101. realloc函数的用法.c
+   1.5 KB  102. 动态数组的用法.c
+   5.0 KB  103. 学生管理系统.c
+   5.9 KB  104. 贪吃蛇游戏/snake.c
+   1013 B  104. 贪吃蛇游戏/snake.h
+    231 B  105. 随机数的生成.c
+    382 B  106. 俄罗斯方块游戏/CppProperties.json
+  13.7 KB  106. 俄罗斯方块游戏/tetris.c
+   1.6 KB  106. 俄罗斯方块游戏/tetris.h
+    325 B  11. 关系运算符.c
+    330 B  12. 逻辑运算符.c
+    333 B  13. 逻辑运算的短路求值.c
+    500 B  14. 按位与、或、异或操作.c
+    416 B  15. 按位取反操作.c
+    808 B  16. 移位运算.c
+    751 B  17. 复合赋值运算.c
+    356 B  18. 条件表达式.c
+    414 B  19. sizeof运算符.c
+    352 B  20. 字段宽度.c
+    333 B  21. 精度控制.c
+    494 B  22. 最简单scanf.c
+    282 B  23. scanf一次读取多个数据.c
+    278 B  24. 字符输入输出函数.c
+    404 B  25. 简单的if语句.c
+    254 B  26. 简单的if-else语句.c
+    422 B  27. 判断闰年.c
+    420 B  28. 学生成绩等级评定.c
+    339 B  29. 求三个数的最大值.c
+    472 B  30. 奇偶数判断.c
+    946 B  31. 简单的计算器程序.c
+    173 B  32. 打印100遍我命由我不由天.c
+    202 B  33. 1到100的和.c
+    436 B  34. 正整数校验.c
+    416 B  35. 简易计算器菜单.c
+    191 B  36. 最简单的for循环.c
+    190 B  37. for循环计算1到100的和.c
+    367 B  38. 水仙花数.c
+    205 B  39. 九九乘法表.c
+    190 B  40. 逢七过.c
+    466 B  41. 一维数组的引用.c
+    664 B  42. 一维数组的遍历.c
+    609 B  43. 二维数组的引用.c
+    554 B  44. 二维数组的遍历.c
+    522 B  45. 函数的定义与使用.c
+    522 B  46. 一维数组作为函数参数.c
+    567 B  47. 二维数组作为函数参数.c
+    516 B  48. 递归函数.c
+    407 B  49. 使用递归法计算阶乘.c
+   1.4 KB  50. 指针的定义和使用.c
+    968 B  51. 指针的算术运算.c
+    859 B  52. 指针的关系运算.c
+    781 B  53. 数组名与指针的关系.c
+    810 B  54. 数组参数传递的本质.c
+    942 B  55. 下标方式与指针运算方式的对比.c
+   1023 B  56. 二维数组的内存布局和指针访问.c
+   1.3 KB  57. 二维数组的指针遍历.c
+   1.3 KB  58. 函数指针概念演示.c
+    917 B  59. 指针函数小案例.c
+    845 B  60. 二级指针的基本概念演示.c
+    927 B  61. 二级指针的应用.c
+    440 B  62. 字符串表示方法.c
+    323 B  63. strlen函数的用法.c
+    622 B  64. 自己动手实现strlen.c
+    409 B  65. strcpy函数的用法.c
+    304 B  66. strncpy函数的用法.c
+    325 B  67. strcat函数的用法.c
+    332 B  68. strncat函数的用法.c
+    447 B  69. strcmp函数的用法.c
+    379 B  70. strncmp函数的用法.c
+    935 B  71. 字符处理函数小案例.c
+    430 B  72. 大小写切换系统.c
+    942 B  73. 结构体的定义与使用.c
+    978 B  74. 结构体数组的定义与使用.c
+    378 B  75. 结构体指针的用法.c
+    591 B  76. 按值传递结构体.c
+    781 B  77. 按地址传递结构体.c
+    624 B  78. 函数直接返回结构体.c
+   1.1 KB  79. 返回指向结构体的指针.c
+    840 B  80. 联合体的定义与使用.c
+    647 B  81. 使用联合体判断大小端系统.c
+    580 B  82. 枚举的定义与使用.c
+    915 B  83. 枚举小案例.c
+   1.2 KB  84. typedef的用法.c
+    321 B  85. fgetc函数的用法.c
+    545 B  86. fputc函数的用法.c
+    603 B  87. fgets函数的用法.c
+    709 B  88. fputs函数的用法.c
+    574 B  89. fprintf函数的用法.c
+    538 B  90. fscanf函数的用法.c
+    573 B  91. fwrite函数的用法.c
+   1.2 KB  92. 文件位置指针.c
+    469 B  92. fread函数的用法.c
+   1.4 KB  93. 错误处理相关函数用法.c
+    284 B  94. 带参数宏定义的用法.c
+    277 B  95. include指令的引入.c
+    336 B  96. include指令的用法/main.c
+    120 B  96. include指令的用法/math_ops.c
+    107 B  96. include指令的用法/math_ops.h
+    667 B  97. 条件编译的用法.c
+    456 B  98. ifdef与ifndef的用法.c
+    491 B  99. malloc函数的用法.c
+     14 B  data.txt
+     28 B  demo.txt
+     32 B  example.txt
+     66 B  output_lines.txt
+     15 B  output.txt
+    298 B  README.txt</pre></details><section class="kb-source-previews" aria-labelledby="doc-5a6d823e8e-source-heading"><h3 id="doc-5a6d823e8e-source-heading">可读文件预览</h3><details class="kb-preview-panel kb-code-preview" open><summary><span>README.txt</span><small>298 B</small></summary><pre><code>C语言课程源码
+
+本压缩包由开源协会知识库从学习目录中自动精选生成。
+已排除安装包、视频、编译缓存、目标文件、可执行文件、私钥和大型第三方依赖。
+部分工程需要通过对应 IDE、SDK 或配置文件重新生成依赖后再编译。</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>data.txt</span><small>14 B</small></summary><pre><code>101 95.5 Alvin</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>demo.txt</span><small>28 B</small></summary><pre><code>Hello World
+have a nice day</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>01. 第一个C程序.c</span><small>84 B</small></summary><pre><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    printf(&quot;hello world!\n&quot;);
+    return 0;
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>02. 字面常量.c</span><small>432 B</small></summary><pre><code>#include &lt;stdio.h&gt;
+
+int main(void)
+{
+    //字面常量
+    //整形
+    int a = 100;	//十进制
+    short b = 200;
+    int c = 010;	//八进制
+    int hex = 0x1F;	//十六进制
+    int binary = 0b1010;	//二进制
+    
+    //浮点型
+    float pi = 3.14f;
+    double height = 1.75;
+    
+    //字符型
+    char letter = &#39;A&#39;;
+    
+    //科学计数
+    double light_speed = 2.998e8;
+    
+    return 0;
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>03. 符号常量与枚举常量.c</span><small>334 B</small></summary><pre><code>#include &lt;stdio.h&gt;
+
+//#define	PI	3.14
+
+enum gender{
+	MALE = 10,
+	FEMALE
+};
+
+int main(void)
+{
+	const double PI = 3.14;
+	
+	//PI = 3.33;
+	
+    double radius = 5.0;
+    double area = PI * radius * radius;
+    
+    printf(&quot;圆的面积为：%.2f\n&quot;, area);
+    printf(&quot;FEMALE的值为：%d\n&quot;, FEMALE);
+    return 0;
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>04. 变量的定义和初始化.c</span><small>765 B</small></summary><pre><code>#include &lt;stdio.h&gt;
+
+//变量一定要先定义再使用
+
+int global_int;	//全局变量自动初始化为0
+
+int main(void)
+{
+	//定义一个变量
+	int age;
+	int x, y, z;	//同时定义多个变量
+	int count = 30;	//定义并初始化变量
+	//相当于：
+	//int count;
+	//count = 30;
+	float a = 1.0f, b = 2.0f, c = 3.0f;	//多个变量同时初始化
+	float A;
+	int return;
+	
+	//为变量赋值
+	age = 25;
+	x = 10;
+	x = 11;
+	x = 12;
+	y = 20;
+	y = age;
+	z = 30;
+	z = x + y;
+	
+	
+	//输出变量的值
+	printf(&quot;年龄：%d\n&quot;, age);
+	printf(&quot;x = %d, y = %d, z = %d\n&quot;, x, y, z);
+	printf(&quot;学生数量：%d\n&quot;, count);
+	printf(&quot;a = %f, b = %f, c = %f\n&quot;, a, b, c);
+	printf(&quot;globale_int = %d\n&quot;, global_int);
+    
+    return 0;
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>05. 局部作用域.c</span><small>737 B</small></summary><pre><code>#include &lt;stdio.h&gt;
+
+int main(void)
+{
+    int outer_var = 100;		//外层变量
+    printf(&quot;外层变量: %d\n&quot;, outer_var);
+    
+    {
+    	int inner_var = 200;	//内层变量
+    	printf(&quot;内层变量：%d\n&quot;, inner_var);
+    	printf(&quot;在内层访问变量：%d\n&quot;, outer_var);
+    	
+    	{
+    		int deep_var = 300;
+    		printf(&quot;深层变量：%d\n&quot;, deep_var);
+    		printf(&quot;在深层访问变量inner_var：%d\n&quot;, inner_var);
+    		printf(&quot;在深层访问变量outer_var：%d\n&quot;, outer_var);
+		}
+		//printf(&quot;在内层访问深层变量deep_var：%d\n&quot;, deep_var);
+	}
+	
+	//printf(&quot;内层变量inner_var：%d\n&quot;, inner_var);
+	printf(&quot;在外层访问变量outer_var：%d\n&quot;, outer_var);
+        
+    return 0;
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>06. 全局作用域.c</span><small>565 B</small></summary><pre><code>#include &lt;stdio.h&gt;
+
+int a = 10;		//全局变量
+
+void fun1(void)
+{
+	a = 40;
+	printf(&quot;fun1函数里读取a的值为：%d\n&quot;, a);
+}
+
+void fun(void)
+{
+	a = 30;
+	printf(&quot;fun函数里读取a的值为：%d\n&quot;, a);
+}
+
+int main(void)
+{
+    printf(&quot;main函数里读取a的值为：%d\n&quot;, a);
+    a = 20;
+    printf(&quot;main函数里修改a的值为：%d\n&quot;, a);
+    
+    {
+    	int a = 50;
+    	printf(&quot;局部变量a的值为：%d\n&quot;, a);
+	}
+	printf(&quot;回到main函数变量a的值为：%d\n&quot;, a);
+    
+    fun();
+    fun1();
+    
+    return 0;
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>07. 基本算术运算符.c</span><small>1.1 KB</small></summary><pre><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    //加法运算符
+    int a1 = 10, b1 = 20;
+    int result1 = a1 + b1;
+    printf(&quot;result1的值为：%d\n&quot;, result1);
+    
+    char a2 = 127;
+    char result2 = a2 + 1;
+    printf(&quot;result2的值为：%d\n&quot;, result2);
+    
+    //减法运算符
+    int a3 = 50, b3 = 20;
+    int result3 = a3 - b3;
+    printf(&quot;result3的值为：%d\n&quot;, result3);
+    
+    a3 = -a3;
+    printf(&quot;a3的值为：%d\n&quot;, a3);
+    
+    char a4 = -128;
+    char result4 = a4 - 1;
+    printf(&quot;result4的值为：%d\n&quot;, result4);
+    
+    //乘法运算符
+    int a5 = 10, b5 = 5;
+    int result5 = a5 * b5;
+    printf(&quot;result5的值为：%d\n&quot;, result5);
+    
+    //除法运算符
+    int a6 = 7, b6 = 3;
+    int result6 = a6 / b6;
+    printf(&quot;result6的值为：%d\n&quot;, result6);  //2...1
+    
+    float a7 = 7.0, b7 = 3.0;
+    float result7 = a7 / b7;
+    printf(&quot;result7的值为：%f\n&quot;, result7);
+    
+    //取模运算符
+    int a8 = -7, b8 =-3;
+    int result8 = a8 % b8;
+    printf(&quot;result8的值为：%d\n&quot;, result8);
+    
+    return 0;
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>08. 自增自减运算符.c</span><small>446 B</small></summary><pre><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int x = 10, y = 10;
+    printf(&quot;初始值为：x = %d, y = %d\n&quot;, x, y);
+    
+    //前置自增
+    int result1 = ++x;
+    // x = x + 1;
+    // result1 = x;
+    printf(&quot;++x后：x = %d， result1 = %d\n&quot;, x, result1);
+    
+    //后置自增
+    int result2 = y++;
+    // result2 = y;
+    // y = y + 1;
+    printf(&quot;y++后：y = %d, result2 = %d\n&quot;, y, result2);
+    
+    
+    return 0;
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>104. 贪吃蛇游戏/snake.h</span><small>1013 B</small></summary><pre><code>#ifndef __SNAKE_H__
+#define __SNAKE_H__
+
+#include &lt;stdio.h&gt;
+#include &lt;Windows.h&gt;
+#include &lt;conio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+
+#define ROW 22		//游戏区行数
+#define COL	32		//游戏区列数
+
+//颜色枚举
+enum
+{
+	COLOR_DEFAULT = 7,		//默认颜色
+	COLOR_WHITE = 15,		//白色
+	COLOR_RED = 12,			//红色
+	COLOR_LIGHT_BLUE = 11,	//浅蓝色
+	COLOR_BLUE = 9			//蓝色
+};
+
+//标记枚举
+enum
+{
+	EMPTY,		//标记空（什么也木有）
+	WALL,		//标记墙
+	FOOD,		//标记食物
+	HEAD,		//标记头
+	BODY,		//标记蛇身
+};
+
+//方向键枚举
+enum
+{
+	UP = 72,	//上
+	DOWN = 80,	//下
+	LEFT = 75,	//左
+	RIGHT = 77,	//右
+	SPACE = 32,	//空格（暂停）
+	ARROW = 224	//方向键
+};
+
+//蛇头结构体
+struct Snake
+{
+	int len;		//记录蛇长度（包含蛇头）
+	int headX;		//蛇头横坐标
+	int headY;		//蛇头纵坐标
+};
+
+//蛇身结构体
+struct Body
+{
+	int bodyX;		//蛇身横坐标
+	int bodyY;		//蛇身纵坐标
+};
+
+
+#endif</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>106. 俄罗斯方块游戏/tetris.h</span><small>1.6 KB</small></summary><pre><code>#ifndef TETRIS_H__
+#define TETRIS_H__
+
+#include &lt;stdio.h&gt;
+#include &lt;windows.h&gt;
+#include &lt;conio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+
+//游戏区域大小常量
+#define GAME_BOARD_HEIGHT	22
+#define GAME_BOARD_WIDTH	16
+#define PLAYABLE_AREA_WIDTH	14
+
+//屏幕区域位置偏移量  - 控制游戏区域在屏幕上的位置
+#define SCREEN_OFFSET_X		15
+#define SCREEN_OFFSET_Y		2
+
+//信息区域位置常量
+#define INFO_AREA_X			50
+#define INFO_AREA_Y			5	
+
+//方块状态常量
+#define CELL_EMPTY			-1
+#define CELL_BORDER			-2
+
+//方块类型枚举定义
+enum PieceType{
+	PIECE_I,
+	PIECE_O,
+	PIECE_T,
+	PIECE_S,
+	PIECE_Z,
+	PIECE_J,
+	PIECE_L
+};
+
+//控制台颜色枚举定义
+enum ConsoleColors {
+	COLOR_WHITE = 7,		//白色/默认色
+	COLOR_ORANGE = 6,		//橙色
+	COLOR_GRAY = 8,			//灰色
+	COLOR_BLUE = 9,			//蓝色
+	COLOR_GREEN = 10,		//绿色
+	COLOR_CYAN = 11,		//青色
+	COLOR_RED = 12,			//红色
+	COLOR_MAGENTA = 13,		//紫色
+	COLOR_YELLOW = 14,		//黄色
+	COLOR_BRIGHT_WHITE = 15	//亮白色
+};
+
+//按键枚举定义
+enum{
+	KEY_LEFT = 75,
+	KEY_RIGHT = 77,
+	KEY_UP = 72,
+	KEY_DOWN = 80,
+	KEY_SPACE = 32,
+	KEY_QUIT = 27,
+	KEY_ARROW = 224
+};
+
+//游戏状态结构体
+typedef struct{
+	int game_borad[GAME_BOARD_HEIGHT][GAME_BOARD_WIDTH];	//直接保存方块类型，-1空，-2边框，0-6方块类型
+	int current_score;
+	int total_lines_cleared;
+	int current_level;
+	int game_over_flag;
+} TetrisGameState;
+
+//方块结构体
+typedef struct {
+	int piece_shape[4][4];
+	int position_x, position_y;
+	int piece_type;
+} TetrisPiece;
+
+#endif</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>96. include指令的用法/math_ops.h</span><small>107 B</small></summary><pre><code>#ifndef MATH_OPS_H__
+#define MATH_OPS_H__
+
+int add(int a, int b);
+int subtract(int a, int b);
+
+#endif</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>106. 俄罗斯方块游戏/CppProperties.json</span><small>382 B</small></summary><pre><code>{
+  &quot;configurations&quot;: [
+    {
+      &quot;inheritEnvironments&quot;: [
+        &quot;msvc_x64&quot;
+      ],
+      &quot;name&quot;: &quot;x64-Debug&quot;,
+      &quot;includePath&quot;: [
+        &quot;${env.INCLUDE}&quot;,
+        &quot;${workspaceRoot}\\**&quot;
+      ],
+      &quot;defines&quot;: [
+        &quot;WIN32&quot;,
+        &quot;_DEBUG&quot;,
+        &quot;UNICODE&quot;,
+        &quot;_UNICODE&quot;
+      ],
+      &quot;intelliSenseMode&quot;: &quot;windows-msvc-x64&quot;
+    }
+  ]
+}</code></pre></details><details class="kb-preview-panel kb-code-preview"><summary><span>example.txt</span><small>32 B</small></summary><pre><code>adbc1234
+hello world!
+良许真帅</code></pre></details></section></div></div></div></main><footer class="VPDocFooter" data-v-39a288b8 data-v-e257564d><!--[--><!--]--><!----><nav class="prev-next" aria-labelledby="doc-footer-aria-label" data-v-e257564d><span class="visually-hidden" id="doc-footer-aria-label" data-v-e257564d>Pager</span><div class="pager" data-v-e257564d><!----></div><div class="pager" data-v-e257564d><a class="VPLink link pager-link next" href="/guide/getting-started" data-v-e257564d><!--[--><span class="desc" data-v-e257564d>下一篇</span><span class="title" data-v-e257564d>开始使用</span><!--]--></a></div></nav></footer><!--[--><!--]--></div></div></div><!--[--><!--]--></div></div><footer class="VPFooter has-sidebar" data-v-5d98c3a5 data-v-e315a0ad><div class="container" data-v-e315a0ad><p class="message" data-v-e315a0ad>开源协会知识沉淀与资料共享。</p><p class="copyright" data-v-e315a0ad>Powered by VitePress and GitHub Pages.</p></div></footer><!--[--><!--]--></div></div>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"guide_embedded.md\":\"BHAe_NYR\",\"guide_getting-started.md\":\"Bqpeg4mo\",\"guide_robot-motion-control.md\":\"BW8G4pa-\",\"index.md\":\"SpcP3ZNM\",\"library_generated_doc-0c87426632.md\":\"Cg5sZMeW\",\"library_generated_doc-0edadc79e9.md\":\"B8crb2LR\",\"library_generated_doc-115616aa75.md\":\"BQJQlqyg\",\"library_generated_doc-11d294a6fa.md\":\"pSvVu923\",\"library_generated_doc-1338744994.md\":\"BfoeQSIy\",\"library_generated_doc-1694ce68fa.md\":\"B1mDKs1L\",\"library_generated_doc-19e950c8bd.md\":\"CmDWcQC4\",\"library_generated_doc-1c8356e419.md\":\"B4SpI7gK\",\"library_generated_doc-1cad1cfa7a.md\":\"DDMqQCST\",\"library_generated_doc-1d874c7346.md\":\"CmorYCMW\",\"library_generated_doc-1df552e31c.md\":\"BbSzQgHU\",\"library_generated_doc-1f7eeb2478.md\":\"D6p5R4BN\",\"library_generated_doc-23e64d7aa3.md\":\"DS7rIAyT\",\"library_generated_doc-25c2ca1a00.md\":\"B2dNyLn1\",\"library_generated_doc-277853480e.md\":\"C4HCVLz6\",\"library_generated_doc-2806056aab.md\":\"kZU9ztrN\",\"library_generated_doc-2f286a2cac.md\":\"BCdO-MsH\",\"library_generated_doc-30964a207a.md\":\"DE2saZaM\",\"library_generated_doc-33eb0e4d89.md\":\"igTIH4q6\",\"library_generated_doc-3694ef88db.md\":\"BYbhcqoV\",\"library_generated_doc-37a55a2dda.md\":\"BCF_9pPl\",\"library_generated_doc-420b513a36.md\":\"Bk3dbD6x\",\"library_generated_doc-447b7a2ba9.md\":\"BZA0eY7n\",\"library_generated_doc-448f4f56b5.md\":\"Bx1SH5EE\",\"library_generated_doc-44cfd64a5d.md\":\"k8J9-W73\",\"library_generated_doc-504a0bb11d.md\":\"BPlAdKRp\",\"library_generated_doc-5714cd02f9.md\":\"D1bOfiz8\",\"library_generated_doc-5a6d823e8e.md\":\"BoYHIzky\",\"library_generated_doc-5d17bfe9d0.md\":\"B4EexyXA\",\"library_generated_doc-60bded06db.md\":\"XXaEbtjY\",\"library_generated_doc-63a039f8e7.md\":\"CbUK0Tg2\",\"library_generated_doc-63af9b29de.md\":\"ChLVQk_s\",\"library_generated_doc-64ed09afa1.md\":\"BUtoE6dP\",\"library_generated_doc-651a4b046d.md\":\"DRV3UtSJ\",\"library_generated_doc-68d1ef7f2c.md\":\"J2InFLp8\",\"library_generated_doc-6d3dc02122.md\":\"Btlkx1ZR\",\"library_generated_doc-6e56514662.md\":\"CwUvOJbd\",\"library_generated_doc-6fdf145080.md\":\"BxhFdQak\",\"library_generated_doc-72586a38eb.md\":\"DLhWCOZp\",\"library_generated_doc-7360882287.md\":\"DvSqj4CF\",\"library_generated_doc-755776bcf2.md\":\"C8jnx4FB\",\"library_generated_doc-77311ccf4e.md\":\"ChSKaX0-\",\"library_generated_doc-775125e152.md\":\"BJBc6Xx-\",\"library_generated_doc-7a0752f103.md\":\"BVHO029M\",\"library_generated_doc-831d61553e.md\":\"CadO59h8\",\"library_generated_doc-89874c5de2.md\":\"DwPp4SqP\",\"library_generated_doc-8c467c633f.md\":\"CdEwNxmu\",\"library_generated_doc-8ef8cfc49c.md\":\"BB3Ntirn\",\"library_generated_doc-9053c27312.md\":\"BQuYgxCo\",\"library_generated_doc-90ea137ffb.md\":\"DHZBqOjK\",\"library_generated_doc-91fec6c102.md\":\"DOEetHuq\",\"library_generated_doc-95f2617b53.md\":\"BiDMlVqu\",\"library_generated_doc-97ec301176.md\":\"C6PV08t4\",\"library_generated_doc-985d3f547d.md\":\"BYu6cRD9\",\"library_generated_doc-9aaa85564c.md\":\"BYkObiYN\",\"library_generated_doc-a09b57432c.md\":\"CFH5AugM\",\"library_generated_doc-a3f843c655.md\":\"BLk4EXf-\",\"library_generated_doc-a7125a7496.md\":\"CvNDcNb3\",\"library_generated_doc-a9b939c1d7.md\":\"B_-j7xWJ\",\"library_generated_doc-ad65f16e01.md\":\"CV-oKDRD\",\"library_generated_doc-b082a5098c.md\":\"BeWR2P77\",\"library_generated_doc-b137af2c9c.md\":\"C_uXnIhD\",\"library_generated_doc-b16199b132.md\":\"B_2sowo8\",\"library_generated_doc-b1ee804a03.md\":\"C8g2cPLX\",\"library_generated_doc-b23eeebff1.md\":\"BfmZhlb0\",\"library_generated_doc-b41bf628de.md\":\"CwrwXAQ_\",\"library_generated_doc-b68590b8ac.md\":\"rHFIIIDr\",\"library_generated_doc-b710258ab5.md\":\"Dp5da2no\",\"library_generated_doc-b8d8c8547a.md\":\"Bi--A27B\",\"library_generated_doc-b9d0ee371d.md\":\"CknRKVPv\",\"library_generated_doc-bed41b3e47.md\":\"CHt7_QOo\",\"library_generated_doc-bf24e716d3.md\":\"CZY6VRxA\",\"library_generated_doc-c6f390b099.md\":\"m6L8nd_A\",\"library_generated_doc-c75aa7bcf0.md\":\"CyVdVZtk\",\"library_generated_doc-ca880c8c69.md\":\"DDb611wd\",\"library_generated_doc-cd6c0d2060.md\":\"Bz-uok5J\",\"library_generated_doc-cec4c39766.md\":\"Ds-83jm4\",\"library_generated_doc-cfe5ed322b.md\":\"CX8oSRXi\",\"library_generated_doc-cff0ffbcf5.md\":\"D6d1BJ2P\",\"library_generated_doc-d1f02d7b86.md\":\"BAN9IrKu\",\"library_generated_doc-d721f2bfc8.md\":\"ooAlFpgc\",\"library_generated_doc-d801e39e19.md\":\"DzGuoynA\",\"library_generated_doc-d8a0dbf87d.md\":\"DRanZLJU\",\"library_generated_doc-d8b12e4169.md\":\"DWzUu8lk\",\"library_generated_doc-db83f17c96.md\":\"LU-wQ1ll\",\"library_generated_doc-ddacb55a96.md\":\"9vpL5FYY\",\"library_generated_doc-de4b40d6f1.md\":\"JrrhNxjc\",\"library_generated_doc-de9ddd00fc.md\":\"DzX2bt7-\",\"library_generated_doc-df40b62ca2.md\":\"B17oF7ev\",\"library_generated_doc-e3a1c1ca16.md\":\"CcrVyjtV\",\"library_generated_doc-e3de3bfe1a.md\":\"C2bvlYHi\",\"library_generated_doc-e461e6f214.md\":\"D8PjdL5D\",\"library_generated_doc-e54d2ce749.md\":\"D_eqa_aU\",\"library_generated_doc-e5579098a7.md\":\"B23kQfXd\",\"library_generated_doc-e660c8856a.md\":\"HsnlPoJK\",\"library_generated_doc-ea3865b43c.md\":\"DiXLdTIr\",\"library_generated_doc-ea8d1cd1a1.md\":\"BMCX_3lL\",\"library_generated_doc-eb4b03f30e.md\":\"CUeySxlg\",\"library_generated_doc-ef02588d18.md\":\"Czmu3Vpn\",\"library_generated_doc-ef6bcf86df.md\":\"BJouzUjL\",\"library_generated_doc-f057f3c7c3.md\":\"0lN_HW1G\",\"library_generated_doc-f38fd52503.md\":\"cTSZ1jKX\",\"library_generated_doc-f4fe6565c2.md\":\"zeghf7CG\",\"library_generated_doc-f5ed4331ce.md\":\"BLIfnXT-\",\"library_generated_doc-f64e7a02fb.md\":\"CZrG-lqu\",\"library_generated_doc-fcc7daedff.md\":\"CQ1NqbSU\",\"library_generated_doc-fdb02902fe.md\":\"BAYoCMk4\",\"library_generated_doc-ff72dbc431.md\":\"BQlf8kKB\",\"library_generated_doc-ffc4010b5b.md\":\"ICMFuvch\",\"library_index.md\":\"CN9CO2Lp\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"开源协会知识库\",\"description\":\"沉淀嵌入式与机器人运动控制资料的公开知识库\",\"base\":\"/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{\"logo\":\"/association-logo.jpg\",\"search\":{\"provider\":\"local\"},\"nav\":[{\"text\":\"首页\",\"link\":\"/\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}],\"sidebar\":[{\"text\":\"开源协会知识库\",\"items\":[{\"text\":\"开始使用\",\"link\":\"/guide/getting-started\"},{\"text\":\"资料库\",\"link\":\"/library/\"},{\"text\":\"嵌入式\",\"link\":\"/guide/embedded\"},{\"text\":\"机器人运动控制\",\"link\":\"/guide/robot-motion-control\"}]}],\"socialLinks\":[{\"icon\":\"github\",\"link\":\"https://github.com/Zhr-ARM/free-knowledge-base\"}],\"footer\":{\"message\":\"开源协会知识沉淀与资料共享。\",\"copyright\":\"Powered by VitePress and GitHub Pages.\"},\"docFooter\":{\"prev\":\"上一篇\",\"next\":\"下一篇\"},\"outline\":{\"label\":\"本页目录\",\"level\":[2,3]},\"lastUpdated\":{\"text\":\"最后更新\"},\"darkModeSwitchLabel\":\"外观\",\"sidebarMenuLabel\":\"菜单\",\"returnToTopLabel\":\"回到顶部\",\"langMenuLabel\":\"切换语言\",\"externalLinkIcon\":true},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":true}");</script>
     
   </body>
 </html>
