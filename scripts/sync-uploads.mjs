@@ -171,6 +171,8 @@ async function renderMarkdownPage(document, documentByRelativePath, uploadFileSe
 function renderPdfPage(document) {
   return `---
 search: false
+aside: false
+pageClass: kb-wide-document
 ---
 
 <script setup>
@@ -183,10 +185,13 @@ const fileUrl = withBase(${JSON.stringify(document.publicUrl)})
 
 ${renderFileMeta(document)}
 
-<p class="kb-download-actions"><a class="kb-download-button" :href="fileUrl" download>下载 PDF</a></p>
+<p class="kb-download-actions">
+  <a class="kb-download-button" :href="fileUrl" target="_blank" rel="noopener">新窗口大屏阅读</a>
+  <a class="kb-download-button kb-download-button-secondary" :href="fileUrl" download>下载 PDF</a>
+</p>
 
 <div class="kb-pdf-preview">
-  <iframe :src="fileUrl" title="${escapeHtml(document.title)}"></iframe>
+  <iframe :src="fileUrl" title="${escapeHtml(document.title)}" allowfullscreen></iframe>
 </div>
 `
 }
@@ -217,6 +222,8 @@ async function renderDocxPage(document) {
 
     return `---
 search: false
+aside: false
+pageClass: kb-wide-document
 ---
 
 <script setup>
@@ -243,6 +250,8 @@ ${previewHtml}
 function renderLegacyDocPage(document, note = '旧版 .doc 文件不能直接转换为网页内容。') {
   return `---
 search: false
+aside: false
+pageClass: kb-wide-document
 ---
 
 <script setup>
@@ -282,6 +291,8 @@ async function renderSpreadsheetPage(document) {
 
   return `---
 search: false
+aside: false
+pageClass: kb-wide-document
 ---
 
 <script setup>
@@ -424,6 +435,8 @@ async function renderXMindPage(document) {
 
   return `---
 search: false
+aside: false
+pageClass: kb-wide-document
 ---
 
 <script setup>
@@ -538,6 +551,8 @@ async function renderZipPage(document) {
 
   return `---
 search: false
+aside: false
+pageClass: kb-wide-document
 ---
 
 <script setup>
@@ -699,6 +714,8 @@ async function renderTextPage(document) {
 
   return `---
 search: false
+aside: false
+pageClass: kb-wide-document
 ---
 
 <script setup>
@@ -725,6 +742,8 @@ function renderDownloadPage(document) {
 
   return `---
 search: false
+aside: false
+pageClass: kb-wide-document
 ---
 
 <script setup>
@@ -888,13 +907,20 @@ function splitFrontmatter(source) {
 }
 
 function disableGeneratedPageSearch(frontmatter) {
-  if (!frontmatter) return '---\nsearch: false\n---\n'
+  let result = frontmatter || '---\n---\n'
+  result = setFrontmatterValue(result, 'search', 'false')
+  result = setFrontmatterValue(result, 'aside', 'false')
+  result = setFrontmatterValue(result, 'pageClass', 'kb-wide-document')
+  return result
+}
 
-  if (/^search\s*:/m.test(frontmatter)) {
-    return frontmatter.replace(/^search\s*:.*$/m, 'search: false')
+function setFrontmatterValue(frontmatter, key, value) {
+  const pattern = new RegExp(`^${key}\\s*:.*$`, 'm')
+  if (pattern.test(frontmatter)) {
+    return frontmatter.replace(pattern, `${key}: ${value}`)
   }
 
-  return frontmatter.replace(/\r?\n---\r?\n$/, '\nsearch: false\n---\n')
+  return frontmatter.replace(/\r?\n---\r?\n$/, `\n${key}: ${value}\n---\n`)
 }
 
 function splitHref(href) {

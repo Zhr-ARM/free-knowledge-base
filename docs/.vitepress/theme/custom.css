@@ -228,6 +228,30 @@
   border-left-color: var(--kb-teal);
 }
 
+.kb-wide-document .VPDoc .content {
+  min-width: 0;
+  max-width: none;
+}
+
+.kb-wide-document .VPDoc .content-container {
+  width: 100%;
+  max-width: 1440px;
+}
+
+@media (min-width: 1280px) {
+  .kb-wide-document .VPContent.has-sidebar {
+    padding-right: 0;
+  }
+
+  .kb-wide-document .VPDoc .container {
+    justify-content: stretch;
+  }
+
+  .kb-wide-document .VPDoc .aside {
+    display: none;
+  }
+}
+
 .kb-file-meta {
   display: flex;
   flex-wrap: wrap;
@@ -251,6 +275,9 @@
 }
 
 .kb-download-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   margin: 20px 0 !important;
 }
 
@@ -285,8 +312,8 @@
 
 .kb-pdf-preview {
   width: 100%;
-  height: min(76vh, 920px);
-  min-height: 520px;
+  height: min(84vh, 1080px);
+  min-height: 640px;
   overflow: hidden;
   border: 1px solid var(--kb-border);
   border-radius: 8px;
