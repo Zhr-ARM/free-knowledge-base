@@ -190,9 +190,11 @@ ${renderFileMeta(document)}
   <a class="kb-download-button kb-download-button-secondary" :href="fileUrl" download>下载 PDF</a>
 </p>
 
-<div class="kb-pdf-preview">
-  <iframe :src="fileUrl" title="${escapeHtml(document.title)}" allowfullscreen></iframe>
-</div>
+<PdfPreview
+  :src="fileUrl"
+  title="${escapeHtml(document.title)}"
+  size="${escapeHtml(formatFileSize(document.sizeBytes))}"
+/>
 `
 }
 

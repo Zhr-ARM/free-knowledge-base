@@ -311,6 +311,8 @@
 }
 
 .kb-pdf-preview {
+  position: relative;
+  isolation: isolate;
   width: 100%;
   height: min(84vh, 1080px);
   min-height: 640px;
@@ -321,9 +323,123 @@
 }
 
 .kb-pdf-preview iframe {
+  display: block;
   width: 100%;
   height: 100%;
   border: 0;
+  background: #fff;
+}
+
+.kb-pdf-loading {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
+}
+
+.kb-pdf-loading-content {
+  display: grid;
+  width: min(360px, 100%);
+  justify-items: center;
+  text-align: center;
+}
+
+.kb-pdf-spinner {
+  width: 42px;
+  height: 42px;
+  border: 4px solid color-mix(in srgb, var(--kb-teal) 22%, transparent);
+  border-top-color: var(--kb-teal);
+  border-radius: 50%;
+  animation: kb-pdf-spin 0.85s linear infinite;
+}
+
+.kb-pdf-loading-title {
+  margin: 18px 0 0 !important;
+  color: var(--kb-navy);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.dark .kb-pdf-loading-title {
+  color: #b8edf4;
+}
+
+.kb-pdf-loading-meta {
+  margin: 6px 0 18px !important;
+  color: var(--vp-c-text-2);
+  font-size: 14px;
+}
+
+.kb-pdf-loading-track {
+  position: relative;
+  width: min(260px, 82%);
+  height: 4px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--kb-teal) 18%, transparent);
+}
+
+.kb-pdf-loading-bar {
+  position: absolute;
+  inset-block: 0;
+  left: -42%;
+  width: 42%;
+  border-radius: 4px;
+  background: var(--kb-teal);
+  animation: kb-pdf-progress 1.25s ease-in-out infinite;
+}
+
+.kb-pdf-loading-link {
+  margin-top: 18px;
+  color: var(--kb-teal) !important;
+  font-weight: 600;
+  text-decoration: none !important;
+}
+
+.kb-pdf-loading-link:hover {
+  color: var(--kb-deep-teal) !important;
+  text-decoration: underline !important;
+}
+
+.kb-pdf-loading-leave-active {
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.kb-pdf-loading-leave-to {
+  opacity: 0;
+}
+
+@keyframes kb-pdf-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes kb-pdf-progress {
+  0% {
+    left: -42%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-pdf-spinner,
+  .kb-pdf-loading-bar {
+    animation: none;
+  }
+
+  .kb-pdf-loading-bar {
+    left: 0;
+    width: 100%;
+  }
 }
 
 .kb-document-preview {
