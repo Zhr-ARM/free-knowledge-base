@@ -7,6 +7,9 @@ export default defineConfig({
   title: '开源协会知识库',
   description: '沉淀嵌入式与机器人运动控制资料的公开知识库',
   base,
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}logo.svg` }]
+  ],
   cleanUrls: true,
   srcExclude: ['public/**'],
   lastUpdated: true,

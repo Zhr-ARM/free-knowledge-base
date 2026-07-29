@@ -2,7 +2,10 @@ import crypto from 'node:crypto'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { TextDecoder } from 'node:util'
+import JSZip from 'jszip'
 import mammoth from 'mammoth'
+import * as XLSX from 'xlsx'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(__dirname, '..')
@@ -12,6 +15,20 @@ const publicUploadsDir = path.join(rootDir, 'docs', 'public', 'uploads')
 const rawUploadsDir = path.join(publicUploadsDir, 'raw')
 const previewUploadsDir = path.join(publicUploadsDir, 'previews')
 const libraryIndexPath = path.join(rootDir, 'docs', 'library', 'index.md')
+const archiveTextExtensions = new Set([
+  '.asm', '.bat', '.c', '.cc', '.cfg', '.cmake', '.cmd', '.conf', '.cpp',
+  '.cs', '.css', '.csv', '.cxx', '.go', '.h', '.hpp', '.htm', '.html',
+  '.ini', '.ino', '.java', '.js', '.json', '.json5', '.ld', '.lua', '.m',
+  '.mak', '.md', '.mk', '.php', '.pri', '.pro', '.properties', '.ps1',
+  '.py', '.qrc', '.rs', '.s', '.scss', '.sh', '.sql', '.toml', '.ts',
+  '.tsx', '.txt', '.xml', '.yaml', '.yml'
+])
+const archiveTextNames = new Set([
+  'cmakelists.txt', 'license', 'makefile', 'readme'
+])
+const maxArchivePreviewFiles = 16
+const maxArchivePreviewFileBytes = 96 * 1024
+const maxArchivePreviewTotalBytes = 640 * 1024
 
 const supportedDocuments = new Set([
   '.md', '.markdown', '.pdf', '.docx', '.doc',
@@ -20,6 +37,7 @@ const supportedDocuments = new Set([
 ])
 
 async function main() {
+  console.log('Preparing generated document directories...')
   await fs.mkdir(uploadsDir, { recursive: true })
   await fs.rm(generatedDir, { recursive: true, force: true })
   await fs.rm(publicUploadsDir, { recursive: true, force: true })
@@ -44,11 +62,16 @@ async function main() {
 
   const documentByRelativePath = new Map(documents.map((document) => [document.relativePath, document]))
 
+  console.log(`Copying ${uploadFiles.length} source file(s)...`)
   for (const relativePath of uploadFiles) {
     await copyRawUpload(relativePath)
   }
 
+  console.log(`Generating ${documents.length} document page(s)...`)
   for (const document of documents) {
+    if (['.zip', '.xmind', '.xls', '.xlsx', '.csv'].includes(document.ext)) {
+      console.log(`  Previewing ${document.relativePath}`)
+    }
     await writeGeneratedDocument(document, documentByRelativePath, uploadFileSet)
   }
 
@@ -121,6 +144,14 @@ async function writeGeneratedDocument(document, documentByRelativePath, uploadFi
     page = await renderDocxPage(document)
   } else if (document.ext === '.doc') {
     page = renderLegacyDocPage(document)
+  } else if (document.ext === '.xls' || document.ext === '.xlsx' || document.ext === '.csv') {
+    page = await renderSpreadsheetPage(document)
+  } else if (document.ext === '.xmind') {
+    page = await renderXMindPage(document)
+  } else if (document.ext === '.zip') {
+    page = await renderZipPage(document)
+  } else if (document.ext === '.txt') {
+    page = await renderTextPage(document)
   } else {
     page = renderDownloadPage(document)
   }
@@ -227,6 +258,465 @@ ${renderFileMeta(document)}
 ${note}
 
 <p class="kb-download-actions"><a class="kb-download-button" :href="fileUrl" download>下载 Word 文件</a></p>
+`
+}
+
+async function renderSpreadsheetPage(document) {
+  const workbook = XLSX.read(await fs.readFile(document.sourcePath), {
+    type: 'buffer',
+    cellDates: true
+  })
+  const sheets = workbook.SheetNames.map((sheetName, index) => {
+    const sheet = workbook.Sheets[sheetName]
+    const table = spreadsheetTable(sheet)
+    const hiddenState = workbook.Workbook?.Sheets?.[index]?.Hidden || 0
+
+    return {
+      name: sheetName,
+      hiddenState,
+      ...table
+    }
+  })
+  const totalRows = sheets.reduce((sum, sheet) => sum + sheet.rows.length, 0)
+  const totalCells = sheets.reduce((sum, sheet) => sum + sheet.nonEmptyCells, 0)
+
+  return `---
+search: false
+---
+
+<script setup>
+import { withBase } from 'vitepress'
+
+const fileUrl = withBase(${JSON.stringify(document.publicUrl)})
+</script>
+
+# ${document.title}
+
+${renderFileMeta(document)}
+
+<p class="kb-download-actions"><a class="kb-download-button kb-download-button-secondary" :href="fileUrl" download>下载原始表格</a></p>
+
+## 在线预览
+
+<div class="kb-preview-summary">
+  <span><strong>${sheets.length}</strong> 个工作表</span>
+  <span><strong>${totalRows}</strong> 行有效数据</span>
+  <span><strong>${totalCells}</strong> 个非空单元格</span>
+</div>
+
+<div class="kb-spreadsheet-preview">
+${sheets.map((sheet, index) => renderSpreadsheetSheet(sheet, index === 0)).join('\n')}
+</div>
+`
+}
+
+function spreadsheetTable(sheet) {
+  if (!sheet?.['!ref']) {
+    return {
+      firstColumn: 0,
+      columnCount: 0,
+      rows: [],
+      nonEmptyCells: 0
+    }
+  }
+
+  const range = XLSX.utils.decode_range(sheet['!ref'])
+  const rows = []
+  let columnCount = 0
+  let nonEmptyCells = 0
+
+  for (let rowIndex = range.s.r; rowIndex <= range.e.r; rowIndex += 1) {
+    const values = []
+    let lastContentIndex = -1
+
+    for (let columnIndex = range.s.c; columnIndex <= range.e.c; columnIndex += 1) {
+      const cell = sheet[XLSX.utils.encode_cell({ r: rowIndex, c: columnIndex })]
+      const value = cell ? XLSX.utils.format_cell(cell) : ''
+      values.push(value)
+
+      if (String(value).trim() !== '') {
+        lastContentIndex = values.length - 1
+        nonEmptyCells += 1
+      }
+    }
+
+    if (lastContentIndex >= 0) {
+      const trimmedValues = values.slice(0, lastContentIndex + 1)
+      columnCount = Math.max(columnCount, trimmedValues.length)
+      rows.push({
+        rowNumber: rowIndex + 1,
+        values: trimmedValues
+      })
+    }
+  }
+
+  return {
+    firstColumn: range.s.c,
+    columnCount,
+    rows,
+    nonEmptyCells
+  }
+}
+
+function renderSpreadsheetSheet(sheet, open) {
+  const visibility = sheet.hiddenState === 2
+    ? '（深度隐藏）'
+    : sheet.hiddenState === 1
+      ? '（隐藏）'
+      : ''
+  const summary = `${escapeVueText(sheet.name)}${visibility} · ${sheet.rows.length} 行 · ${sheet.nonEmptyCells} 个非空单元格`
+
+  if (sheet.rows.length === 0) {
+    return `<details class="kb-preview-panel kb-sheet-preview"${open ? ' open' : ''}>
+  <summary>${summary}</summary>
+  <p class="kb-preview-empty">这个工作表暂无可显示内容。</p>
+</details>`
+  }
+
+  const columnHeaders = Array.from(
+    { length: sheet.columnCount },
+    (_, index) => `<th scope="col">${XLSX.utils.encode_col(sheet.firstColumn + index)}</th>`
+  ).join('')
+  const rows = sheet.rows.map((row) => {
+    const cells = Array.from({ length: sheet.columnCount }, (_, index) => {
+      const value = row.values[index] ?? ''
+      return `<td>${escapeVueText(String(value))}</td>`
+    }).join('')
+    return `<tr><th scope="row">${row.rowNumber}</th>${cells}</tr>`
+  }).join('\n')
+
+  return `<details class="kb-preview-panel kb-sheet-preview"${open ? ' open' : ''}>
+  <summary>${summary}</summary>
+  <div class="kb-table-scroll" tabindex="0" aria-label="${escapeHtml(sheet.name)} 工作表">
+    <table class="kb-preview-table">
+      <thead><tr><th scope="col">行</th>${columnHeaders}</tr></thead>
+      <tbody>
+${rows}
+      </tbody>
+    </table>
+  </div>
+</details>`
+}
+
+async function renderXMindPage(document) {
+  const archive = await loadZip(document.sourcePath)
+  const contentEntry = findZipEntry(archive, 'content.json')
+
+  if (!contentEntry) {
+    throw new Error(`${document.relativePath}: XMind 文件中缺少 content.json`)
+  }
+
+  const parsedContent = JSON.parse(await contentEntry.async('string'))
+  const sheets = normalizeXMindSheets(parsedContent)
+  const topicCount = sheets.reduce((sum, sheet) => sum + countXMindTopics(sheet.rootTopic), 0)
+  const thumbnailEntry = findZipEntry(archive, 'Thumbnails/thumbnail.png')
+  let thumbnailUrl = null
+
+  if (thumbnailEntry) {
+    const documentPreviewDir = path.join(previewUploadsDir, document.id)
+    await fs.mkdir(documentPreviewDir, { recursive: true })
+    await fs.writeFile(
+      path.join(documentPreviewDir, 'thumbnail.png'),
+      await thumbnailEntry.async('nodebuffer')
+    )
+    thumbnailUrl = `/uploads/previews/${document.id}/thumbnail.png`
+  }
+
+  return `---
+search: false
+---
+
+<script setup>
+import { withBase } from 'vitepress'
+
+const fileUrl = withBase(${JSON.stringify(document.publicUrl)})
+${thumbnailUrl ? `const thumbnailUrl = withBase(${JSON.stringify(thumbnailUrl)})` : ''}
+</script>
+
+# ${document.title}
+
+${renderFileMeta(document)}
+
+<p class="kb-download-actions"><a class="kb-download-button kb-download-button-secondary" :href="fileUrl" download>下载原始 XMind</a></p>
+
+## 在线预览
+
+<div class="kb-preview-summary">
+  <span><strong>${sheets.length}</strong> 个画布</span>
+  <span><strong>${topicCount}</strong> 个主题</span>
+</div>
+
+<div class="kb-xmind-preview">
+${thumbnailUrl ? `  <figure class="kb-xmind-thumbnail">
+    <img :src="thumbnailUrl" alt="${escapeHtml(document.title)} 思维导图缩略图">
+    <figcaption>思维导图总览</figcaption>
+  </figure>` : ''}
+  <div class="kb-xmind-outline">
+${sheets.map((sheet, index) => renderXMindSheet(sheet, index === 0)).join('\n')}
+  </div>
+</div>
+`
+}
+
+function normalizeXMindSheets(content) {
+  if (Array.isArray(content)) return content
+  if (Array.isArray(content?.sheets)) return content.sheets
+  return content ? [content] : []
+}
+
+function countXMindTopics(topic) {
+  if (!topic) return 0
+  return 1 + xmindTopicChildren(topic).reduce(
+    (sum, child) => sum + countXMindTopics(child),
+    0
+  )
+}
+
+function xmindTopicChildren(topic) {
+  const children = topic?.children
+  if (!children) return []
+  if (Array.isArray(children)) return children.filter(Boolean)
+
+  return Object.values(children)
+    .flatMap((value) => Array.isArray(value) ? value : [])
+    .filter(Boolean)
+}
+
+function renderXMindSheet(sheet, open) {
+  const sheetTitle = sheet.title || sheet.rootTopic?.title || '未命名画布'
+  const topicCount = countXMindTopics(sheet.rootTopic)
+
+  return `<details class="kb-preview-panel kb-xmind-sheet"${open ? ' open' : ''}>
+  <summary>${escapeVueText(sheetTitle)} · ${topicCount} 个主题</summary>
+  ${sheet.rootTopic ? `<ul class="kb-topic-tree">${renderXMindTopic(sheet.rootTopic, true)}</ul>` : '<p class="kb-preview-empty">这个画布暂无主题。</p>'}
+</details>`
+}
+
+function renderXMindTopic(topic, isRoot = false) {
+  const children = xmindTopicChildren(topic)
+  const childList = children.length > 0
+    ? `<ul>${children.map((child) => renderXMindTopic(child)).join('')}</ul>`
+    : ''
+
+  return `<li><span${isRoot ? ' class="kb-topic-root"' : ''}>${escapeVueText(topic.title || '未命名主题')}</span>${childList}</li>`
+}
+
+async function renderZipPage(document) {
+  const archive = await loadZip(document.sourcePath)
+  const files = Object.values(archive.files)
+    .filter((entry) => !entry.dir && !/[\\/]$/.test(entry.name))
+    .map((entry) => {
+      const name = normalizeArchivePath(entry.name)
+      return {
+        entry,
+        name,
+        sizeBytes: Number(entry._data?.uncompressedSize || 0)
+      }
+    })
+    .sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'))
+  const folders = new Set()
+  const extensionCounts = new Map()
+
+  for (const file of files) {
+    const parts = file.name.split('/')
+    for (let index = 1; index < parts.length; index += 1) {
+      folders.add(parts.slice(0, index).join('/'))
+    }
+
+    const extension = archiveExtension(file.name)
+    extensionCounts.set(extension, (extensionCounts.get(extension) || 0) + 1)
+  }
+
+  const totalUncompressedBytes = files.reduce((sum, file) => sum + file.sizeBytes, 0)
+  const extensionSummary = [...extensionCounts.entries()]
+    .sort(([, countA], [, countB]) => countB - countA)
+    .slice(0, 12)
+  const sourcePreviews = await createArchiveSourcePreviews(files)
+  const fileListing = files
+    .map((file) => `${formatFileSize(file.sizeBytes).padStart(9)}  ${file.name}`)
+    .join('\n')
+
+  return `---
+search: false
+---
+
+<script setup>
+import { withBase } from 'vitepress'
+
+const fileUrl = withBase(${JSON.stringify(document.publicUrl)})
+const archiveListing = ${serializeForScript(fileListing)}
+const sourcePreviewContents = ${serializeForScript(sourcePreviews.map((preview) => preview.content))}
+</script>
+
+# ${document.title}
+
+${renderFileMeta(document)}
+
+<p class="kb-download-actions"><a class="kb-download-button kb-download-button-secondary" :href="fileUrl" download>下载完整源码包</a></p>
+
+## 在线预览
+
+<div class="kb-preview-summary">
+  <span><strong>${files.length}</strong> 个文件</span>
+  <span><strong>${folders.size}</strong> 个目录</span>
+  <span><strong>${formatFileSize(totalUncompressedBytes)}</strong> 解压后大小</span>
+</div>
+
+<div class="kb-archive-preview">
+  <div class="kb-extension-list" aria-label="文件类型统计">
+${extensionSummary.map(([extension, count]) => `    <span><strong>${escapeVueText(extension)}</strong>${count}</span>`).join('\n')}
+  </div>
+
+  <details class="kb-preview-panel kb-archive-index">
+    <summary>查看完整目录 · ${files.length} 个文件</summary>
+    <pre v-text="archiveListing"></pre>
+  </details>
+
+  <section class="kb-source-previews" aria-labelledby="${document.id}-source-heading">
+    <h3 id="${document.id}-source-heading">可读文件预览</h3>
+    ${sourcePreviews.length > 0
+      ? sourcePreviews.map((preview, index) => renderArchiveSourcePreview(preview, index, index === 0)).join('\n')
+      : '<p class="kb-preview-empty">这个压缩包主要包含二进制工程文件，网页中已展示完整目录，暂无可直接转成文本的源码。</p>'}
+  </section>
+</div>
+`
+}
+
+async function createArchiveSourcePreviews(files) {
+  const candidates = files
+    .filter((file) => (
+      file.sizeBytes <= maxArchivePreviewFileBytes &&
+      isArchiveTextCandidate(file.name)
+    ))
+    .sort((a, b) => {
+      const scoreDifference = archivePreviewScore(a.name) - archivePreviewScore(b.name)
+      return scoreDifference || a.name.localeCompare(b.name, 'zh-CN')
+    })
+  const selectedCandidates = selectArchivePreviewCandidates(candidates)
+
+  const previews = []
+  let totalBytes = 0
+
+  for (const file of selectedCandidates) {
+    if (previews.length >= maxArchivePreviewFiles) break
+    if (totalBytes + file.sizeBytes > maxArchivePreviewTotalBytes) continue
+
+    const buffer = await file.entry.async('nodebuffer')
+    if (looksBinary(buffer)) continue
+
+    const decoded = decodeTextBuffer(buffer)
+    const maxCharacters = 72000
+    const truncated = decoded.length > maxCharacters
+    previews.push({
+      name: file.name,
+      sizeBytes: file.sizeBytes,
+      content: truncated ? `${decoded.slice(0, maxCharacters)}\n\n[网页预览到此处，完整内容请下载源码包查看。]` : decoded,
+      truncated
+    })
+    totalBytes += file.sizeBytes
+  }
+
+  return previews
+}
+
+function selectArchivePreviewCandidates(candidates) {
+  const quotas = [
+    ['documentation', 3],
+    ['source', 8],
+    ['header', 3],
+    ['configuration', 2]
+  ]
+  const selected = []
+  const selectedNames = new Set()
+
+  for (const [kind, limit] of quotas) {
+    const matching = candidates.filter((candidate) => archivePreviewKind(candidate.name) === kind)
+    appendArchiveCandidates(selected, selectedNames, matching, limit)
+  }
+
+  appendArchiveCandidates(
+    selected,
+    selectedNames,
+    candidates,
+    maxArchivePreviewFiles - selected.length
+  )
+  return selected
+}
+
+function appendArchiveCandidates(selected, selectedNames, candidates, limit) {
+  if (limit <= 0) return
+
+  const roots = new Set()
+  for (const candidate of candidates) {
+    if (selected.length >= maxArchivePreviewFiles || roots.size >= limit) break
+    if (selectedNames.has(candidate.name)) continue
+
+    const root = normalizeArchivePath(candidate.name).split('/')[0]
+    if (roots.has(root)) continue
+    roots.add(root)
+    selectedNames.add(candidate.name)
+    selected.push(candidate)
+  }
+
+  const targetSize = Math.min(maxArchivePreviewFiles, selected.length + Math.max(0, limit - roots.size))
+  for (const candidate of candidates) {
+    if (selected.length >= targetSize) break
+    if (selectedNames.has(candidate.name)) continue
+    selectedNames.add(candidate.name)
+    selected.push(candidate)
+  }
+}
+
+function archivePreviewKind(fileName) {
+  const normalizedName = normalizeArchivePath(fileName)
+  const baseName = path.posix.basename(normalizedName).toLowerCase()
+  const extension = path.posix.extname(normalizedName).toLowerCase()
+
+  if (
+    baseName.startsWith('readme') ||
+    baseName === 'license' ||
+    extension === '.md' ||
+    extension === '.txt'
+  ) return 'documentation'
+
+  if (['.h', '.hpp'].includes(extension)) return 'header'
+  if (['.asm', '.c', '.cc', '.cpp', '.cs', '.cxx', '.go', '.ino', '.java', '.js', '.lua', '.m', '.py', '.rs', '.s', '.ts', '.tsx'].includes(extension)) {
+    return 'source'
+  }
+  return 'configuration'
+}
+
+function renderArchiveSourcePreview(preview, index, open) {
+  const status = preview.truncated ? ' · 已截取' : ''
+  return `<details class="kb-preview-panel kb-code-preview"${open ? ' open' : ''}>
+  <summary><span>${escapeVueText(preview.name)}</span><small>${formatFileSize(preview.sizeBytes)}${status}</small></summary>
+  <pre><code v-text="sourcePreviewContents[${index}]"></code></pre>
+</details>`
+}
+
+async function renderTextPage(document) {
+  const source = stripBom(await fs.readFile(document.sourcePath, 'utf8'))
+
+  return `---
+search: false
+---
+
+<script setup>
+import { withBase } from 'vitepress'
+
+const fileUrl = withBase(${JSON.stringify(document.publicUrl)})
+const textPreview = ${serializeForScript(source)}
+</script>
+
+# ${document.title}
+
+${renderFileMeta(document)}
+
+<p class="kb-download-actions"><a class="kb-download-button kb-download-button-secondary" :href="fileUrl" download>下载原始文本</a></p>
+
+## 在线预览
+
+<div class="kb-text-preview"><pre v-text="textPreview"></pre></div>
 `
 }
 
@@ -472,6 +962,72 @@ function extensionForImage(contentType) {
   return extensions[contentType] || 'bin'
 }
 
+async function loadZip(filePath) {
+  return JSZip.loadAsync(await fs.readFile(filePath), {
+    decodeFileName: (bytes) => new TextDecoder('gb18030').decode(bytes)
+  })
+}
+
+function findZipEntry(archive, targetName) {
+  const normalizedTarget = normalizeArchivePath(targetName).toLowerCase()
+  return Object.values(archive.files).find(
+    (entry) => normalizeArchivePath(entry.name).toLowerCase() === normalizedTarget
+  )
+}
+
+function normalizeArchivePath(value) {
+  return value.replace(/\\/g, '/').replace(/^\.\/+/, '')
+}
+
+function archiveExtension(fileName) {
+  const extension = path.posix.extname(normalizeArchivePath(fileName)).toLowerCase()
+  return extension ? extension.slice(1).toUpperCase() : '无扩展名'
+}
+
+function isArchiveTextCandidate(fileName) {
+  const normalizedName = normalizeArchivePath(fileName)
+  const baseName = path.posix.basename(normalizedName).toLowerCase()
+  const extension = path.posix.extname(normalizedName).toLowerCase()
+  return archiveTextExtensions.has(extension) || archiveTextNames.has(baseName)
+}
+
+function archivePreviewScore(fileName) {
+  const normalizedName = normalizeArchivePath(fileName)
+  const baseName = path.posix.basename(normalizedName).toLowerCase()
+  const extension = path.posix.extname(normalizedName).toLowerCase()
+  const depth = normalizedName.split('/').length
+
+  if (baseName.startsWith('readme')) return depth
+  if (extension === '.md' || extension === '.txt') return 10 + depth
+  if (baseName === 'license') return 16 + depth
+  if (['.c', '.h', '.cpp', '.hpp', '.ino', '.py'].includes(extension)) return 20 + depth
+  if (['.json', '.yaml', '.yml', '.toml', '.ini', '.cfg'].includes(extension)) return 30 + depth
+  return 40 + depth
+}
+
+function looksBinary(buffer) {
+  const sample = buffer.subarray(0, Math.min(buffer.length, 8192))
+  if (sample.includes(0)) return true
+
+  let controlCharacters = 0
+  for (const byte of sample) {
+    const isAllowedWhitespace = byte === 9 || byte === 10 || byte === 12 || byte === 13
+    if ((byte < 32 && !isAllowedWhitespace) || byte === 127) {
+      controlCharacters += 1
+    }
+  }
+
+  return sample.length > 0 && controlCharacters / sample.length > 0.08
+}
+
+function decodeTextBuffer(buffer) {
+  try {
+    return stripBom(new TextDecoder('utf-8', { fatal: true }).decode(buffer))
+  } catch {
+    return stripBom(new TextDecoder('gb18030').decode(buffer))
+  }
+}
+
 function encodePath(relativePath) {
   return relativePath.split('/').map(encodeURIComponent).join('/')
 }
@@ -489,11 +1045,26 @@ function escapeMarkdownText(value) {
 }
 
 function escapeHtml(value) {
-  return value
+  return String(value)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
+}
+
+function escapeVueText(value) {
+  return escapeHtml(value)
+    .replace(/\{/g, '&#123;')
+    .replace(/\}/g, '&#125;')
+}
+
+function serializeForScript(value) {
+  return JSON.stringify(value)
+    .replace(/</g, '\\u003C')
+    .replace(/>/g, '\\u003E')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029')
 }
 
 function stripBom(value) {
