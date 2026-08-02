@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+import pdfWorkerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url'
 import type {
   DocumentInitParameters,
   PDFDocumentLoadingTask,
@@ -51,10 +51,12 @@ function releaseDocument() {
   cancelRender()
   for (const controller of fetchControllers) controller.abort()
   fetchControllers.clear()
-  loadingTask?.destroy()
-  pdfDocument?.destroy()
+  const task = loadingTask
   loadingTask = undefined
   pdfDocument = undefined
+  void task?.destroy().catch((error) => {
+    console.error('PDF cleanup failed', error)
+  })
 }
 
 async function loadDocument() {
@@ -70,7 +72,9 @@ async function loadDocument() {
   zoom.value = 1
 
   try {
-    const pdfjs = await import('pdfjs-dist')
+    // The modern PDF.js build only targets the latest browsers. The legacy
+    // bundle keeps the viewer working in mobile Safari and embedded WebViews.
+    const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs')
     if (currentLoad !== loadVersion) return
 
     pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerUrl
@@ -99,7 +103,7 @@ async function loadDocument() {
 }
 
 async function createPdfSource(
-  pdfjs: typeof import('pdfjs-dist'),
+  pdfjs: typeof import('pdfjs-dist/legacy/build/pdf.mjs'),
   currentLoad: number
 ): Promise<DocumentInitParameters> {
   const initialResponse = await fetchPdfRange(0, rangeChunkSize)
@@ -352,7 +356,15 @@ watch(() => props.src, loadDocument)
       <div v-if="errorMessage" class="kb-pdf-error" role="alert">
         <strong>无法显示在线预览</strong>
         <p>{{ errorMessage }}</p>
-        <a :href="src" target="_blank" rel="noopener">在新窗口打开</a>
+        <div class="kb-pdf-error-actions">
+          <button type="button" class="kb-download-button" @click="loadDocument">重新加载</button>
+          <a
+            :href="src"
+            class="kb-download-button kb-download-button-secondary"
+            target="_blank"
+            rel="noopener"
+          >打开原文件</a>
+        </div>
       </div>
 
       <div v-else class="kb-pdf-canvas-stage" :class="{ 'is-rendering': rendering && !loading }">
