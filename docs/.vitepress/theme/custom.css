@@ -1,4 +1,5 @@
 :root {
+  --vp-font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --vp-c-brand-1: #008391;
   --vp-c-brand-2: #0a94a7;
   --vp-c-brand-3: #5bc2d6;
@@ -341,6 +342,10 @@
   background: var(--vp-c-bg);
 }
 
+.kb-pdf-toolbar.is-pending {
+  color: var(--vp-c-text-3);
+}
+
 .kb-pdf-toolbar-group,
 .kb-page-control {
   display: inline-flex;
@@ -440,11 +445,30 @@
   padding: 24px;
 }
 
+.kb-pdf-canvas-stage.has-placeholder {
+  width: 100%;
+}
+
 .kb-pdf-canvas-stage canvas {
+  grid-area: 1 / 1;
   display: block;
   background: #fff;
   box-shadow: 0 2px 14px rgba(19, 32, 51, 0.16);
   transition: opacity 0.15s ease;
+}
+
+.kb-pdf-canvas-stage canvas.is-waiting {
+  visibility: hidden;
+}
+
+.kb-pdf-placeholder {
+  grid-area: 1 / 1;
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  background: #fff;
+  box-shadow: 0 2px 14px rgba(19, 32, 51, 0.16);
 }
 
 .kb-pdf-canvas-stage.is-rendering canvas {
@@ -475,6 +499,57 @@
   padding: 24px;
   background: var(--vp-c-bg-soft);
   color: var(--vp-c-text-1);
+}
+
+.kb-pdf-loading.has-preview {
+  inset: 16px auto auto 50%;
+  display: block;
+  width: min(300px, calc(100% - 32px));
+  padding: 0;
+  background: transparent;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.kb-pdf-loading.has-preview .kb-pdf-loading-content {
+  grid-template-columns: 22px minmax(0, 1fr);
+  width: 100%;
+  justify-items: start;
+  column-gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--kb-border);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 3px 12px rgba(19, 32, 51, 0.12);
+  backdrop-filter: blur(6px);
+}
+
+.dark .kb-pdf-loading.has-preview .kb-pdf-loading-content {
+  background: rgba(32, 36, 43, 0.94);
+}
+
+.kb-pdf-loading.has-preview .kb-pdf-spinner {
+  grid-row: 1 / 3;
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+.kb-pdf-loading.has-preview .kb-pdf-loading-title {
+  margin: 0 !important;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.kb-pdf-loading.has-preview .kb-pdf-loading-meta {
+  margin: 1px 0 8px !important;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.kb-pdf-loading.has-preview .kb-pdf-loading-track {
+  grid-column: 1 / -1;
+  width: 100%;
 }
 
 .kb-pdf-loading-content {
@@ -535,6 +610,49 @@
   justify-items: center;
   padding: 32px;
   text-align: center;
+}
+
+.kb-pdf-error-content {
+  display: grid;
+  justify-items: center;
+}
+
+.kb-pdf-error.has-preview {
+  position: relative;
+  min-height: 100%;
+  place-content: start center;
+  padding: 24px;
+  background: #e5e7eb;
+}
+
+.dark .kb-pdf-error.has-preview {
+  background: #20242b;
+}
+
+.kb-pdf-error-preview {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  background: #fff;
+  box-shadow: 0 2px 14px rgba(19, 32, 51, 0.16);
+}
+
+.kb-pdf-error.has-preview .kb-pdf-error-content {
+  position: absolute;
+  z-index: 1;
+  top: 16px;
+  left: 50%;
+  width: min(440px, calc(100% - 32px));
+  padding: 14px 16px;
+  border: 1px solid var(--kb-border);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 3px 12px rgba(19, 32, 51, 0.12);
+  transform: translateX(-50%);
+}
+
+.dark .kb-pdf-error.has-preview .kb-pdf-error-content {
+  background: rgba(32, 36, 43, 0.96);
 }
 
 .kb-pdf-error strong {
@@ -636,6 +754,11 @@
   background: var(--vp-c-bg);
 }
 
+.kb-preview-panel:not([open]) {
+  content-visibility: auto;
+  contain-intrinsic-size: 52px;
+}
+
 .kb-preview-panel > summary {
   padding: 13px 16px;
   color: var(--kb-navy);
@@ -658,6 +781,14 @@
   margin: 0 !important;
   padding: 18px;
   color: var(--vp-c-text-2);
+}
+
+.kb-preview-limit {
+  margin: 0 !important;
+  padding: 10px 14px;
+  border-top: 1px solid var(--kb-border);
+  color: var(--vp-c-text-2);
+  font-size: 13px;
 }
 
 .kb-table-scroll {
@@ -1264,5 +1395,26 @@
   .kb-code-preview > summary {
     flex-direction: column;
     gap: 2px;
+  }
+}
+
+@media (max-width: 400px) {
+  .kb-icon-button {
+    width: 30px;
+    height: 32px;
+  }
+
+  .kb-page-control input {
+    width: 40px;
+    height: 32px;
+  }
+
+  .kb-page-control span:last-child {
+    min-width: 34px;
+  }
+
+  .kb-zoom-value {
+    min-width: 42px;
+    height: 32px;
   }
 }

@@ -1,4 +1,5 @@
 import crypto from 'node:crypto'
+import { spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -14,6 +15,8 @@ const generatedDir = path.join(rootDir, 'docs', 'library', 'generated')
 const publicUploadsDir = path.join(rootDir, 'docs', 'public', 'uploads')
 const rawUploadsDir = path.join(publicUploadsDir, 'raw')
 const previewUploadsDir = path.join(publicUploadsDir, 'previews')
+const pdfPreviewDir = path.join(previewUploadsDir, 'pdf')
+const pdfPreviewCacheDir = path.join(rootDir, '.cache', 'pdf-previews')
 const libraryIndexPath = path.join(rootDir, 'docs', 'library', 'index.md')
 const archiveTextExtensions = new Set([
   '.asm', '.bat', '.c', '.cc', '.cfg', '.cmake', '.cmd', '.conf', '.cpp',
@@ -26,9 +29,13 @@ const archiveTextExtensions = new Set([
 const archiveTextNames = new Set([
   'cmakelists.txt', 'license', 'makefile', 'readme'
 ])
-const maxArchivePreviewFiles = 16
-const maxArchivePreviewFileBytes = 96 * 1024
-const maxArchivePreviewTotalBytes = 640 * 1024
+const maxArchivePreviewFiles = 6
+const maxArchivePreviewFileBytes = 24 * 1024
+const maxArchivePreviewTotalBytes = 48 * 1024
+const maxArchivePreviewCharacters = 16000
+const maxSpreadsheetPreviewRows = 24
+const maxSpreadsheetPreviewColumns = 24
+const pdfPreviewConcurrency = 4
 
 const supportedDocuments = new Set([
   '.md', '.markdown', '.pdf', '.docx', '.doc',
@@ -66,6 +73,8 @@ async function main() {
   for (const relativePath of uploadFiles) {
     await copyRawUpload(relativePath)
   }
+
+  await preparePdfPreviews(documents)
 
   console.log(`Generating ${documents.length} document page(s)...`)
   for (const document of documents) {
@@ -122,7 +131,8 @@ function createDocumentRecord(relativePath, sizeBytes) {
     sourcePath: path.join(uploadsDir, ...relativePath.split('/')),
     pagePath: path.join(generatedDir, `${id}.md`),
     pageLink: `/library/generated/${id}`,
-    publicUrl: `/uploads/raw/${encodePath(relativePath)}`
+    publicUrl: `/uploads/raw/${encodePath(relativePath)}`,
+    previewUrl: null
   }
 }
 
@@ -131,6 +141,149 @@ async function copyRawUpload(relativePath) {
   const targetPath = path.join(rawUploadsDir, ...relativePath.split('/'))
   await fs.mkdir(path.dirname(targetPath), { recursive: true })
   await fs.copyFile(sourcePath, targetPath)
+}
+
+async function preparePdfPreviews(documents) {
+  const pdfDocuments = documents.filter((document) => document.ext === '.pdf')
+  if (pdfDocuments.length === 0) return
+
+  if (!await commandIsAvailable('pdftoppm', ['-v'])) {
+    console.warn('Skipping PDF cover previews because pdftoppm is unavailable.')
+    return
+  }
+
+  await fs.mkdir(pdfPreviewDir, { recursive: true })
+  await fs.mkdir(pdfPreviewCacheDir, { recursive: true })
+  console.log(`Preparing ${pdfDocuments.length} PDF first-page preview(s)...`)
+
+  let nextIndex = 0
+  let generatedCount = 0
+  let cachedCount = 0
+  let failedCount = 0
+
+  async function worker() {
+    while (nextIndex < pdfDocuments.length) {
+      const document = pdfDocuments[nextIndex]
+      nextIndex += 1
+
+      try {
+        const result = await preparePdfPreview(document)
+        generatedCount += result.generated ? 1 : 0
+        cachedCount += result.generated ? 0 : 1
+      } catch (error) {
+        failedCount += 1
+        console.warn(`  Unable to preview ${document.relativePath}: ${error.message}`)
+      }
+    }
+  }
+
+  await Promise.all(
+    Array.from(
+      { length: Math.min(pdfPreviewConcurrency, pdfDocuments.length) },
+      () => worker()
+    )
+  )
+
+  const summary = [`${generatedCount} generated`, `${cachedCount} cached`]
+  if (failedCount > 0) summary.push(`${failedCount} skipped`)
+  console.log(`Prepared PDF previews (${summary.join(', ')}).`)
+}
+
+async function preparePdfPreview(document) {
+  const fingerprint = await pdfPreviewFingerprint(document)
+  const cachePath = path.join(pdfPreviewCacheDir, `${document.id}-${fingerprint}.jpg`)
+  const outputPath = path.join(pdfPreviewDir, `${document.id}.jpg`)
+  const generated = !await fileExists(cachePath)
+
+  if (generated) {
+    const temporaryPrefix = path.join(
+      pdfPreviewCacheDir,
+      `.${document.id}-${process.pid}-${crypto.randomBytes(4).toString('hex')}`
+    )
+    const temporaryPath = `${temporaryPrefix}.jpg`
+
+    try {
+      await runCommand('pdftoppm', [
+        '-f', '1',
+        '-l', '1',
+        '-singlefile',
+        '-jpeg',
+        '-jpegopt', 'quality=72,progressive=y,optimize=y',
+        '-scale-to', '1280',
+        document.sourcePath,
+        temporaryPrefix
+      ])
+      await fs.rename(temporaryPath, cachePath)
+    } finally {
+      await fs.rm(temporaryPath, { force: true })
+    }
+  }
+
+  await fs.copyFile(cachePath, outputPath)
+  document.previewUrl = `/uploads/previews/pdf/${document.id}.jpg`
+  return { generated }
+}
+
+async function pdfPreviewFingerprint(document) {
+  const sampleSize = Math.min(document.sizeBytes, 64 * 1024)
+  const source = await fs.open(document.sourcePath, 'r')
+  const hash = crypto.createHash('sha1').update(String(document.sizeBytes))
+
+  try {
+    const head = Buffer.alloc(sampleSize)
+    const { bytesRead: headBytes } = await source.read(head, 0, sampleSize, 0)
+    hash.update(head.subarray(0, headBytes))
+
+    if (document.sizeBytes > sampleSize) {
+      const tail = Buffer.alloc(sampleSize)
+      const tailPosition = Math.max(0, document.sizeBytes - sampleSize)
+      const { bytesRead: tailBytes } = await source.read(tail, 0, sampleSize, tailPosition)
+      hash.update(tail.subarray(0, tailBytes))
+    }
+  } finally {
+    await source.close()
+  }
+
+  return hash.digest('hex').slice(0, 12)
+}
+
+async function fileExists(filePath) {
+  try {
+    await fs.access(filePath)
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function commandIsAvailable(command, args) {
+  try {
+    await runCommand(command, args)
+    return true
+  } catch {
+    return false
+  }
+}
+
+function runCommand(command, args) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, args, {
+      stdio: ['ignore', 'ignore', 'pipe']
+    })
+    let stderr = ''
+
+    child.stderr.on('data', (chunk) => {
+      if (stderr.length < 4096) stderr += chunk.toString()
+    })
+    child.on('error', reject)
+    child.on('close', (code) => {
+      if (code === 0) {
+        resolve()
+      } else {
+        reject(new Error(stderr.trim() || `${command} exited with code ${code}`))
+      }
+    })
+  })
 }
 
 async function writeGeneratedDocument(document, documentByRelativePath, uploadFileSet) {
@@ -180,6 +333,7 @@ pageClass: kb-wide-document
 import { withBase } from 'vitepress'
 
 const fileUrl = withBase(${JSON.stringify(document.publicUrl)})
+${document.previewUrl ? `const previewUrl = withBase(${JSON.stringify(document.previewUrl)})` : ''}
 </script>
 
 # ${document.title}
@@ -193,6 +347,7 @@ ${renderFileMeta(document)}
 
 <PdfPreview
   :src="fileUrl"
+  ${document.previewUrl ? ':preview-src="previewUrl"' : ''}
   title="${escapeHtml(document.title)}"
   size="${escapeHtml(formatFileSize(document.sizeBytes))}"
 />
@@ -218,10 +373,12 @@ async function renderDocxPage(document) {
         })
       }
     )
-    const previewHtml = result.value.replace(
-      /src="__KB_WITH_BASE__([^"]+)"/g,
-      (_, imageUrl) => `:src="withBase('${imageUrl}')"`
-    )
+    const previewHtml = result.value
+      .replace(
+        /src="__KB_WITH_BASE__([^"]+)"/g,
+        (_, imageUrl) => `:src="withBase('${imageUrl}')"`
+      )
+      .replace(/<img\b/g, '<img loading="lazy" decoding="async"')
 
     return `---
 search: false
@@ -289,7 +446,7 @@ async function renderSpreadsheetPage(document) {
       ...table
     }
   })
-  const totalRows = sheets.reduce((sum, sheet) => sum + sheet.rows.length, 0)
+  const totalRows = sheets.reduce((sum, sheet) => sum + sheet.totalRows, 0)
   const totalCells = sheets.reduce((sum, sheet) => sum + sheet.nonEmptyCells, 0)
 
   return `---
@@ -330,31 +487,50 @@ function spreadsheetTable(sheet) {
       firstColumn: 0,
       columnCount: 0,
       rows: [],
-      nonEmptyCells: 0
+      totalRows: 0,
+      totalColumns: 0,
+      nonEmptyCells: 0,
+      truncated: false
     }
   }
 
   const range = XLSX.utils.decode_range(sheet['!ref'])
   const rows = []
+  const previewEndColumn = Math.min(
+    range.e.c,
+    range.s.c + maxSpreadsheetPreviewColumns - 1
+  )
   let columnCount = 0
+  let totalRows = 0
   let nonEmptyCells = 0
 
   for (let rowIndex = range.s.r; rowIndex <= range.e.r; rowIndex += 1) {
     const values = []
     let lastContentIndex = -1
+    let rowHasContent = false
 
     for (let columnIndex = range.s.c; columnIndex <= range.e.c; columnIndex += 1) {
       const cell = sheet[XLSX.utils.encode_cell({ r: rowIndex, c: columnIndex })]
       const value = cell ? XLSX.utils.format_cell(cell) : ''
-      values.push(value)
 
       if (String(value).trim() !== '') {
-        lastContentIndex = values.length - 1
+        rowHasContent = true
         nonEmptyCells += 1
+      }
+
+      if (columnIndex <= previewEndColumn) {
+        values.push(value)
+        if (String(value).trim() !== '') lastContentIndex = values.length - 1
       }
     }
 
-    if (lastContentIndex >= 0) {
+    if (rowHasContent) totalRows += 1
+
+    if (
+      rowHasContent &&
+      lastContentIndex >= 0 &&
+      rows.length < maxSpreadsheetPreviewRows
+    ) {
       const trimmedValues = values.slice(0, lastContentIndex + 1)
       columnCount = Math.max(columnCount, trimmedValues.length)
       rows.push({
@@ -368,7 +544,10 @@ function spreadsheetTable(sheet) {
     firstColumn: range.s.c,
     columnCount,
     rows,
-    nonEmptyCells
+    totalRows,
+    totalColumns: range.e.c - range.s.c + 1,
+    nonEmptyCells,
+    truncated: totalRows > rows.length || range.e.c > previewEndColumn
   }
 }
 
@@ -378,7 +557,7 @@ function renderSpreadsheetSheet(sheet, open) {
     : sheet.hiddenState === 1
       ? '（隐藏）'
       : ''
-  const summary = `${escapeVueText(sheet.name)}${visibility} · ${sheet.rows.length} 行 · ${sheet.nonEmptyCells} 个非空单元格`
+  const summary = `${escapeVueText(sheet.name)}${visibility} · ${sheet.totalRows} 行 · ${sheet.nonEmptyCells} 个非空单元格`
 
   if (sheet.rows.length === 0) {
     return `<details class="kb-preview-panel kb-sheet-preview"${open ? ' open' : ''}>
@@ -409,6 +588,7 @@ ${rows}
       </tbody>
     </table>
   </div>
+  ${sheet.truncated ? `<p class="kb-preview-limit">网页展示前 ${maxSpreadsheetPreviewRows} 行、${maxSpreadsheetPreviewColumns} 列，完整内容请下载原始表格。</p>` : ''}
 </details>`
 }
 
@@ -464,7 +644,7 @@ ${renderFileMeta(document)}
 
 <div class="kb-xmind-preview">
 ${thumbnailUrl ? `  <figure class="kb-xmind-thumbnail">
-    <img :src="thumbnailUrl" alt="${escapeHtml(document.title)} 思维导图缩略图">
+    <img :src="thumbnailUrl" alt="${escapeHtml(document.title)} 思维导图缩略图" loading="lazy" decoding="async">
     <figcaption>思维导图总览</figcaption>
   </figure>` : ''}
   <div class="kb-xmind-outline">
@@ -623,12 +803,11 @@ async function createArchiveSourcePreviews(files) {
     if (looksBinary(buffer)) continue
 
     const decoded = decodeTextBuffer(buffer)
-    const maxCharacters = 72000
-    const truncated = decoded.length > maxCharacters
+    const truncated = decoded.length > maxArchivePreviewCharacters
     previews.push({
       name: file.name,
       sizeBytes: file.sizeBytes,
-      content: truncated ? `${decoded.slice(0, maxCharacters)}\n\n[网页预览到此处，完整内容请下载源码包查看。]` : decoded,
+      content: truncated ? `${decoded.slice(0, maxArchivePreviewCharacters)}\n\n[网页预览到此处，完整内容请下载源码包查看。]` : decoded,
       truncated
     })
     totalBytes += file.sizeBytes

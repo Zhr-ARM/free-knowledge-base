@@ -7,6 +7,15 @@ export default defineConfig({
   title: '开源协会知识库',
   description: '沉淀嵌入式与机器人运动控制资料的公开知识库',
   base,
+  router: {
+    prefetchLinks: false
+  },
+  transformHtml(html) {
+    return html.replace(
+      /\s*<link rel="preload" href="[^"]*inter-roman-latin\.[^"]+\.woff2" as="font" type="font\/woff2" crossorigin="">/,
+      ''
+    )
+  },
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}logo.svg` }]
   ],

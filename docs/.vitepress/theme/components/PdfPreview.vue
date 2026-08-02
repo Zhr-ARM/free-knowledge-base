@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import pdfWorkerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url'
+import modernPdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+import legacyPdfWorkerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url'
 import type {
   DocumentInitParameters,
   PDFDocumentLoadingTask,
@@ -12,7 +13,10 @@ const props = defineProps<{
   src: string
   title: string
   size?: string
+  previewSrc?: string
 }>()
+
+type PdfJsModule = typeof import('pdfjs-dist')
 
 const canvas = ref<HTMLCanvasElement | null>(null)
 const preview = ref<HTMLDivElement | null>(null)
@@ -34,6 +38,7 @@ let loadVersion = 0
 let renderVersion = 0
 const fetchControllers = new Set<AbortController>()
 const rangeChunkSize = 256 * 1024
+const tailPrefetchSize = 768 * 1024
 
 const progressStyle = computed(() => ({
   width: progress.value === null ? '34%' : `${Math.max(4, progress.value)}%`
@@ -72,12 +77,10 @@ async function loadDocument() {
   zoom.value = 1
 
   try {
-    // The modern PDF.js build only targets the latest browsers. The legacy
-    // bundle keeps the viewer working in mobile Safari and embedded WebViews.
-    const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs')
+    const { pdfjs, workerUrl } = await loadPdfJs()
     if (currentLoad !== loadVersion) return
 
-    pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerUrl
+    pdfjs.GlobalWorkerOptions.workerSrc = workerUrl
     const source = await createPdfSource(pdfjs, currentLoad)
     if (currentLoad !== loadVersion) return
 
@@ -102,8 +105,33 @@ async function loadDocument() {
   }
 }
 
+async function loadPdfJs(): Promise<{ pdfjs: PdfJsModule, workerUrl: string }> {
+  if (supportsModernPdfJs()) {
+    return {
+      pdfjs: await import('pdfjs-dist'),
+      workerUrl: modernPdfWorkerUrl
+    }
+  }
+
+  return {
+    pdfjs: await import('pdfjs-dist/legacy/build/pdf.mjs') as PdfJsModule,
+    workerUrl: legacyPdfWorkerUrl
+  }
+}
+
+function supportsModernPdfJs() {
+  return (
+    typeof (Promise as any).withResolvers === 'function' &&
+    typeof (Promise as any).try === 'function' &&
+    typeof (URL as any).parse === 'function' &&
+    typeof AbortSignal !== 'undefined' &&
+    typeof (AbortSignal as any).any === 'function' &&
+    typeof structuredClone === 'function'
+  )
+}
+
 async function createPdfSource(
-  pdfjs: typeof import('pdfjs-dist/legacy/build/pdf.mjs'),
+  pdfjs: PdfJsModule,
   currentLoad: number
 ): Promise<DocumentInitParameters> {
   const initialResponse = await fetchPdfRange(0, rangeChunkSize)
@@ -117,6 +145,25 @@ async function createPdfSource(
 
   let loadedBytes = initialData.byteLength
   progress.value = Math.max(1, Math.round((loadedBytes / totalSize) * 100))
+  const tailBegin = Math.max(initialData.byteLength, totalSize - tailPrefetchSize)
+  const tailPromise = tailBegin < totalSize
+    ? fetchPdfRange(tailBegin, totalSize)
+      .then((response) => {
+        if (currentLoad !== loadVersion) return undefined
+        const data = response.status === 206
+          ? response.data
+          : response.data.slice(tailBegin, totalSize)
+        loadedBytes = Math.min(totalSize, loadedBytes + data.byteLength)
+        progress.value = Math.max(1, Math.round((loadedBytes / totalSize) * 100))
+        return data
+      })
+      .catch((error) => {
+        if (!isAbortError(error) && currentLoad === loadVersion) {
+          console.warn('PDF tail prefetch failed; falling back to range requests', error)
+        }
+        return undefined
+      })
+    : Promise.resolve<Uint8Array | undefined>(undefined)
 
   class HttpRangeTransport extends pdfjs.PDFDataRangeTransport {
     constructor() {
@@ -124,25 +171,34 @@ async function createPdfSource(
     }
 
     requestDataRange(begin: number, end: number) {
-      void fetchPdfRange(begin, end)
-        .then((response) => {
-          if (currentLoad !== loadVersion) return
+      void this.provideRange(begin, end).catch((error) => {
+        if (isAbortError(error)) return
+        if (currentLoad !== loadVersion) return
+        loading.value = false
+        errorMessage.value = '网络读取中断，请重试或在新窗口中打开。'
+        void loadingTask?.destroy().catch(() => {})
+        console.error('PDF range request failed', error)
+      })
+    }
 
-          const chunk = response.status === 206
-            ? response.data
-            : response.data.slice(begin, end)
-          loadedBytes = Math.min(totalSize, loadedBytes + chunk.byteLength)
-          progress.value = Math.max(1, Math.round((loadedBytes / totalSize) * 100))
-          this.onDataRange(begin, chunk)
-        })
-        .catch((error) => {
-          if (error instanceof DOMException && error.name === 'AbortError') return
-          if (currentLoad !== loadVersion) return
-          loading.value = false
-          errorMessage.value = '网络读取中断，请重试或在新窗口中打开。'
-          loadingTask?.destroy()
-          console.error('PDF range request failed', error)
-        })
+    async provideRange(begin: number, end: number) {
+      if (begin >= tailBegin && end <= totalSize) {
+        const tailData = await tailPromise
+        if (tailData && currentLoad === loadVersion) {
+          this.onDataRange(begin, tailData.slice(begin - tailBegin, end - tailBegin))
+          return
+        }
+      }
+
+      const response = await fetchPdfRange(begin, end)
+      if (currentLoad !== loadVersion) return
+
+      const chunk = response.status === 206
+        ? response.data
+        : response.data.slice(begin, end)
+      loadedBytes = Math.min(totalSize, loadedBytes + chunk.byteLength)
+      progress.value = Math.max(1, Math.round((loadedBytes / totalSize) * 100))
+      this.onDataRange(begin, chunk)
     }
 
     abort() {
@@ -158,6 +214,10 @@ async function createPdfSource(
     disableAutoFetch: true,
     rangeChunkSize
   }
+}
+
+function isAbortError(error: unknown) {
+  return error instanceof Error && error.name === 'AbortError'
 }
 
 async function fetchPdfRange(begin: number, end: number) {
@@ -282,12 +342,12 @@ watch(() => props.src, loadDocument)
 
 <template>
   <div class="kb-pdf-viewer">
-    <div v-if="pageCount" class="kb-pdf-toolbar" aria-label="PDF 阅读工具栏">
+    <div class="kb-pdf-toolbar" :class="{ 'is-pending': !pageCount }" aria-label="PDF 阅读工具栏">
       <div class="kb-pdf-toolbar-group">
         <button
           type="button"
           class="kb-icon-button"
-          :disabled="pageNumber <= 1 || rendering"
+          :disabled="!pageCount || pageNumber <= 1 || rendering"
           title="上一页"
           aria-label="上一页"
           @click="goToPage(pageNumber - 1)"
@@ -301,16 +361,17 @@ watch(() => props.src, loadDocument)
             type="number"
             min="1"
             :max="pageCount"
+            :disabled="!pageCount"
             inputmode="numeric"
             @change="commitPageInput"
             @keydown.enter="commitPageInput"
           >
-          <span>/ {{ pageCount }}</span>
+          <span>/ {{ pageCount || '—' }}</span>
         </label>
         <button
           type="button"
           class="kb-icon-button"
-          :disabled="pageNumber >= pageCount || rendering"
+          :disabled="!pageCount || pageNumber >= pageCount || rendering"
           title="下一页"
           aria-label="下一页"
           @click="goToPage(pageNumber + 1)"
@@ -323,7 +384,7 @@ watch(() => props.src, loadDocument)
         <button
           type="button"
           class="kb-icon-button"
-          :disabled="zoom <= 0.6 || rendering"
+          :disabled="!pageCount || zoom <= 0.6 || rendering"
           title="缩小"
           aria-label="缩小"
           @click="changeZoom(-0.15)"
@@ -333,7 +394,7 @@ watch(() => props.src, loadDocument)
         <button
           type="button"
           class="kb-zoom-value"
-          :disabled="zoom === 1 || rendering"
+          :disabled="!pageCount || zoom === 1 || rendering"
           title="适合页面宽度"
           @click="resetZoom"
         >
@@ -342,7 +403,7 @@ watch(() => props.src, loadDocument)
         <button
           type="button"
           class="kb-icon-button"
-          :disabled="zoom >= 2.5 || rendering"
+          :disabled="!pageCount || zoom >= 2.5 || rendering"
           title="放大"
           aria-label="放大"
           @click="changeZoom(0.15)"
@@ -353,36 +414,74 @@ watch(() => props.src, loadDocument)
     </div>
 
     <div ref="preview" class="kb-pdf-preview" :aria-busy="loading || rendering">
-      <div v-if="errorMessage" class="kb-pdf-error" role="alert">
-        <strong>无法显示在线预览</strong>
-        <p>{{ errorMessage }}</p>
-        <div class="kb-pdf-error-actions">
-          <button type="button" class="kb-download-button" @click="loadDocument">重新加载</button>
-          <a
-            :href="src"
-            class="kb-download-button kb-download-button-secondary"
-            target="_blank"
-            rel="noopener"
-          >打开原文件</a>
+      <div
+        v-if="errorMessage"
+        class="kb-pdf-error"
+        :class="{ 'has-preview': previewSrc }"
+        role="alert"
+      >
+        <img
+          v-if="previewSrc"
+          class="kb-pdf-error-preview"
+          :src="previewSrc"
+          :alt="`${title}，第一页预览`"
+          loading="eager"
+          decoding="async"
+        >
+        <div class="kb-pdf-error-content">
+          <strong>完整阅读器暂时不可用</strong>
+          <p>{{ errorMessage }}</p>
+          <div class="kb-pdf-error-actions">
+            <button type="button" class="kb-download-button" @click="loadDocument">重新加载</button>
+            <a
+              :href="src"
+              class="kb-download-button kb-download-button-secondary"
+              target="_blank"
+              rel="noopener"
+            >打开原文件</a>
+          </div>
         </div>
       </div>
 
-      <div v-else class="kb-pdf-canvas-stage" :class="{ 'is-rendering': rendering && !loading }">
+      <div
+        v-else
+        class="kb-pdf-canvas-stage"
+        :class="{
+          'is-rendering': rendering && !loading,
+          'has-placeholder': loading && previewSrc
+        }"
+      >
+        <img
+          v-if="loading && previewSrc"
+          class="kb-pdf-placeholder"
+          :src="previewSrc"
+          :alt="`${title}，第一页预览`"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        >
         <canvas
           ref="canvas"
+          :class="{ 'is-waiting': loading && previewSrc }"
           role="img"
           :aria-label="`${title}，第 ${pageNumber} 页，共 ${pageCount} 页`"
         ></canvas>
         <span v-if="rendering && !loading" class="kb-page-loading" role="status">正在读取第 {{ pageNumber }} 页</span>
       </div>
 
-      <div v-if="loading" class="kb-pdf-loading" role="status" aria-live="polite">
+      <div
+        v-if="loading"
+        class="kb-pdf-loading"
+        :class="{ 'has-preview': previewSrc }"
+        role="status"
+        aria-live="polite"
+      >
         <div class="kb-pdf-loading-content">
           <span class="kb-pdf-spinner" aria-hidden="true"></span>
-          <p class="kb-pdf-loading-title">正在读取第一页</p>
+          <p class="kb-pdf-loading-title">{{ previewSrc ? '正在准备翻页' : '正在读取第一页' }}</p>
           <p class="kb-pdf-loading-meta">
             <template v-if="size">{{ size }} &middot; </template>
-            分段载入中
+            {{ previewSrc ? '完整阅读载入中' : '分段载入中' }}
           </p>
           <span class="kb-pdf-loading-track" aria-hidden="true">
             <span class="kb-pdf-loading-bar" :style="progressStyle"></span>
