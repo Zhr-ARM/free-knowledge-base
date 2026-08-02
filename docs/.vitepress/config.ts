@@ -16,7 +16,47 @@ export default defineConfig({
   themeConfig: {
     logo: '/association-logo.jpg',
     search: {
-      provider: 'local'
+      provider: 'local',
+      options: {
+        translations: {
+          button: {
+            buttonText: '搜索',
+            buttonAriaLabel: '搜索资料'
+          },
+          modal: {
+            displayDetails: '显示详细结果',
+            resetButtonTitle: '清除搜索',
+            backButtonTitle: '关闭搜索',
+            noResultsText: '没有找到相关资料',
+            footer: {
+              selectText: '打开',
+              selectKeyAriaLabel: '回车键',
+              navigateText: '切换',
+              navigateUpKeyAriaLabel: '向上键',
+              navigateDownKeyAriaLabel: '向下键',
+              closeText: '关闭',
+              closeKeyAriaLabel: 'Esc 键'
+            }
+          }
+        },
+        _render(src, env, md) {
+          const relativePath = env.relativePath.replace(/\\/g, '/')
+          const html = md.render(src, env)
+
+          if (relativePath.includes('library/generated/')) {
+            const title = env.frontmatter.searchTitle || env.frontmatter.title
+            if (!title) return ''
+
+            const details = [env.frontmatter.searchPath, env.frontmatter.searchType]
+              .filter(Boolean)
+              .map(String)
+              .join(' · ')
+            return md.render(`# ${String(title)}\n\n${details}\n`, {})
+          }
+
+          return env.frontmatter.search === false ? '' : html
+        }
+      }
     },
     nav: [
       { text: '首页', link: '/' },

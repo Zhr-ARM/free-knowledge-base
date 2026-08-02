@@ -156,6 +156,7 @@ async function writeGeneratedDocument(document, documentByRelativePath, uploadFi
     page = renderDownloadPage(document)
   }
 
+  page = addGeneratedPageMetadata(page, document)
   await fs.writeFile(document.pagePath, page, 'utf8')
 }
 
@@ -808,14 +809,37 @@ async function getLibraryCategories(documents) {
 }
 
 async function writeLibraryIndex(documents, categories) {
+  const libraryDocuments = [...documents]
+    .sort((a, b) => a.relativePath.localeCompare(b.relativePath, 'zh-CN'))
+    .map((document) => ({
+      title: document.title,
+      category: document.category,
+      path: document.displayPath,
+      type: labelForExt(document.ext),
+      size: formatFileSize(document.sizeBytes),
+      link: document.pageLink
+    }))
   const lines = [
+    '---',
+    'sidebar: false',
+    'aside: false',
+    'outline: false',
+    'pageClass: kb-library-page',
+    '---',
+    '',
+    '<script setup>',
+    `const libraryDocuments = ${serializeForScript(libraryDocuments)}`,
+    '</script>',
+    '',
     '# 资料库',
     '',
     '这里按分类汇总开源协会已经公开的学习资料。点击条目可以在线阅读、预览 PDF，或下载原始文件。',
     '',
-    '可以通过顶部搜索框查找关键词，也可以按下面的分类浏览。',
+    '可以使用下面的资料搜索直接查找文件，也可以继续按分类浏览。',
     '',
     '暂时没有收录内容的分类会显示“暂无资料”。',
+    '',
+    '<LibrarySearch :documents="libraryDocuments" />',
     ''
   ]
 
@@ -906,6 +930,21 @@ function splitFrontmatter(source) {
   const match = source.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n/)
   if (!match) return { frontmatter: '', body: source }
   return { frontmatter: match[0], body: source.slice(match[0].length) }
+}
+
+function addGeneratedPageMetadata(source, document) {
+  const { frontmatter, body } = splitFrontmatter(source)
+  let result = frontmatter || '---\n---\n'
+  result = setFrontmatterValue(result, 'title', JSON.stringify(document.title))
+  result = setFrontmatterValue(
+    result,
+    'description',
+    JSON.stringify(`${document.displayPath} · ${labelForExt(document.ext)} · ${formatFileSize(document.sizeBytes)}`)
+  )
+  result = setFrontmatterValue(result, 'searchTitle', JSON.stringify(document.title))
+  result = setFrontmatterValue(result, 'searchPath', JSON.stringify(document.displayPath))
+  result = setFrontmatterValue(result, 'searchType', JSON.stringify(labelForExt(document.ext)))
+  return `${result}${body}`
 }
 
 function disableGeneratedPageSearch(frontmatter) {
