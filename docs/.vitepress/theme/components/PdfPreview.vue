@@ -1,4 +1,13 @@
 <script setup lang="ts">
+import {
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
+  Minimize2,
+  Minus,
+  Plus,
+  ScanLine
+} from '@lucide/vue'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import modernPdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 import legacyPdfWorkerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url'
@@ -17,11 +26,16 @@ const props = defineProps<{
 }>()
 
 type PdfJsModule = typeof import('pdfjs-dist')
+type ScrollAnchor = { x: number, y: number }
 
 const canvas = ref<HTMLCanvasElement | null>(null)
 const preview = ref<HTMLDivElement | null>(null)
+const viewer = ref<HTMLDivElement | null>(null)
 const loading = ref(true)
 const rendering = ref(false)
+const fullscreenAvailable = ref(false)
+const isFullscreen = ref(false)
+const panning = ref(false)
 const errorMessage = ref('')
 const progress = ref<number | null>(null)
 const pageNumber = ref(1)
@@ -39,6 +53,7 @@ let renderVersion = 0
 const fetchControllers = new Set<AbortController>()
 const rangeChunkSize = 256 * 1024
 const tailPrefetchSize = 768 * 1024
+let panOrigin: { x: number, y: number, left: number, top: number } | undefined
 
 const progressStyle = computed(() => ({
   width: progress.value === null ? '34%' : `${Math.max(4, progress.value)}%`
@@ -248,7 +263,7 @@ function readTotalSize(contentRange: string | null) {
   return match ? Number.parseInt(match[1], 10) : 0
 }
 
-async function renderCurrentPage() {
+async function renderCurrentPage(scrollAnchor?: ScrollAnchor) {
   if (!pdfDocument || !canvas.value || !preview.value) return
 
   const currentRender = ++renderVersion
@@ -273,6 +288,7 @@ async function renderCurrentPage() {
     canvas.value.height = Math.floor(viewport.height * pixelRatio)
     canvas.value.style.width = `${Math.floor(viewport.width)}px`
     canvas.value.style.height = `${Math.floor(viewport.height)}px`
+    if (scrollAnchor) restoreScrollAnchor(scrollAnchor)
 
     renderTask = page.render({
       canvas: canvas.value,
@@ -295,18 +311,21 @@ async function renderCurrentPage() {
 function scheduleRender() {
   if (!pdfDocument) return
   if (resizeFrame) window.cancelAnimationFrame(resizeFrame)
+  const scrollAnchor = captureScrollAnchor()
   resizeFrame = window.requestAnimationFrame(() => {
-    void renderCurrentPage()
+    void renderCurrentPage(scrollAnchor)
   })
 }
 
 function goToPage(value: number) {
   if (!pdfDocument || pageCount.value === 0) return
   const target = Math.min(pageCount.value, Math.max(1, Math.round(value)))
+  const scrollAnchor = captureScrollAnchor()
+  if (scrollAnchor) scrollAnchor.y = 0
   pageNumber.value = target
   pageInput.value = String(target)
-  preview.value?.scrollTo({ top: 0, behavior: 'smooth' })
-  void renderCurrentPage()
+  preview.value?.scrollTo({ top: 0, behavior: 'auto' })
+  void renderCurrentPage(scrollAnchor)
 }
 
 function commitPageInput() {
@@ -315,16 +334,121 @@ function commitPageInput() {
 }
 
 function changeZoom(delta: number) {
-  zoom.value = Math.min(2.5, Math.max(0.6, Number((zoom.value + delta).toFixed(2))))
-  void renderCurrentPage()
+  if (!pdfDocument) return
+  const nextZoom = Math.min(2.5, Math.max(0.6, Number((zoom.value + delta).toFixed(2))))
+  if (nextZoom === zoom.value) return
+  const scrollAnchor = captureScrollAnchor()
+  zoom.value = nextZoom
+  void renderCurrentPage(scrollAnchor)
 }
 
 function resetZoom() {
+  if (!pdfDocument || zoom.value === 1) return
+  const scrollAnchor = captureScrollAnchor()
   zoom.value = 1
-  void renderCurrentPage()
+  void renderCurrentPage(scrollAnchor)
+}
+
+function captureScrollAnchor(): ScrollAnchor | undefined {
+  if (!preview.value) return undefined
+  const { clientHeight, clientWidth, scrollHeight, scrollLeft, scrollTop, scrollWidth } = preview.value
+  return {
+    x: (scrollLeft + clientWidth / 2) / Math.max(scrollWidth, 1),
+    y: (scrollTop + clientHeight / 2) / Math.max(scrollHeight, 1)
+  }
+}
+
+function restoreScrollAnchor(anchor: ScrollAnchor) {
+  if (!preview.value) return
+  const { clientHeight, clientWidth, scrollHeight, scrollWidth } = preview.value
+  preview.value.scrollLeft = Math.max(0, anchor.x * scrollWidth - clientWidth / 2)
+  preview.value.scrollTop = Math.max(0, anchor.y * scrollHeight - clientHeight / 2)
+}
+
+function startPan(event: PointerEvent) {
+  if (event.pointerType !== 'mouse' || event.button !== 0 || zoom.value <= 1 || !preview.value) return
+  const stage = event.currentTarget as HTMLElement
+  panning.value = true
+  panOrigin = {
+    x: event.clientX,
+    y: event.clientY,
+    left: preview.value.scrollLeft,
+    top: preview.value.scrollTop
+  }
+  stage.setPointerCapture(event.pointerId)
+  event.preventDefault()
+}
+
+function movePan(event: PointerEvent) {
+  if (!panning.value || !panOrigin || !preview.value) return
+  preview.value.scrollLeft = panOrigin.left - (event.clientX - panOrigin.x)
+  preview.value.scrollTop = panOrigin.top - (event.clientY - panOrigin.y)
+}
+
+function stopPan(event?: PointerEvent) {
+  const stage = event?.currentTarget as HTMLElement | undefined
+  if (event && stage?.hasPointerCapture(event.pointerId)) {
+    stage.releasePointerCapture(event.pointerId)
+  }
+  panning.value = false
+  panOrigin = undefined
+}
+
+async function toggleFullscreen() {
+  if (!fullscreenAvailable.value || !viewer.value) return
+
+  try {
+    if (document.fullscreenElement === viewer.value) {
+      await document.exitFullscreen()
+    } else {
+      await viewer.value.requestFullscreen()
+    }
+  } catch (error) {
+    console.error('PDF fullscreen request failed', error)
+  }
+}
+
+function handleFullscreenChange() {
+  isFullscreen.value = document.fullscreenElement === viewer.value
+  stopPan()
+  void nextTick().then(scheduleRender)
+}
+
+function handleFullscreenKeyboard(event: KeyboardEvent) {
+  if (!isFullscreen.value || event.defaultPrevented) return
+  const target = event.target
+  if (target instanceof HTMLElement && (
+    target.matches('input, textarea, select') || target.isContentEditable
+  )) return
+
+  if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+    event.preventDefault()
+    goToPage(pageNumber.value - 1)
+  } else if (event.key === 'ArrowRight' || event.key === 'PageDown') {
+    event.preventDefault()
+    goToPage(pageNumber.value + 1)
+  } else if (event.key === 'Home') {
+    event.preventDefault()
+    goToPage(1)
+  } else if (event.key === 'End') {
+    event.preventDefault()
+    goToPage(pageCount.value)
+  } else if (event.key === '+' || event.key === '=') {
+    event.preventDefault()
+    changeZoom(0.15)
+  } else if (event.key === '-' || event.key === '_') {
+    event.preventDefault()
+    changeZoom(-0.15)
+  } else if (event.key === '0') {
+    event.preventDefault()
+    resetZoom()
+  }
 }
 
 onMounted(() => {
+  fullscreenAvailable.value = document.fullscreenEnabled
+  document.addEventListener('fullscreenchange', handleFullscreenChange)
+  document.addEventListener('keydown', handleFullscreenKeyboard)
   resizeObserver = new ResizeObserver(scheduleRender)
   if (preview.value) resizeObserver.observe(preview.value)
   void loadDocument()
@@ -332,6 +456,8 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   loadVersion += 1
+  document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  document.removeEventListener('keydown', handleFullscreenKeyboard)
   resizeObserver?.disconnect()
   if (resizeFrame) window.cancelAnimationFrame(resizeFrame)
   releaseDocument()
@@ -341,7 +467,7 @@ watch(() => props.src, loadDocument)
 </script>
 
 <template>
-  <div class="kb-pdf-viewer">
+  <div ref="viewer" class="kb-pdf-viewer" :class="{ 'is-fullscreen': isFullscreen }">
     <div class="kb-pdf-toolbar" :class="{ 'is-pending': !pageCount }" aria-label="PDF 阅读工具栏">
       <div class="kb-pdf-toolbar-group">
         <button
@@ -352,7 +478,7 @@ watch(() => props.src, loadDocument)
           aria-label="上一页"
           @click="goToPage(pageNumber - 1)"
         >
-          &#8249;
+          <ChevronLeft aria-hidden="true" />
         </button>
         <label class="kb-page-control">
           <span class="visually-hidden">页码</span>
@@ -376,7 +502,7 @@ watch(() => props.src, loadDocument)
           aria-label="下一页"
           @click="goToPage(pageNumber + 1)"
         >
-          &#8250;
+          <ChevronRight aria-hidden="true" />
         </button>
       </div>
 
@@ -389,17 +515,11 @@ watch(() => props.src, loadDocument)
           aria-label="缩小"
           @click="changeZoom(-0.15)"
         >
-          &minus;
+          <Minus aria-hidden="true" />
         </button>
-        <button
-          type="button"
-          class="kb-zoom-value"
-          :disabled="!pageCount || zoom === 1 || rendering"
-          title="适合页面宽度"
-          @click="resetZoom"
-        >
+        <span class="kb-zoom-value" aria-live="polite">
           {{ zoomLabel }}
-        </button>
+        </span>
         <button
           type="button"
           class="kb-icon-button"
@@ -408,7 +528,29 @@ watch(() => props.src, loadDocument)
           aria-label="放大"
           @click="changeZoom(0.15)"
         >
-          +
+          <Plus aria-hidden="true" />
+        </button>
+        <span class="kb-toolbar-divider" aria-hidden="true"></span>
+        <button
+          type="button"
+          class="kb-icon-button"
+          :disabled="!pageCount || zoom === 1 || rendering"
+          title="适合页面宽度"
+          aria-label="适合页面宽度"
+          @click="resetZoom"
+        >
+          <ScanLine aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          class="kb-icon-button kb-fullscreen-button"
+          :disabled="!fullscreenAvailable"
+          :title="fullscreenAvailable ? (isFullscreen ? '退出全屏' : '全屏阅读') : '当前浏览器不支持全屏'"
+          :aria-label="isFullscreen ? '退出全屏' : '全屏阅读'"
+          @click="toggleFullscreen"
+        >
+          <Minimize2 v-if="isFullscreen" aria-hidden="true" />
+          <Maximize2 v-else aria-hidden="true" />
         </button>
       </div>
     </div>
@@ -448,8 +590,15 @@ watch(() => props.src, loadDocument)
         class="kb-pdf-canvas-stage"
         :class="{
           'is-rendering': rendering && !loading,
-          'has-placeholder': loading && previewSrc
+          'has-placeholder': loading && previewSrc,
+          'is-pannable': zoom > 1 && !loading,
+          'is-panning': panning
         }"
+        @pointerdown="startPan"
+        @pointermove="movePan"
+        @pointerup="stopPan"
+        @pointercancel="stopPan"
+        @lostpointercapture="stopPan"
       >
         <img
           v-if="loading && previewSrc"
