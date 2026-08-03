@@ -7,7 +7,12 @@ import {
   sanitizeGeneratedHtml,
   validateUploadPath
 } from '../scripts/lib/content-guards.mjs'
-import { countXMindTopics, spreadsheetTable } from '../scripts/sync-uploads.mjs'
+import {
+  countXMindTopics,
+  parsePdfInfo,
+  parseQpdfFirstPageEnd,
+  spreadsheetTable
+} from '../scripts/sync-uploads.mjs'
 
 test('hidden files and every hidden path segment are ignored', () => {
   assert.equal(isIgnoredUpload('.secret.pdf'), true)
@@ -94,4 +99,29 @@ test('XMind traversal enforces a maximum nesting depth', () => {
   }
 
   assert.throws(() => countXMindTopics(root), /层级超过/)
+})
+
+test('PDF metadata exposes page count and web optimization state', () => {
+  assert.deepEqual(parsePdfInfo([
+    'Title:          C course',
+    'Pages:          369',
+    'Encrypted:      no',
+    'Optimized:      yes',
+    'PDF version:    1.7'
+  ].join('\n')), {
+    pageCount: 369,
+    optimized: true,
+    encrypted: false
+  })
+
+  assert.deepEqual(parsePdfInfo('Pages: 12\nOptimized: no\n'), {
+    pageCount: 12,
+    optimized: false,
+    encrypted: false
+  })
+
+  assert.equal(parsePdfInfo('Pages: 20\nEncrypted: yes (print:no)\n').encrypted, true)
+
+  assert.equal(parseQpdfFirstPageEnd('file_size: 1200\nfirst_page_end: 809281\nnpages: 20\n'), 809281)
+  assert.equal(parseQpdfFirstPageEnd('not linearized'), 0)
 })

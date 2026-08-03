@@ -22,10 +22,14 @@ import type {
 
 const props = defineProps<{
   src: string
+  originalSrc?: string
   title: string
   size?: string
   sizeBytes?: number
   previewSrc?: string
+  previewSrcs?: string[]
+  pageCountHint?: number
+  initialBytesHint?: number
 }>()
 
 type PdfJsModule = typeof import('pdfjs-dist')
@@ -43,6 +47,7 @@ const canvas = ref<HTMLCanvasElement | null>(null)
 const preview = ref<HTMLDivElement | null>(null)
 const viewer = ref<HTMLDivElement | null>(null)
 const loading = ref(true)
+const documentReady = ref(false)
 const rendering = ref(false)
 const fullscreenAvailable = ref(false)
 const isFullscreen = ref(false)
@@ -54,7 +59,7 @@ const errorMessage = ref('')
 const progress = ref<number | null>(null)
 const pageNumber = ref(1)
 const pageInput = ref('1')
-const pageCount = ref(0)
+const pageCount = ref(normalizedPageCountHint())
 const zoom = ref(1)
 
 let loadingTask: PDFDocumentLoadingTask | undefined
@@ -70,6 +75,8 @@ let networkInformation: NetworkInformationLike | undefined
 let foregroundRequestCount = 0
 let loadVersion = 0
 let renderVersion = 0
+let warmPreviewTimer: number | undefined
+const warmedPreviewImages: HTMLImageElement[] = []
 const fetchControllers = new Set<AbortController>()
 const rangeChunkSize = 256 * 1024
 const tailPrefetchSize = 768 * 1024
@@ -79,6 +86,25 @@ const foregroundRetryLimit = 2
 const foregroundTimeout = 20000
 const mobileBackgroundLimit = 32 * 1024 * 1024
 let panOrigin: { x: number, y: number, left: number, top: number } | undefined
+
+const previewSources = computed(() => {
+  const sources = props.previewSrcs?.filter(Boolean) || []
+  if (sources.length > 0) return sources
+  return props.previewSrc ? [props.previewSrc] : []
+})
+
+const activePreviewSrc = computed(() => previewSources.value[pageNumber.value - 1] || '')
+
+const previewNavigationLimit = computed(() => Math.min(
+  previewSources.value.length,
+  pageCount.value || previewSources.value.length
+))
+
+const navigationLimit = computed(() => (
+  documentReady.value ? pageCount.value : previewNavigationLimit.value
+))
+
+const originalFileSrc = computed(() => props.originalSrc || props.src)
 
 const progressStyle = computed(() => ({
   width: progress.value === null ? '34%' : `${Math.max(4, progress.value)}%`
@@ -90,6 +116,11 @@ const backgroundProgressStyle = computed(() => ({
   width: `${Math.max(1, backgroundProgress.value || 0)}%`
 }))
 
+function normalizedPageCountHint() {
+  const value = Number(props.pageCountHint)
+  return Number.isFinite(value) && value > 0 ? Math.round(value) : 0
+}
+
 function cancelRender() {
   renderVersion += 1
   renderTask?.cancel()
@@ -98,6 +129,7 @@ function cancelRender() {
 
 function releaseDocument() {
   cancelRender()
+  documentReady.value = false
   backgroundController?.abort()
   backgroundController = undefined
   beginBackgroundLoad = undefined
@@ -126,7 +158,7 @@ async function loadDocument() {
   backgroundActive.value = false
   pageNumber.value = 1
   pageInput.value = '1'
-  pageCount.value = 0
+  pageCount.value = normalizedPageCountHint()
   zoom.value = 1
 
   try {
@@ -147,6 +179,9 @@ async function loadDocument() {
     if (currentLoad !== loadVersion) return
 
     pageCount.value = pdfDocument.numPages
+    pageNumber.value = Math.min(pageNumber.value, pageCount.value)
+    pageInput.value = String(pageNumber.value)
+    documentReady.value = true
     await nextTick()
     await renderCurrentPage()
     if (currentLoad === loadVersion) {
@@ -165,6 +200,7 @@ async function loadDocument() {
   } catch (error) {
     if (currentLoad !== loadVersion) return
     loading.value = false
+    documentReady.value = false
     errorMessage.value = '在线预览暂时无法打开，请使用新窗口阅读或下载文件。'
     console.error('PDF preview failed', error)
   }
@@ -199,7 +235,11 @@ async function createPdfSource(
   pdfjs: PdfJsModule,
   currentLoad: number
 ): Promise<DocumentInitParameters> {
-  const initialResponse = await fetchPdfRange(0, rangeChunkSize, currentLoad)
+  const hintedInitialSize = Math.max(0, Number(props.initialBytesHint) || 0)
+  const initialRequestSize = hintedInitialSize > 0
+    ? Math.ceil(hintedInitialSize / rangeChunkSize) * rangeChunkSize
+    : rangeChunkSize
+  const initialResponse = await fetchPdfRange(0, initialRequestSize, currentLoad)
   const initialData = initialResponse.data
   const initialSize = initialData.byteLength
   const totalSize = readTotalSize(initialResponse.headers.get('content-range'))
@@ -212,7 +252,8 @@ async function createPdfSource(
 
   let loadedBytes = initialSize
   progress.value = Math.max(1, Math.round((loadedBytes / totalSize) * 100))
-  const tailBegin = Math.max(initialSize, totalSize - tailPrefetchSize)
+  const tailSize = isLinearizedPdf(initialData) ? rangeChunkSize : tailPrefetchSize
+  const tailBegin = Math.max(initialSize, totalSize - tailSize)
   const tailPromise = tailBegin < totalSize
     ? fetchPdfRange(tailBegin, totalSize, currentLoad)
       .then((response) => {
@@ -289,6 +330,11 @@ async function createPdfSource(
     disableAutoFetch: true,
     rangeChunkSize
   }
+}
+
+function isLinearizedPdf(data: Uint8Array) {
+  const header = new TextDecoder('latin1').decode(data.subarray(0, Math.min(data.byteLength, 4096)))
+  return /\/Linearized(?:\s|$)/.test(header)
 }
 
 function isAbortError(error: unknown) {
@@ -561,14 +607,15 @@ function scheduleRender() {
 }
 
 function goToPage(value: number) {
-  if (!pdfDocument || pageCount.value === 0) return
-  const target = Math.min(pageCount.value, Math.max(1, Math.round(value)))
+  const maxPage = navigationLimit.value
+  if (maxPage === 0) return
+  const target = Math.min(maxPage, Math.max(1, Math.round(value)))
   const scrollAnchor = captureScrollAnchor()
   if (scrollAnchor) scrollAnchor.y = 0
   pageNumber.value = target
   pageInput.value = String(target)
   preview.value?.scrollTo({ top: 0, behavior: 'auto' })
-  void renderCurrentPage(scrollAnchor)
+  if (pdfDocument) void renderCurrentPage(scrollAnchor)
 }
 
 function commitPageInput() {
@@ -688,6 +735,20 @@ function handleFullscreenKeyboard(event: KeyboardEvent) {
   }
 }
 
+function warmQuickPreviewPages() {
+  if (previewSources.value.length < 2) return
+  warmPreviewTimer = window.setTimeout(() => {
+    warmPreviewTimer = undefined
+    for (const source of previewSources.value.slice(1)) {
+      const image = new Image()
+      image.decoding = 'async'
+      image.fetchPriority = 'low'
+      image.src = source
+      warmedPreviewImages.push(image)
+    }
+  }, 800)
+}
+
 onMounted(() => {
   fullscreenAvailable.value = document.fullscreenEnabled
   networkInformation = readNetworkInformation()
@@ -696,6 +757,7 @@ onMounted(() => {
   document.addEventListener('keydown', handleFullscreenKeyboard)
   resizeObserver = new ResizeObserver(scheduleRender)
   if (preview.value) resizeObserver.observe(preview.value)
+  warmQuickPreviewPages()
   void loadDocument()
 })
 
@@ -707,6 +769,8 @@ onBeforeUnmount(() => {
   document.removeEventListener('keydown', handleFullscreenKeyboard)
   resizeObserver?.disconnect()
   if (resizeFrame) window.cancelAnimationFrame(resizeFrame)
+  if (warmPreviewTimer) window.clearTimeout(warmPreviewTimer)
+  warmedPreviewImages.length = 0
   releaseDocument()
 })
 
@@ -720,7 +784,7 @@ watch(() => props.src, loadDocument)
         <button
           type="button"
           class="kb-icon-button"
-          :disabled="!pageCount || pageNumber <= 1 || rendering"
+          :disabled="!navigationLimit || pageNumber <= 1 || rendering"
           title="上一页"
           aria-label="上一页"
           @click="goToPage(pageNumber - 1)"
@@ -733,8 +797,8 @@ watch(() => props.src, loadDocument)
             v-model="pageInput"
             type="number"
             min="1"
-            :max="pageCount"
-            :disabled="!pageCount"
+            :max="navigationLimit"
+            :disabled="!navigationLimit"
             inputmode="numeric"
             @change="commitPageInput"
             @keydown.enter="commitPageInput"
@@ -744,7 +808,7 @@ watch(() => props.src, loadDocument)
         <button
           type="button"
           class="kb-icon-button"
-          :disabled="!pageCount || pageNumber >= pageCount || rendering"
+          :disabled="!navigationLimit || pageNumber >= navigationLimit || rendering"
           title="下一页"
           aria-label="下一页"
           @click="goToPage(pageNumber + 1)"
@@ -757,7 +821,7 @@ watch(() => props.src, loadDocument)
         <button
           type="button"
           class="kb-icon-button"
-          :disabled="!pageCount || zoom <= 0.6 || rendering"
+          :disabled="!documentReady || zoom <= 0.6 || rendering"
           title="缩小"
           aria-label="缩小"
           @click="changeZoom(-0.15)"
@@ -770,7 +834,7 @@ watch(() => props.src, loadDocument)
         <button
           type="button"
           class="kb-icon-button"
-          :disabled="!pageCount || zoom >= 2.5 || rendering"
+          :disabled="!documentReady || zoom >= 2.5 || rendering"
           title="放大"
           aria-label="放大"
           @click="changeZoom(0.15)"
@@ -791,7 +855,7 @@ watch(() => props.src, loadDocument)
         <button
           type="button"
           class="kb-icon-button"
-          :disabled="!pageCount || zoom === 1 || rendering"
+          :disabled="!documentReady || zoom === 1 || rendering"
           title="适合页面宽度"
           aria-label="适合页面宽度"
           @click="resetZoom"
@@ -828,14 +892,14 @@ watch(() => props.src, loadDocument)
       <div
         v-if="errorMessage"
         class="kb-pdf-error"
-        :class="{ 'has-preview': previewSrc }"
+        :class="{ 'has-preview': activePreviewSrc }"
         role="alert"
       >
         <img
-          v-if="previewSrc"
+          v-if="activePreviewSrc"
           class="kb-pdf-error-preview"
-          :src="previewSrc"
-          :alt="`${title}，第一页预览`"
+          :src="activePreviewSrc"
+          :alt="`${title}，第 ${pageNumber} 页预览`"
           loading="eager"
           decoding="async"
         >
@@ -845,7 +909,7 @@ watch(() => props.src, loadDocument)
           <div class="kb-pdf-error-actions">
             <button type="button" class="kb-download-button" @click="loadDocument">重新加载</button>
             <a
-              :href="src"
+              :href="originalFileSrc"
               class="kb-download-button kb-download-button-secondary"
               target="_blank"
               rel="noopener"
@@ -859,7 +923,7 @@ watch(() => props.src, loadDocument)
         class="kb-pdf-canvas-stage"
         :class="{
           'is-rendering': rendering && !loading,
-          'has-placeholder': loading && previewSrc,
+          'has-placeholder': loading && activePreviewSrc,
           'is-pannable': zoom > 1 && !loading,
           'is-panning': panning
         }"
@@ -870,17 +934,17 @@ watch(() => props.src, loadDocument)
         @lostpointercapture="stopPan"
       >
         <img
-          v-if="loading && previewSrc"
+          v-if="loading && activePreviewSrc"
           class="kb-pdf-placeholder"
-          :src="previewSrc"
-          :alt="`${title}，第一页预览`"
+          :src="activePreviewSrc"
+          :alt="`${title}，第 ${pageNumber} 页预览`"
           loading="eager"
           fetchpriority="high"
           decoding="async"
         >
         <canvas
           ref="canvas"
-          :class="{ 'is-waiting': loading && previewSrc }"
+          :class="{ 'is-waiting': loading && activePreviewSrc }"
           role="img"
           :aria-label="`${title}，第 ${pageNumber} 页，共 ${pageCount} 页`"
         ></canvas>
@@ -890,16 +954,16 @@ watch(() => props.src, loadDocument)
       <div
         v-if="loading"
         class="kb-pdf-loading"
-        :class="{ 'has-preview': previewSrc }"
+        :class="{ 'has-preview': activePreviewSrc }"
         role="status"
         aria-live="polite"
       >
         <div class="kb-pdf-loading-content">
           <span class="kb-pdf-spinner" aria-hidden="true"></span>
-          <p class="kb-pdf-loading-title">{{ previewSrc ? '正在准备翻页' : '正在读取第一页' }}</p>
+          <p class="kb-pdf-loading-title">{{ activePreviewSrc ? '正在载入高清页面' : '正在读取第一页' }}</p>
           <p class="kb-pdf-loading-meta">
             <template v-if="size">{{ size }} &middot; </template>
-            {{ previewSrc ? '完整阅读载入中' : '分段载入中' }}
+            {{ activePreviewSrc ? '完整内容载入中' : '分段载入中' }}
           </p>
           <span class="kb-pdf-loading-track" aria-hidden="true">
             <span class="kb-pdf-loading-bar" :style="progressStyle"></span>

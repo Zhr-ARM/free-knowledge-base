@@ -30,7 +30,7 @@ uploads/
 支持格式：
 
 - `.md`：转换为知识库页面
-- `.pdf`：生成网页预览页
+- `.pdf`：生成前三页快速预览，并为适合的大文件生成无损线性化阅读副本
 - `.docx`：尽量转换为网页内容，并保留原文件下载链接
 - `.doc`：生成下载页，建议转成 `.docx` 或 `.pdf`
 - `.zip`、`.xmind`、`.xls`、`.xlsx`、`.csv`、`.txt`：生成受限的网页预览
@@ -57,13 +57,7 @@ npm run sync:uploads
 npm run docs:build
 ```
 
-发布线上网站：
-
-```bash
-npm run docs:deploy
-```
-
-`docs:dev`、`docs:build` 和 `docs:deploy` 都会自动先同步 `uploads/`。
+`docs:dev` 和 `docs:build` 都会自动先同步 `uploads/`。
 
 ## 内容维护
 
@@ -77,13 +71,13 @@ npm run docs:deploy
 
 ## 发布方式
 
-当前仓库使用 `gh-pages` 分支发布静态产物。主分支推送后，GitHub Actions 会先执行内容清单、单元测试、构建、断链检查和浏览器测试，通过后自动更新 `gh-pages`。发布地址：
+当前仓库使用 GitHub Pages 的 GitHub Actions 发布源。推送 `main` 后，Actions 会执行内容清单、单元测试、构建、断链检查和浏览器测试，通过后直接部署 Pages 产物。发布地址：
 
 ```text
 https://cdut-osa.cn/
 ```
 
-需要手动发布时仍可运行 `npm run docs:deploy`。
+也可以在仓库的 Actions 页面手动运行 `Verify and deploy` 工作流。
 
 ## 注意
 

@@ -1,5 +1,6 @@
 import crypto from 'node:crypto'
 import { spawn } from 'node:child_process'
+import { createReadStream } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -27,7 +28,9 @@ const publicUploadsDir = path.join(rootDir, 'docs', 'public', 'uploads')
 const rawUploadsDir = path.join(publicUploadsDir, 'raw')
 const previewUploadsDir = path.join(publicUploadsDir, 'previews')
 const pdfPreviewDir = path.join(previewUploadsDir, 'pdf')
+const pdfWebPreviewDir = path.join(previewUploadsDir, 'pdf-web')
 const pdfPreviewCacheDir = path.join(rootDir, '.cache', 'pdf-previews')
+const pdfWebPreviewCacheDir = path.join(rootDir, '.cache', 'pdf-web-previews')
 const libraryIndexPath = path.join(rootDir, 'docs', 'library', 'index.md')
 const libraryCategoriesPath = path.join(rootDir, 'config', 'library-categories.json')
 const archiveTextExtensions = new Set([
@@ -48,6 +51,10 @@ const maxArchivePreviewCharacters = 16000
 const maxSpreadsheetPreviewRows = 24
 const maxSpreadsheetPreviewColumns = 24
 const pdfPreviewConcurrency = 2
+const pdfPreviewPageLimit = 3
+const pdfWebPreviewMinBytes = 5 * 1024 * 1024
+const pdfWebFirstPageMaxBytes = 1024 * 1024
+const qpdfCommand = process.env.QPDF_PATH || 'qpdf'
 
 const supportedDocuments = new Set([
   '.md', '.markdown', '.pdf', '.docx', '.doc',
@@ -183,7 +190,11 @@ function createDocumentRecord(relativePath, sizeBytes, categoryBySourceFolder) {
     pagePath: path.join(generatedDir, `${id}.md`),
     pageLink: `/library/generated/${id}`,
     publicUrl: `/uploads/raw/${encodePath(relativePath)}`,
-    previewUrl: null
+    viewerUrl: `/uploads/raw/${encodePath(relativePath)}`,
+    viewerSizeBytes: sizeBytes,
+    viewerInitialBytes: 0,
+    previewUrls: [],
+    pageCount: 0
   }
 }
 
@@ -224,17 +235,28 @@ async function removeStalePreviews(documents) {
   )
 
   for (const entry of await fs.readdir(previewUploadsDir, { withFileTypes: true })) {
-    if (entry.name === 'pdf') continue
+    if (entry.name === 'pdf' || entry.name === 'pdf-web') continue
     if (!previewDocumentIds.has(entry.name)) {
       await fs.rm(path.join(previewUploadsDir, entry.name), { recursive: true, force: true })
     }
   }
 
-  if (!await fileExists(pdfPreviewDir)) return
-  for (const entry of await fs.readdir(pdfPreviewDir, { withFileTypes: true })) {
-    if (!entry.isFile() || path.extname(entry.name).toLowerCase() !== '.jpg') continue
+  if (await fileExists(pdfPreviewDir)) {
+    for (const entry of await fs.readdir(pdfPreviewDir, { withFileTypes: true })) {
+      if (!entry.isFile() || path.extname(entry.name).toLowerCase() !== '.jpg') continue
+      const baseName = path.basename(entry.name, path.extname(entry.name))
+      const documentId = baseName.match(/^(doc-[0-9a-f]{10})(?:-\d+)?$/)?.[1]
+      if (!documentId || !pdfDocumentIds.has(documentId)) {
+        await fs.rm(path.join(pdfPreviewDir, entry.name), { force: true })
+      }
+    }
+  }
+
+  if (!await fileExists(pdfWebPreviewDir)) return
+  for (const entry of await fs.readdir(pdfWebPreviewDir, { withFileTypes: true })) {
+    if (!entry.isFile() || path.extname(entry.name).toLowerCase() !== '.pdf') continue
     if (!pdfDocumentIds.has(path.basename(entry.name, path.extname(entry.name)))) {
-      await fs.rm(path.join(pdfPreviewDir, entry.name), { force: true })
+      await fs.rm(path.join(pdfWebPreviewDir, entry.name), { force: true })
     }
   }
 }
@@ -243,18 +265,30 @@ async function preparePdfPreviews(documents) {
   const pdfDocuments = documents.filter((document) => document.ext === '.pdf')
   if (pdfDocuments.length === 0) return
 
-  if (!await commandIsAvailable('pdftoppm', ['-v'])) {
-    console.warn('Skipping PDF cover previews because pdftoppm is unavailable.')
+  const pdfToolsAvailable = (
+    await commandIsAvailable('pdftoppm', ['-v']) &&
+    await commandIsAvailable('pdfinfo', ['-v'])
+  )
+  if (!pdfToolsAvailable) {
+    console.warn('Skipping PDF page previews because Poppler tools are unavailable.')
     return
   }
 
+  const qpdfAvailable = await commandIsAvailable(qpdfCommand, ['--version'])
   await fs.mkdir(pdfPreviewDir, { recursive: true })
   await fs.mkdir(pdfPreviewCacheDir, { recursive: true })
-  console.log(`Preparing ${pdfDocuments.length} PDF first-page preview(s)...`)
+  await fs.mkdir(pdfWebPreviewDir, { recursive: true })
+  await fs.mkdir(pdfWebPreviewCacheDir, { recursive: true })
+  console.log(`Preparing ${pdfDocuments.length} PDF quick preview(s)...`)
+  if (!qpdfAvailable) {
+    console.warn('  qpdf is unavailable; large PDFs will use their original files for online reading.')
+  }
 
   let nextIndex = 0
   let generatedCount = 0
   let cachedCount = 0
+  let webGeneratedCount = 0
+  let webCachedCount = 0
   let failedCount = 0
 
   async function worker() {
@@ -263,9 +297,11 @@ async function preparePdfPreviews(documents) {
       nextIndex += 1
 
       try {
-        const result = await preparePdfPreview(document)
+        const result = await preparePdfPreview(document, qpdfAvailable)
         generatedCount += result.generated ? 1 : 0
         cachedCount += result.generated ? 0 : 1
+        webGeneratedCount += result.webPreviewStatus === 'generated' ? 1 : 0
+        webCachedCount += result.webPreviewStatus === 'cached' ? 1 : 0
       } catch (error) {
         failedCount += 1
         console.warn(`  Unable to preview ${document.relativePath}: ${error.message}`)
@@ -283,64 +319,173 @@ async function preparePdfPreviews(documents) {
   const summary = [`${generatedCount} generated`, `${cachedCount} cached`]
   if (failedCount > 0) summary.push(`${failedCount} skipped`)
   console.log(`Prepared PDF previews (${summary.join(', ')}).`)
+  if (webGeneratedCount + webCachedCount > 0) {
+    console.log(
+      `Prepared ${webGeneratedCount + webCachedCount} linearized PDF web copy(s) ` +
+      `(${webGeneratedCount} generated, ${webCachedCount} cached).`
+    )
+  }
 }
 
-async function preparePdfPreview(document) {
+async function preparePdfPreview(document, qpdfAvailable) {
+  const { stdout: pdfInfoOutput } = await runCommand('pdfinfo', [document.sourcePath])
+  const pdfInfo = parsePdfInfo(pdfInfoOutput)
+  if (pdfInfo.pageCount < 1) throw new Error('PDF page count could not be read')
+
+  document.pageCount = pdfInfo.pageCount
   const fingerprint = await pdfPreviewFingerprint(document)
-  const cachePath = path.join(pdfPreviewCacheDir, `${document.id}-${fingerprint}.jpg`)
-  const outputPath = path.join(pdfPreviewDir, `${document.id}.jpg`)
-  const generated = !await fileExists(cachePath)
+  const previewCount = Math.min(pdfPreviewPageLimit, document.pageCount)
+  const cachePaths = Array.from(
+    { length: previewCount },
+    (_, index) => path.join(pdfPreviewCacheDir, `${document.id}-${fingerprint}-${index + 1}.jpg`)
+  )
+  const cacheHits = await Promise.all(cachePaths.map(fileExists))
+  const generated = cacheHits.some((cached) => !cached)
 
   if (generated) {
-    const temporaryPrefix = path.join(
-      pdfPreviewCacheDir,
-      `.${document.id}-${process.pid}-${crypto.randomBytes(4).toString('hex')}`
-    )
-    const temporaryPath = `${temporaryPrefix}.jpg`
+    const temporaryDir = await fs.mkdtemp(path.join(pdfPreviewCacheDir, '.render-'))
+    const temporaryPrefix = path.join(temporaryDir, 'page')
 
     try {
       await runCommand('pdftoppm', [
         '-f', '1',
-        '-l', '1',
-        '-singlefile',
+        '-l', String(previewCount),
         '-jpeg',
         '-jpegopt', 'quality=72,progressive=y,optimize=y',
         '-scale-to', '1280',
         document.sourcePath,
         temporaryPrefix
       ])
+
+      const renderedPages = (await fs.readdir(temporaryDir))
+        .map((name) => ({ name, page: Number.parseInt(name.match(/^page-(\d+)\.jpg$/)?.[1] || '', 10) }))
+        .filter(({ page }) => Number.isFinite(page))
+        .sort((a, b) => a.page - b.page)
+
+      if (renderedPages.length < previewCount) {
+        throw new Error(`only ${renderedPages.length} of ${previewCount} quick preview pages were rendered`)
+      }
+
+      for (let index = 0; index < previewCount; index += 1) {
+        await fs.rm(cachePaths[index], { force: true })
+        await fs.rename(path.join(temporaryDir, renderedPages[index].name), cachePaths[index])
+      }
+    } finally {
+      await fs.rm(temporaryDir, { recursive: true, force: true })
+    }
+  }
+
+  document.previewUrls = []
+  for (let index = 0; index < previewCount; index += 1) {
+    const outputName = `${document.id}${index === 0 ? '' : `-${index + 1}`}.jpg`
+    await fs.copyFile(cachePaths[index], path.join(pdfPreviewDir, outputName))
+    document.previewUrls.push(`/uploads/previews/pdf/${outputName}`)
+  }
+  for (let index = previewCount; index < pdfPreviewPageLimit; index += 1) {
+    await fs.rm(path.join(pdfPreviewDir, `${document.id}-${index + 1}.jpg`), { force: true })
+  }
+
+  let webPreviewStatus = null
+  try {
+    webPreviewStatus = await preparePdfWebPreview(
+      document,
+      fingerprint,
+      qpdfAvailable,
+      pdfInfo.optimized,
+      pdfInfo.encrypted
+    )
+  } catch (error) {
+    await fs.rm(path.join(pdfWebPreviewDir, `${document.id}.pdf`), { force: true })
+    console.warn(`  Unable to optimize ${document.relativePath} for web reading: ${error.message}`)
+  }
+
+  return { generated, webPreviewStatus }
+}
+
+async function pdfPreviewFingerprint(document) {
+  const hash = crypto.createHash('sha256').update(String(document.sizeBytes))
+  await new Promise((resolve, reject) => {
+    const stream = createReadStream(document.sourcePath)
+    stream.on('data', (chunk) => hash.update(chunk))
+    stream.on('error', reject)
+    stream.on('end', resolve)
+  })
+  return hash.digest('hex').slice(0, 16)
+}
+
+async function preparePdfWebPreview(
+  document,
+  fingerprint,
+  qpdfAvailable,
+  sourceOptimized,
+  sourceEncrypted
+) {
+  const outputPath = path.join(pdfWebPreviewDir, `${document.id}.pdf`)
+  const shouldOptimize = (
+    qpdfAvailable &&
+    !sourceOptimized &&
+    !sourceEncrypted &&
+    document.sizeBytes >= pdfWebPreviewMinBytes
+  )
+
+  if (!shouldOptimize) {
+    await fs.rm(outputPath, { force: true })
+    return null
+  }
+
+  const cachePath = path.join(pdfWebPreviewCacheDir, `${document.id}-${fingerprint}.pdf`)
+  const generated = !await fileExists(cachePath)
+  if (generated) {
+    const temporaryPath = path.join(
+      pdfWebPreviewCacheDir,
+      `.${document.id}-${process.pid}-${crypto.randomBytes(4).toString('hex')}.pdf`
+    )
+
+    try {
+      await runCommand(qpdfCommand, ['--linearize', document.sourcePath, temporaryPath], 180000)
+      await runCommand(qpdfCommand, ['--check-linearization', temporaryPath], 60000)
       await fs.rename(temporaryPath, cachePath)
     } finally {
       await fs.rm(temporaryPath, { force: true })
     }
   }
 
-  await fs.copyFile(cachePath, outputPath)
-  document.previewUrl = `/uploads/previews/pdf/${document.id}.jpg`
-  return { generated }
-}
-
-async function pdfPreviewFingerprint(document) {
-  const sampleSize = Math.min(document.sizeBytes, 64 * 1024)
-  const source = await fs.open(document.sourcePath, 'r')
-  const hash = crypto.createHash('sha1').update(String(document.sizeBytes))
-
-  try {
-    const head = Buffer.alloc(sampleSize)
-    const { bytesRead: headBytes } = await source.read(head, 0, sampleSize, 0)
-    hash.update(head.subarray(0, headBytes))
-
-    if (document.sizeBytes > sampleSize) {
-      const tail = Buffer.alloc(sampleSize)
-      const tailPosition = Math.max(0, document.sizeBytes - sampleSize)
-      const { bytesRead: tailBytes } = await source.read(tail, 0, sampleSize, tailPosition)
-      hash.update(tail.subarray(0, tailBytes))
-    }
-  } finally {
-    await source.close()
+  const { stdout: linearizationOutput } = await runCommand(
+    qpdfCommand,
+    ['--show-linearization', cachePath],
+    60000
+  )
+  const firstPageEnd = parseQpdfFirstPageEnd(linearizationOutput)
+  if (firstPageEnd < 1) throw new Error('qpdf did not report the first-page byte range')
+  if (firstPageEnd > pdfWebFirstPageMaxBytes) {
+    await fs.rm(outputPath, { force: true })
+    return null
   }
 
-  return hash.digest('hex').slice(0, 12)
+  await fs.copyFile(cachePath, outputPath)
+  document.viewerUrl = `/uploads/previews/pdf-web/${document.id}.pdf`
+  document.viewerSizeBytes = (await fs.stat(cachePath)).size
+  document.viewerInitialBytes = firstPageEnd
+  return generated ? 'generated' : 'cached'
+}
+
+function parsePdfInfo(output) {
+  const values = new Map()
+  for (const line of output.split(/\r?\n/)) {
+    const separator = line.indexOf(':')
+    if (separator < 0) continue
+    values.set(line.slice(0, separator).trim().toLowerCase(), line.slice(separator + 1).trim())
+  }
+
+  return {
+    pageCount: Number.parseInt(values.get('pages') || '0', 10) || 0,
+    optimized: /^yes\b/i.test(values.get('optimized') || ''),
+    encrypted: /^yes\b/i.test(values.get('encrypted') || '')
+  }
+}
+
+function parseQpdfFirstPageEnd(output) {
+  return Number.parseInt(output.match(/^first_page_end:\s*(\d+)$/m)?.[1] || '0', 10) || 0
 }
 
 async function fileExists(filePath) {
@@ -364,8 +509,10 @@ async function commandIsAvailable(command, args) {
 function runCommand(command, args, timeoutMs = 45000) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
-      stdio: ['ignore', 'ignore', 'pipe']
+      stdio: ['ignore', 'pipe', 'pipe'],
+      env: { ...process.env, LC_ALL: 'C' }
     })
+    let stdout = ''
     let stderr = ''
     let settled = false
     const timeout = setTimeout(() => {
@@ -375,8 +522,11 @@ function runCommand(command, args, timeoutMs = 45000) {
       reject(new Error(`${command} 执行超过 ${Math.round(timeoutMs / 1000)} 秒，已停止`))
     }, timeoutMs)
 
+    child.stdout.on('data', (chunk) => {
+      if (stdout.length < 65536) stdout += chunk.toString()
+    })
     child.stderr.on('data', (chunk) => {
-      if (stderr.length < 4096) stderr += chunk.toString()
+      if (stderr.length < 8192) stderr += chunk.toString()
     })
     child.on('error', (error) => {
       if (settled) return
@@ -389,7 +539,7 @@ function runCommand(command, args, timeoutMs = 45000) {
       settled = true
       clearTimeout(timeout)
       if (code === 0) {
-        resolve()
+        resolve({ stdout, stderr })
       } else {
         reject(new Error(stderr.trim() || `${command} exited with code ${code}`))
       }
@@ -448,13 +598,20 @@ function renderPdfPage(document) {
 search: false
 aside: false
 pageClass: kb-wide-document
----
+${document.previewUrls[0] ? `head:
+  - - link
+    - rel: preload
+      as: image
+      href: ${JSON.stringify(document.previewUrls[0])}
+      fetchpriority: high
+` : ''}---
 
 <script setup>
 import { withBase } from 'vitepress'
 
 const fileUrl = withBase(${JSON.stringify(document.publicUrl)})
-${document.previewUrl ? `const previewUrl = withBase(${JSON.stringify(document.previewUrl)})` : ''}
+const viewerUrl = withBase(${JSON.stringify(document.viewerUrl)})
+const previewUrls = ${JSON.stringify(document.previewUrls)}.map((url) => withBase(url))
 </script>
 
 # ${document.title}
@@ -462,16 +619,19 @@ ${document.previewUrl ? `const previewUrl = withBase(${JSON.stringify(document.p
 ${renderFileMeta(document)}
 
 <p class="kb-download-actions">
-  <a class="kb-download-button" :href="fileUrl" target="_blank" rel="noopener">新窗口大屏阅读</a>
+  <a class="kb-download-button" :href="viewerUrl" target="_blank" rel="noopener">新窗口大屏阅读</a>
   <a class="kb-download-button kb-download-button-secondary" :href="fileUrl" download>下载 PDF</a>
 </p>
 
 <PdfPreview
-  :src="fileUrl"
-  ${document.previewUrl ? ':preview-src="previewUrl"' : ''}
+  :src="viewerUrl"
+  :original-src="fileUrl"
+  :preview-srcs="previewUrls"
   title="${escapeHtml(document.title)}"
   size="${escapeHtml(formatFileSize(document.sizeBytes))}"
-  :size-bytes="${document.sizeBytes}"
+  :size-bytes="${document.viewerSizeBytes}"
+  :page-count-hint="${document.pageCount}"
+  :initial-bytes-hint="${document.viewerInitialBytes}"
 />
 `
 }
@@ -1466,7 +1626,7 @@ function toPosix(value) {
   return value.split(path.sep).join('/')
 }
 
-export { countXMindTopics, main, spreadsheetTable }
+export { countXMindTopics, main, parsePdfInfo, parseQpdfFirstPageEnd, spreadsheetTable }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === scriptPath) {
   main().catch((error) => {
