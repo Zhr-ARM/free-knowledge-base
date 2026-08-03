@@ -8,10 +8,11 @@ on:
 
 concurrency:
   group: knowledge-base-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   contents: read
+  pages: read
 
 jobs:
   verify:
@@ -65,6 +66,16 @@ jobs:
       - name: Browser tests
         run: npm run test:e2e
 
+      - name: Configure GitHub Pages
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/configure-pages@v6
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: docs/.vitepress/dist
+
       - name: Upload browser report on failure
         if: failure() && hashFiles('playwright-report/**') != ''
         uses: actions/upload-artifact@v7
@@ -77,45 +88,14 @@ jobs:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: verify
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     permissions:
-      contents: write
+      pages: write
+      id-token: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Restore PDF cover previews
-        uses: actions/cache@v6
-        with:
-          path: .cache/pdf-previews
-          key: pdf-previews-${{ hashFiles('uploads/**/*.pdf', 'uploads/**/*.PDF') }}
-
-      - name: Ensure PDF cover renderer
-        run: command -v pdftoppm || (sudo apt-get update && sudo apt-get install -y poppler-utils)
-
-      - name: Build site
-        run: npm run docs:build
-
-      - name: Deploy gh-pages branch
-        env:
-          GH_PAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: >-
-          npx gh-pages
-          -d docs/.vitepress/dist
-          --no-history
-          --nojekyll
-          --cname cdut-osa.cn
-          --silent
-          --repo "https://x-access-token:${GH_PAGES_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          -u "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
