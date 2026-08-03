@@ -47,7 +47,7 @@ const maxArchivePreviewTotalBytes = 48 * 1024
 const maxArchivePreviewCharacters = 16000
 const maxSpreadsheetPreviewRows = 24
 const maxSpreadsheetPreviewColumns = 24
-const pdfPreviewConcurrency = 4
+const pdfPreviewConcurrency = 2
 
 const supportedDocuments = new Set([
   '.md', '.markdown', '.pdf', '.docx', '.doc',

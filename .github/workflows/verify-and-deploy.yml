@@ -19,18 +19,27 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Cache PDF cover previews
+        uses: actions/cache@v6
+        with:
+          path: .cache/pdf-previews
+          key: pdf-previews-${{ hashFiles('uploads/**/*.pdf', 'uploads/**/*.PDF') }}
+
+      - name: Ensure PDF cover renderer
+        run: command -v pdftoppm || (sudo apt-get update && sudo apt-get install -y poppler-utils)
 
       - name: Unit tests
         run: npm test
@@ -57,8 +66,8 @@ jobs:
         run: npm run test:e2e
 
       - name: Upload browser report on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
+        if: failure() && hashFiles('playwright-report/**') != ''
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: playwright-report/
@@ -73,18 +82,27 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Restore PDF cover previews
+        uses: actions/cache@v6
+        with:
+          path: .cache/pdf-previews
+          key: pdf-previews-${{ hashFiles('uploads/**/*.pdf', 'uploads/**/*.PDF') }}
+
+      - name: Ensure PDF cover renderer
+        run: command -v pdftoppm || (sudo apt-get update && sudo apt-get install -y poppler-utils)
 
       - name: Build site
         run: npm run docs:build
