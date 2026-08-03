@@ -5,8 +5,8 @@
   --vp-c-brand-3: #5bc2d6;
   --vp-c-brand-soft: rgba(0, 131, 145, 0.14);
   --vp-c-indigo-1: #173866;
-  --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: linear-gradient(120deg, #0b7f8c 0%, #173866 72%);
+  --vp-home-hero-name-color: #173866;
+  --vp-home-hero-name-background: none;
   --kb-cyan: #5bc2d6;
   --kb-teal: #008391;
   --kb-deep-teal: #006874;
@@ -22,6 +22,7 @@
   --vp-c-brand-soft: rgba(91, 194, 214, 0.18);
   --kb-border: rgba(141, 213, 226, 0.22);
   --kb-soft: rgba(91, 194, 214, 0.08);
+  --vp-home-hero-name-color: #d8f7fb;
 }
 
 .VPNav {
@@ -96,9 +97,9 @@
   margin: 6px auto 40px;
   padding: 22px;
   max-width: 1120px;
-  border: 1px solid var(--kb-border);
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(91, 194, 214, 0.12), rgba(23, 56, 102, 0.05));
+  border-top: 1px solid var(--kb-border);
+  border-bottom: 1px solid var(--kb-border);
+  background: var(--kb-soft);
 }
 
 .kb-brand-association,
@@ -152,10 +153,9 @@
   gap: 28px;
   margin: 24px auto 72px;
   max-width: 1120px;
-  padding: 32px;
-  border: 1px solid var(--kb-border);
-  border-radius: 8px;
-  background: var(--kb-soft);
+  padding: 32px 0;
+  border-top: 1px solid var(--kb-border);
+  border-bottom: 1px solid var(--kb-border);
 }
 
 .kb-section h2 {
@@ -1365,6 +1365,11 @@
   .kb-brand-strip,
   .kb-section {
     padding: 18px;
+  }
+
+  .kb-section {
+    padding-right: 0;
+    padding-left: 0;
   }
 
   .kb-brand-copy strong {

@@ -11,3 +11,5 @@ Thumbs.db
 *.log
 *.err
 .codex-*
+playwright-report/
+test-results/

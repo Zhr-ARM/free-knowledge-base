@@ -1,0 +1,20 @@
+{
+  "categories": [
+    {
+      "name": "嵌入式",
+      "sourceFolders": ["嵌入式", "单片机"]
+    },
+    {
+      "name": "机器人运动控制",
+      "sourceFolders": ["机器人运动控制"]
+    },
+    {
+      "name": "ROS",
+      "sourceFolders": ["ROS"]
+    },
+    {
+      "name": "开源项目",
+      "sourceFolders": ["开源项目"]
+    }
+  ]
+}

@@ -7,8 +7,19 @@ import { TextDecoder } from 'node:util'
 import JSZip from 'jszip'
 import mammoth from 'mammoth'
 import * as XLSX from 'xlsx'
+import {
+  assertArchiveEntrySize,
+  assertFileSize,
+  inspectArchive,
+  isIgnoredUpload,
+  renderSafeMarkdown,
+  sanitizeGeneratedHtml,
+  uploadLimits,
+  validateUploadPath
+} from './lib/content-guards.mjs'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const scriptPath = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(scriptPath)
 const rootDir = path.resolve(__dirname, '..')
 const uploadsDir = path.join(rootDir, 'uploads')
 const generatedDir = path.join(rootDir, 'docs', 'library', 'generated')
@@ -18,6 +29,7 @@ const previewUploadsDir = path.join(publicUploadsDir, 'previews')
 const pdfPreviewDir = path.join(previewUploadsDir, 'pdf')
 const pdfPreviewCacheDir = path.join(rootDir, '.cache', 'pdf-previews')
 const libraryIndexPath = path.join(rootDir, 'docs', 'library', 'index.md')
+const libraryCategoriesPath = path.join(rootDir, 'config', 'library-categories.json')
 const archiveTextExtensions = new Set([
   '.asm', '.bat', '.c', '.cc', '.cfg', '.cmake', '.cmd', '.conf', '.cpp',
   '.cs', '.css', '.csv', '.cxx', '.go', '.h', '.hpp', '.htm', '.html',
@@ -45,34 +57,52 @@ const supportedDocuments = new Set([
 
 async function main() {
   console.log('Preparing generated document directories...')
+  const libraryConfig = await loadLibraryConfig()
+  const categoryBySourceFolder = new Map(
+    libraryConfig.categories.flatMap((category) => (
+      category.sourceFolders.map((folder) => [folder, category.name])
+    ))
+  )
+  const allowedSourceFolders = new Set(categoryBySourceFolder.keys())
   await fs.mkdir(uploadsDir, { recursive: true })
   await fs.rm(generatedDir, { recursive: true, force: true })
-  await fs.rm(publicUploadsDir, { recursive: true, force: true })
   await fs.mkdir(generatedDir, { recursive: true })
   await fs.mkdir(rawUploadsDir, { recursive: true })
+  await fs.mkdir(previewUploadsDir, { recursive: true })
 
-  const files = await walk(uploadsDir)
+  const files = await walk(uploadsDir, true)
   const uploadFiles = files
     .map((filePath) => toPosix(path.relative(uploadsDir, filePath)))
     .filter((relativePath) => !isIgnoredUpload(relativePath))
     .sort((a, b) => a.localeCompare(b, 'zh-CN'))
 
   const uploadFileSet = new Set(uploadFiles)
+  const uploadStats = new Map(await Promise.all(uploadFiles.map(async (relativePath) => {
+    validateUploadPath(relativePath, allowedSourceFolders, supportedDocuments)
+    const stats = await fs.stat(path.join(uploadsDir, ...relativePath.split('/')))
+    assertFileSize(relativePath, stats.size)
+    return [relativePath, stats]
+  })))
   const documents = await Promise.all(
     uploadFiles
       .filter((relativePath) => supportedDocuments.has(path.extname(relativePath).toLowerCase()))
-      .map(async (relativePath) => {
-        const stats = await fs.stat(path.join(uploadsDir, ...relativePath.split('/')))
-        return createDocumentRecord(relativePath, stats.size)
-      })
+      .map(async (relativePath) => createDocumentRecord(
+        relativePath,
+        uploadStats.get(relativePath).size,
+        categoryBySourceFolder
+      ))
   )
 
   const documentByRelativePath = new Map(documents.map((document) => [document.relativePath, document]))
 
   console.log(`Copying ${uploadFiles.length} source file(s)...`)
+  let copiedCount = 0
   for (const relativePath of uploadFiles) {
-    await copyRawUpload(relativePath)
+    copiedCount += await copyRawUpload(relativePath, uploadStats.get(relativePath)) ? 1 : 0
   }
+  await removeStaleRawUploads(uploadFileSet)
+  await removeStalePreviews(documents)
+  console.log(`Copied ${copiedCount} changed source file(s); ${uploadFiles.length - copiedCount} unchanged.`)
 
   await preparePdfPreviews(documents)
 
@@ -84,19 +114,45 @@ async function main() {
     await writeGeneratedDocument(document, documentByRelativePath, uploadFileSet)
   }
 
-  const categories = await getLibraryCategories(documents)
+  const categories = libraryConfig.categories.map((category) => category.name)
   await writeLibraryIndex(documents, categories)
   console.log(`Synced ${documents.length} document(s) from uploads/.`)
 }
 
-async function walk(dir) {
+async function loadLibraryConfig() {
+  const config = JSON.parse(await fs.readFile(libraryCategoriesPath, 'utf8'))
+  if (!Array.isArray(config.categories) || config.categories.length === 0) {
+    throw new Error('config/library-categories.json 必须至少配置一个分类')
+  }
+
+  const names = new Set()
+  const sourceFolders = new Set()
+  for (const category of config.categories) {
+    if (!category?.name || !Array.isArray(category.sourceFolders) || category.sourceFolders.length === 0) {
+      throw new Error('每个资料分类都必须包含 name 和 sourceFolders')
+    }
+    if (names.has(category.name)) throw new Error(`资料分类重复：${category.name}`)
+    names.add(category.name)
+    for (const folder of category.sourceFolders) {
+      if (!folder || folder.includes('/') || folder.startsWith('.')) {
+        throw new Error(`资料源目录名称无效：${folder}`)
+      }
+      if (sourceFolders.has(folder)) throw new Error(`资料源目录重复：${folder}`)
+      sourceFolders.add(folder)
+    }
+  }
+  return config
+}
+
+async function walk(dir, skipHidden = false) {
   const entries = await fs.readdir(dir, { withFileTypes: true })
   const results = []
 
   for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'))) {
+    if (skipHidden && entry.name.startsWith('.')) continue
     const fullPath = path.join(dir, entry.name)
     if (entry.isDirectory()) {
-      results.push(...await walk(fullPath))
+      results.push(...await walk(fullPath, skipHidden))
     } else if (entry.isFile()) {
       results.push(fullPath)
     }
@@ -105,26 +161,21 @@ async function walk(dir) {
   return results
 }
 
-function isIgnoredUpload(relativePath) {
-  const parts = relativePath.split('/')
-  const fileName = parts.at(-1) || ''
-  return fileName.startsWith('.') || relativePath === 'README.md'
-}
-
-function createDocumentRecord(relativePath, sizeBytes) {
+function createDocumentRecord(relativePath, sizeBytes, categoryBySourceFolder) {
   const ext = path.extname(relativePath).toLowerCase()
   const title = titleFromPath(relativePath)
   const id = `doc-${crypto.createHash('sha1').update(relativePath).digest('hex').slice(0, 10)}`
   const pathParts = relativePath.split('/')
-  const firstFolder = pathParts.length > 1 ? pathParts[0] : '未分类'
+  const firstFolder = pathParts[0]
+  const category = categoryBySourceFolder.get(firstFolder)
   const sectionParts = pathParts.slice(1, -1)
 
   return {
     id,
     title,
-    category: firstFolder,
+    category,
     sectionParts,
-    displayPath: [firstFolder, ...sectionParts.map(displaySectionName)].join(' / '),
+    displayPath: [category, ...sectionParts.map(displaySectionName)].join(' / '),
     relativePath,
     ext,
     sizeBytes,
@@ -136,11 +187,56 @@ function createDocumentRecord(relativePath, sizeBytes) {
   }
 }
 
-async function copyRawUpload(relativePath) {
+async function copyRawUpload(relativePath, sourceStats) {
   const sourcePath = path.join(uploadsDir, ...relativePath.split('/'))
   const targetPath = path.join(rawUploadsDir, ...relativePath.split('/'))
+  try {
+    const targetStats = await fs.stat(targetPath)
+    if (
+      targetStats.size === sourceStats.size &&
+      Math.abs(targetStats.mtimeMs - sourceStats.mtimeMs) < 2
+    ) return false
+  } catch {}
+
   await fs.mkdir(path.dirname(targetPath), { recursive: true })
   await fs.copyFile(sourcePath, targetPath)
+  await fs.utimes(targetPath, sourceStats.atime, sourceStats.mtime)
+  return true
+}
+
+async function removeStaleRawUploads(uploadFileSet) {
+  if (!await fileExists(rawUploadsDir)) return
+  const publicFiles = await walk(rawUploadsDir)
+  for (const filePath of publicFiles) {
+    const relativePath = toPosix(path.relative(rawUploadsDir, filePath))
+    if (!uploadFileSet.has(relativePath)) await fs.rm(filePath, { force: true })
+  }
+}
+
+async function removeStalePreviews(documents) {
+  const previewDocumentIds = new Set(
+    documents
+      .filter((document) => document.ext === '.docx' || document.ext === '.xmind')
+      .map((document) => document.id)
+  )
+  const pdfDocumentIds = new Set(
+    documents.filter((document) => document.ext === '.pdf').map((document) => document.id)
+  )
+
+  for (const entry of await fs.readdir(previewUploadsDir, { withFileTypes: true })) {
+    if (entry.name === 'pdf') continue
+    if (!previewDocumentIds.has(entry.name)) {
+      await fs.rm(path.join(previewUploadsDir, entry.name), { recursive: true, force: true })
+    }
+  }
+
+  if (!await fileExists(pdfPreviewDir)) return
+  for (const entry of await fs.readdir(pdfPreviewDir, { withFileTypes: true })) {
+    if (!entry.isFile() || path.extname(entry.name).toLowerCase() !== '.jpg') continue
+    if (!pdfDocumentIds.has(path.basename(entry.name, path.extname(entry.name)))) {
+      await fs.rm(path.join(pdfPreviewDir, entry.name), { force: true })
+    }
+  }
 }
 
 async function preparePdfPreviews(documents) {
@@ -265,18 +361,33 @@ async function commandIsAvailable(command, args) {
   }
 }
 
-function runCommand(command, args) {
+function runCommand(command, args, timeoutMs = 45000) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       stdio: ['ignore', 'ignore', 'pipe']
     })
     let stderr = ''
+    let settled = false
+    const timeout = setTimeout(() => {
+      if (settled) return
+      settled = true
+      child.kill('SIGKILL')
+      reject(new Error(`${command} 执行超过 ${Math.round(timeoutMs / 1000)} 秒，已停止`))
+    }, timeoutMs)
 
     child.stderr.on('data', (chunk) => {
       if (stderr.length < 4096) stderr += chunk.toString()
     })
-    child.on('error', reject)
+    child.on('error', (error) => {
+      if (settled) return
+      settled = true
+      clearTimeout(timeout)
+      reject(error)
+    })
     child.on('close', (code) => {
+      if (settled) return
+      settled = true
+      clearTimeout(timeout)
       if (code === 0) {
         resolve()
       } else {
@@ -289,24 +400,29 @@ function runCommand(command, args) {
 async function writeGeneratedDocument(document, documentByRelativePath, uploadFileSet) {
   let page
 
-  if (document.ext === '.md' || document.ext === '.markdown') {
-    page = await renderMarkdownPage(document, documentByRelativePath, uploadFileSet)
-  } else if (document.ext === '.pdf') {
-    page = renderPdfPage(document)
-  } else if (document.ext === '.docx') {
-    page = await renderDocxPage(document)
-  } else if (document.ext === '.doc') {
-    page = renderLegacyDocPage(document)
-  } else if (document.ext === '.xls' || document.ext === '.xlsx' || document.ext === '.csv') {
-    page = await renderSpreadsheetPage(document)
-  } else if (document.ext === '.xmind') {
-    page = await renderXMindPage(document)
-  } else if (document.ext === '.zip') {
-    page = await renderZipPage(document)
-  } else if (document.ext === '.txt') {
-    page = await renderTextPage(document)
-  } else {
-    page = renderDownloadPage(document)
+  try {
+    if (document.ext === '.md' || document.ext === '.markdown') {
+      page = await renderMarkdownPage(document, documentByRelativePath, uploadFileSet)
+    } else if (document.ext === '.pdf') {
+      page = renderPdfPage(document)
+    } else if (document.ext === '.docx') {
+      page = await renderDocxPage(document)
+    } else if (document.ext === '.doc') {
+      page = renderLegacyDocPage(document)
+    } else if (document.ext === '.xls' || document.ext === '.xlsx' || document.ext === '.csv') {
+      page = await renderSpreadsheetPage(document)
+    } else if (document.ext === '.xmind') {
+      page = await renderXMindPage(document)
+    } else if (document.ext === '.zip') {
+      page = await renderZipPage(document)
+    } else if (document.ext === '.txt') {
+      page = await renderTextPage(document)
+    } else {
+      page = renderDownloadPage(document)
+    }
+  } catch (error) {
+    console.warn(`  Unable to create a rich preview for ${document.relativePath}: ${error.message}`)
+    page = renderDownloadPage(document, '此资料暂时不能安全地转换为网页预览，请下载原始文件查看。')
   }
 
   page = addGeneratedPageMetadata(page, document)
@@ -314,12 +430,17 @@ async function writeGeneratedDocument(document, documentByRelativePath, uploadFi
 }
 
 async function renderMarkdownPage(document, documentByRelativePath, uploadFileSet) {
+  assertFileSize(document.relativePath, document.sizeBytes, uploadLimits.maxMarkdownBytes)
   const source = stripBom(await fs.readFile(document.sourcePath, 'utf8'))
-  const rewritten = rewriteMarkdownLinks(source, document.relativePath, documentByRelativePath, uploadFileSet)
-  const { frontmatter, body } = splitFrontmatter(rewritten)
-  const prefix = /^#\s+.+$/m.test(body) ? '' : `# ${document.title}\n\n`
+  const { body } = splitFrontmatter(source)
+  const markdownBody = `${/^#\s+.+$/m.test(body) ? '' : `# ${document.title}\n\n`}${body.trimStart()}`
+  const previewHtml = renderSafeMarkdown(markdownBody, {
+    currentRelativePath: document.relativePath,
+    documentByRelativePath,
+    uploadFileSet
+  })
 
-  return `${disableGeneratedPageSearch(frontmatter)}${prefix}${body.trimStart()}\n`
+  return `${disableGeneratedPageSearch('')}${previewHtml}\n`
 }
 
 function renderPdfPage(document) {
@@ -350,14 +471,17 @@ ${renderFileMeta(document)}
   ${document.previewUrl ? ':preview-src="previewUrl"' : ''}
   title="${escapeHtml(document.title)}"
   size="${escapeHtml(formatFileSize(document.sizeBytes))}"
+  :size-bytes="${document.sizeBytes}"
 />
 `
 }
 
 async function renderDocxPage(document) {
   try {
+    await loadZip(document.sourcePath, document.relativePath)
     const documentPreviewDir = path.join(previewUploadsDir, document.id)
     let imageIndex = 0
+    await fs.rm(documentPreviewDir, { recursive: true, force: true })
     await fs.mkdir(documentPreviewDir, { recursive: true })
 
     const result = await mammoth.convertToHtml(
@@ -365,7 +489,12 @@ async function renderDocxPage(document) {
       {
         convertImage: mammoth.images.imgElement(async (image) => {
           const imageBuffer = await image.readAsBuffer()
-          const imageName = `image-${String(++imageIndex).padStart(3, '0')}.${extensionForImage(image.contentType)}`
+          if (imageBuffer.byteLength > uploadLimits.maxXMindThumbnailBytes) {
+            throw new Error('文档中的单张图片超过预览上限')
+          }
+          const imageExtension = extensionForImage(image.contentType)
+          if (!imageExtension) throw new Error(`不支持的内嵌图片格式：${image.contentType}`)
+          const imageName = `image-${String(++imageIndex).padStart(3, '0')}.${imageExtension}`
           await fs.writeFile(path.join(documentPreviewDir, imageName), imageBuffer)
           return {
             src: `__KB_WITH_BASE__/uploads/previews/${document.id}/${encodeURIComponent(imageName)}`
@@ -373,7 +502,7 @@ async function renderDocxPage(document) {
         })
       }
     )
-    const previewHtml = result.value
+    const previewHtml = sanitizeGeneratedHtml(result.value, { allowRelativeLinks: false })
       .replace(
         /src="__KB_WITH_BASE__([^"]+)"/g,
         (_, imageUrl) => `:src="withBase('${imageUrl}')"`
@@ -403,7 +532,8 @@ ${previewHtml}
 </div>
 `
   } catch (error) {
-    return renderLegacyDocPage(document, `DOCX 自动转换失败：${error.message}`)
+    console.warn(`  Unable to convert ${document.relativePath}: ${error.message}`)
+    return renderLegacyDocPage(document, '此 Word 文件暂时无法转换为网页内容。')
   }
 }
 
@@ -431,10 +561,15 @@ ${note}
 }
 
 async function renderSpreadsheetPage(document) {
+  assertFileSize(document.relativePath, document.sizeBytes, uploadLimits.maxSpreadsheetBytes)
+  if (document.ext === '.xlsx') await loadZip(document.sourcePath, document.relativePath)
   const workbook = XLSX.read(await fs.readFile(document.sourcePath), {
     type: 'buffer',
     cellDates: true
   })
+  if (workbook.SheetNames.length > uploadLimits.maxSpreadsheetSheets) {
+    throw new Error(`工作簿包含超过 ${uploadLimits.maxSpreadsheetSheets} 个工作表`)
+  }
   const sheets = workbook.SheetNames.map((sheetName, index) => {
     const sheet = workbook.Sheets[sheetName]
     const table = spreadsheetTable(sheet)
@@ -494,60 +629,85 @@ function spreadsheetTable(sheet) {
     }
   }
 
-  const range = XLSX.utils.decode_range(sheet['!ref'])
-  const rows = []
-  const previewEndColumn = Math.min(
-    range.e.c,
-    range.s.c + maxSpreadsheetPreviewColumns - 1
-  )
-  let columnCount = 0
-  let totalRows = 0
-  let nonEmptyCells = 0
+  const cellAddresses = Object.keys(sheet).filter((key) => !key.startsWith('!'))
+  if (cellAddresses.length > uploadLimits.maxSpreadsheetCells) {
+    throw new Error(`工作表包含超过 ${uploadLimits.maxSpreadsheetCells} 个单元格`)
+  }
 
-  for (let rowIndex = range.s.r; rowIndex <= range.e.r; rowIndex += 1) {
-    const values = []
-    let lastContentIndex = -1
-    let rowHasContent = false
+  const populatedCells = []
+  const populatedRows = new Set()
+  let firstColumn = Number.POSITIVE_INFINITY
+  let lastColumn = -1
 
-    for (let columnIndex = range.s.c; columnIndex <= range.e.c; columnIndex += 1) {
-      const cell = sheet[XLSX.utils.encode_cell({ r: rowIndex, c: columnIndex })]
-      const value = cell ? XLSX.utils.format_cell(cell) : ''
-
-      if (String(value).trim() !== '') {
-        rowHasContent = true
-        nonEmptyCells += 1
-      }
-
-      if (columnIndex <= previewEndColumn) {
-        values.push(value)
-        if (String(value).trim() !== '') lastContentIndex = values.length - 1
-      }
+  for (const address of cellAddresses) {
+    let position
+    try {
+      position = XLSX.utils.decode_cell(address)
+    } catch {
+      continue
     }
+    const value = XLSX.utils.format_cell(sheet[address])
+    if (String(value).trim() === '') continue
+    populatedCells.push({ ...position, value })
+    populatedRows.add(position.r)
+    firstColumn = Math.min(firstColumn, position.c)
+    lastColumn = Math.max(lastColumn, position.c)
+  }
 
-    if (rowHasContent) totalRows += 1
-
-    if (
-      rowHasContent &&
-      lastContentIndex >= 0 &&
-      rows.length < maxSpreadsheetPreviewRows
-    ) {
-      const trimmedValues = values.slice(0, lastContentIndex + 1)
-      columnCount = Math.max(columnCount, trimmedValues.length)
-      rows.push({
-        rowNumber: rowIndex + 1,
-        values: trimmedValues
-      })
+  if (populatedCells.length === 0) {
+    return {
+      firstColumn: 0,
+      columnCount: 0,
+      rows: [],
+      totalRows: 0,
+      totalColumns: 0,
+      nonEmptyCells: 0,
+      truncated: false
     }
   }
 
+  const previewEndColumn = Math.min(
+    lastColumn,
+    firstColumn + maxSpreadsheetPreviewColumns - 1
+  )
+  const previewableRows = new Set(
+    populatedCells.filter((cell) => cell.c <= previewEndColumn).map((cell) => cell.r)
+  )
+  const selectedRowNumbers = [...previewableRows]
+    .sort((a, b) => a - b)
+    .slice(0, maxSpreadsheetPreviewRows)
+  const selectedRows = new Set(selectedRowNumbers)
+  const valuesByRow = new Map(selectedRowNumbers.map((row) => [row, new Map()]))
+
+  for (const cell of populatedCells) {
+    if (selectedRows.has(cell.r) && cell.c <= previewEndColumn) {
+      valuesByRow.get(cell.r).set(cell.c, cell.value)
+    }
+  }
+
+  const rows = selectedRowNumbers.map((rowNumber) => {
+    const cells = valuesByRow.get(rowNumber)
+    const finalColumn = Math.max(...cells.keys())
+    return {
+      rowNumber: rowNumber + 1,
+      values: Array.from(
+        { length: finalColumn - firstColumn + 1 },
+        (_, index) => cells.get(firstColumn + index) || ''
+      )
+    }
+  })
+  const columnCount = rows.reduce((count, row) => Math.max(count, row.values.length), 0)
+  const totalRows = populatedRows.size
+  const nonEmptyCells = populatedCells.length
+
   return {
-    firstColumn: range.s.c,
+    firstColumn,
     columnCount,
     rows,
     totalRows,
-    totalColumns: range.e.c - range.s.c + 1,
+    totalColumns: lastColumn - firstColumn + 1,
     nonEmptyCells,
-    truncated: totalRows > rows.length || range.e.c > previewEndColumn
+    truncated: totalRows > rows.length || lastColumn > previewEndColumn
   }
 }
 
@@ -593,25 +753,39 @@ ${rows}
 }
 
 async function renderXMindPage(document) {
-  const archive = await loadZip(document.sourcePath)
+  const archive = await loadZip(document.sourcePath, document.relativePath)
+  const documentPreviewDir = path.join(previewUploadsDir, document.id)
+  await fs.rm(documentPreviewDir, { recursive: true, force: true })
   const contentEntry = findZipEntry(archive, 'content.json')
 
   if (!contentEntry) {
     throw new Error(`${document.relativePath}: XMind 文件中缺少 content.json`)
   }
 
-  const parsedContent = JSON.parse(await contentEntry.async('string'))
+  assertArchiveEntrySize(contentEntry, uploadLimits.maxXMindContentBytes, 'XMind content.json')
+  const contentBuffer = await contentEntry.async('nodebuffer')
+  if (contentBuffer.byteLength > uploadLimits.maxXMindContentBytes) {
+    throw new Error('XMind content.json 超过预览上限')
+  }
+  const parsedContent = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(contentBuffer))
   const sheets = normalizeXMindSheets(parsedContent)
   const topicCount = sheets.reduce((sum, sheet) => sum + countXMindTopics(sheet.rootTopic), 0)
+  if (topicCount > uploadLimits.maxXMindTopics) {
+    throw new Error(`XMind 主题数超过 ${uploadLimits.maxXMindTopics} 个的预览上限`)
+  }
   const thumbnailEntry = findZipEntry(archive, 'Thumbnails/thumbnail.png')
   let thumbnailUrl = null
 
   if (thumbnailEntry) {
-    const documentPreviewDir = path.join(previewUploadsDir, document.id)
+    assertArchiveEntrySize(thumbnailEntry, uploadLimits.maxXMindThumbnailBytes, 'XMind 缩略图')
+    const thumbnail = await thumbnailEntry.async('nodebuffer')
+    if (thumbnail.byteLength > uploadLimits.maxXMindThumbnailBytes) {
+      throw new Error('XMind 缩略图超过预览上限')
+    }
     await fs.mkdir(documentPreviewDir, { recursive: true })
     await fs.writeFile(
       path.join(documentPreviewDir, 'thumbnail.png'),
-      await thumbnailEntry.async('nodebuffer')
+      thumbnail
     )
     thumbnailUrl = `/uploads/previews/${document.id}/thumbnail.png`
   }
@@ -662,10 +836,24 @@ function normalizeXMindSheets(content) {
 
 function countXMindTopics(topic) {
   if (!topic) return 0
-  return 1 + xmindTopicChildren(topic).reduce(
-    (sum, child) => sum + countXMindTopics(child),
-    0
-  )
+  let count = 0
+  const pending = [{ topic, depth: 1 }]
+
+  while (pending.length > 0) {
+    const current = pending.pop()
+    if (current.depth > uploadLimits.maxXMindDepth) {
+      throw new Error(`XMind 主题层级超过 ${uploadLimits.maxXMindDepth} 层的预览上限`)
+    }
+    count += 1
+    if (count > uploadLimits.maxXMindTopics) {
+      throw new Error(`XMind 主题数超过 ${uploadLimits.maxXMindTopics} 个的预览上限`)
+    }
+    for (const child of xmindTopicChildren(current.topic)) {
+      pending.push({ topic: child, depth: current.depth + 1 })
+    }
+  }
+
+  return count
 }
 
 function xmindTopicChildren(topic) {
@@ -698,7 +886,7 @@ function renderXMindTopic(topic, isRoot = false) {
 }
 
 async function renderZipPage(document) {
-  const archive = await loadZip(document.sourcePath)
+  const archive = await loadZip(document.sourcePath, document.relativePath)
   const files = Object.values(archive.files)
     .filter((entry) => !entry.dir && !/[\\/]$/.test(entry.name))
     .map((entry) => {
@@ -892,7 +1080,23 @@ function renderArchiveSourcePreview(preview, index, open) {
 }
 
 async function renderTextPage(document) {
-  const source = stripBom(await fs.readFile(document.sourcePath, 'utf8'))
+  const sourceFile = await fs.open(document.sourcePath, 'r')
+  const previewLength = Math.min(document.sizeBytes, uploadLimits.maxTextPreviewBytes + 1)
+  const previewBuffer = Buffer.alloc(previewLength)
+  let bytesRead = 0
+  try {
+    const result = await sourceFile.read(previewBuffer, 0, previewLength, 0)
+    bytesRead = result.bytesRead
+  } finally {
+    await sourceFile.close()
+  }
+  const truncated = document.sizeBytes > uploadLimits.maxTextPreviewBytes
+  const decoded = decodeTextBuffer(
+    previewBuffer.subarray(0, Math.min(bytesRead, uploadLimits.maxTextPreviewBytes))
+  )
+  const source = truncated
+    ? `${decoded}\n\n[网页预览到此处，完整内容请下载原始文件查看。]`
+    : decoded
 
   return `---
 search: false
@@ -919,7 +1123,7 @@ ${renderFileMeta(document)}
 `
 }
 
-function renderDownloadPage(document) {
+function renderDownloadPage(document, note = '此文件提供原始格式下载。') {
   const typeLabel = labelForExt(document.ext)
 
   return `---
@@ -938,7 +1142,7 @@ const fileUrl = withBase(${JSON.stringify(document.publicUrl)})
 
 ${renderFileMeta(document)}
 
-此文件提供原始格式下载。
+${escapeVueText(note)}
 
 <p class="kb-download-actions"><a class="kb-download-button" :href="fileUrl" download>下载 ${typeLabel} 文件</a></p>
 `
@@ -950,41 +1154,6 @@ function renderFileMeta(document) {
   <span><strong>格式</strong>${escapeHtml(labelForExt(document.ext))}</span>
   <span><strong>大小</strong>${escapeHtml(formatFileSize(document.sizeBytes))}</span>
 </div>`
-}
-
-function rewriteMarkdownLinks(source, currentRelativePath, documentByRelativePath, uploadFileSet) {
-  return source.replace(/(!?\[[^\]]*?\]\()([^)\s]+)(\))/g, (match, prefix, href, suffix) => {
-    if (isExternalHref(href)) return match
-
-    const { pathname, rest } = splitHref(href)
-    const decodedPath = safeDecodeURIComponent(pathname)
-    const targetRelativePath = normalizeUploadPath(path.posix.join(path.posix.dirname(currentRelativePath), decodedPath))
-
-    if (documentByRelativePath.has(targetRelativePath)) {
-      return `${prefix}${documentByRelativePath.get(targetRelativePath).pageLink}${rest}${suffix}`
-    }
-
-    if (uploadFileSet.has(targetRelativePath)) {
-      return `${prefix}../../uploads/raw/${encodePath(targetRelativePath)}${rest}${suffix}`
-    }
-
-    return match
-  })
-}
-
-async function getLibraryCategories(documents) {
-  const preferred = ['嵌入式', '机器人运动控制']
-  const entries = await fs.readdir(uploadsDir, { withFileTypes: true })
-  const folderCategories = entries
-    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
-    .map((entry) => entry.name)
-  const categorySet = new Set([...folderCategories, ...documents.map((document) => document.category)])
-  const preferredCategories = preferred.filter((category) => categorySet.has(category))
-  const extraCategories = [...categorySet]
-    .filter((category) => !preferred.includes(category))
-    .sort((a, b) => a.localeCompare(b, 'zh-CN'))
-
-  return [...preferredCategories, ...extraCategories]
 }
 
 async function writeLibraryIndex(documents, categories) {
@@ -1143,22 +1312,6 @@ function setFrontmatterValue(frontmatter, key, value) {
   return frontmatter.replace(/\r?\n---\r?\n$/, `\n${key}: ${value}\n---\n`)
 }
 
-function splitHref(href) {
-  const match = href.match(/^([^?#]*)([?#][\s\S]*)?$/)
-  return {
-    pathname: match?.[1] || href,
-    rest: match?.[2] || ''
-  }
-}
-
-function isExternalHref(href) {
-  return /^(?:[a-z]+:|#|\/)/i.test(href)
-}
-
-function normalizeUploadPath(value) {
-  return path.posix.normalize(value).replace(/^\.\//, '')
-}
-
 function titleFromPath(relativePath) {
   const parsed = path.parse(relativePath)
   return parsed.name.replace(/^\d{1,3}[-_.、\s]+/, '').trim() || parsed.name
@@ -1198,20 +1351,20 @@ function extensionForImage(contentType) {
     'image/gif': 'gif',
     'image/jpeg': 'jpg',
     'image/png': 'png',
-    'image/svg+xml': 'svg',
-    'image/tiff': 'tiff',
-    'image/bmp': 'bmp',
-    'image/x-emf': 'emf',
-    'image/x-wmf': 'wmf'
+    'image/bmp': 'bmp'
   }
 
   return extensions[contentType] || 'bin'
 }
 
-async function loadZip(filePath) {
-  return JSZip.loadAsync(await fs.readFile(filePath), {
+async function loadZip(filePath, relativePath) {
+  const archiveBuffer = await fs.readFile(filePath)
+  assertFileSize(relativePath, archiveBuffer.byteLength, uploadLimits.maxArchiveBytes)
+  const archive = await JSZip.loadAsync(archiveBuffer, {
     decodeFileName: (bytes) => new TextDecoder('gb18030').decode(bytes)
   })
+  inspectArchive(archive, archiveBuffer.byteLength, relativePath)
+  return archive
 }
 
 function findZipEntry(archive, targetName) {
@@ -1278,14 +1431,6 @@ function encodePath(relativePath) {
   return relativePath.split('/').map(encodeURIComponent).join('/')
 }
 
-function safeDecodeURIComponent(value) {
-  try {
-    return decodeURIComponent(value)
-  } catch {
-    return value
-  }
-}
-
 function escapeMarkdownText(value) {
   return value.replace(/([\\[\]])/g, '\\$1')
 }
@@ -1321,7 +1466,11 @@ function toPosix(value) {
   return value.split(path.sep).join('/')
 }
 
-main().catch((error) => {
-  console.error(error)
-  process.exitCode = 1
-})
+export { countXMindTopics, main, spreadsheetTable }
+
+if (process.argv[1] && path.resolve(process.argv[1]) === scriptPath) {
+  main().catch((error) => {
+    console.error(error)
+    process.exitCode = 1
+  })
+}

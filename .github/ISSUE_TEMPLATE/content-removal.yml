@@ -1,0 +1,26 @@
+name: 内容下架申请
+description: 报告未经授权发布、版权或隐私问题
+title: "[内容下架] "
+labels: [content-review]
+body:
+  - type: input
+    id: path
+    attributes:
+      label: 资料名称或网址
+      placeholder: 请填写资料名称、仓库路径或网页地址
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: 申请原因
+      description: 请说明版权、隐私或授权问题，以及你与该内容的关系。
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 补充证明
+      description: 可提供原始发布地址、版权声明或其他便于核实的信息。请勿公开提交敏感证件。
+    validations:
+      required: false

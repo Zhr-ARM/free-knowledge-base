@@ -46,15 +46,15 @@ import { withBase } from 'vitepress'
     <p>如果你不确定资料名称，先进入资料库按方向浏览；如果知道关键词，可以直接搜索课程名、芯片型号、控制算法或项目主题。</p>
   </div>
   <div class="kb-link-grid">
-    <a class="kb-link-card" href="/library/">
+    <a class="kb-link-card" :href="withBase('/library/')">
       <strong>资料库</strong>
       <span>查看所有已公开资料</span>
     </a>
-    <a class="kb-link-card" href="/guide/embedded">
+    <a class="kb-link-card" :href="withBase('/guide/embedded')">
       <strong>嵌入式</strong>
       <span>查看硬件、驱动和 MCU 资料</span>
     </a>
-    <a class="kb-link-card" href="/guide/robot-motion-control">
+    <a class="kb-link-card" :href="withBase('/guide/robot-motion-control')">
       <strong>机器人运动控制</strong>
       <span>查看电机控制、FOC 和强化学习资料</span>
     </a>

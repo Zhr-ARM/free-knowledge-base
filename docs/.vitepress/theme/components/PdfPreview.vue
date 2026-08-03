@@ -2,6 +2,7 @@
 import {
   ChevronLeft,
   ChevronRight,
+  CloudDownload,
   Maximize2,
   Minimize2,
   Minus,
@@ -13,15 +14,17 @@ import modernPdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 import legacyPdfWorkerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url'
 import type {
   DocumentInitParameters,
+  OnProgressParameters,
   PDFDocumentLoadingTask,
   PDFDocumentProxy,
   RenderTask
-} from 'pdfjs-dist'
+} from 'pdfjs-dist/types/src/display/api'
 
 const props = defineProps<{
   src: string
   title: string
   size?: string
+  sizeBytes?: number
   previewSrc?: string
 }>()
 
@@ -30,6 +33,10 @@ type ScrollAnchor = { x: number, y: number }
 type ProgressivePdfTransport = {
   onDataProgressiveRead: (chunk: Uint8Array) => void
   onDataProgressiveDone: () => void
+}
+type NetworkInformationLike = EventTarget & {
+  effectiveType?: string
+  saveData?: boolean
 }
 
 const canvas = ref<HTMLCanvasElement | null>(null)
@@ -42,6 +49,7 @@ const isFullscreen = ref(false)
 const panning = ref(false)
 const backgroundProgress = ref<number | null>(null)
 const backgroundActive = ref(false)
+const backgroundDeferred = ref(false)
 const errorMessage = ref('')
 const progress = ref<number | null>(null)
 const pageNumber = ref(1)
@@ -56,7 +64,9 @@ let resizeObserver: ResizeObserver | undefined
 let resizeFrame: number | undefined
 let backgroundController: AbortController | undefined
 let beginBackgroundLoad: (() => Promise<void>) | undefined
+let pendingBackgroundLoad: (() => Promise<void>) | undefined
 let backgroundWorkerReady: Promise<void> | undefined
+let networkInformation: NetworkInformationLike | undefined
 let foregroundRequestCount = 0
 let loadVersion = 0
 let renderVersion = 0
@@ -65,6 +75,9 @@ const rangeChunkSize = 256 * 1024
 const tailPrefetchSize = 768 * 1024
 const backgroundReadDelay = 40
 const backgroundRetryLimit = 3
+const foregroundRetryLimit = 2
+const foregroundTimeout = 20000
+const mobileBackgroundLimit = 32 * 1024 * 1024
 let panOrigin: { x: number, y: number, left: number, top: number } | undefined
 
 const progressStyle = computed(() => ({
@@ -88,8 +101,10 @@ function releaseDocument() {
   backgroundController?.abort()
   backgroundController = undefined
   beginBackgroundLoad = undefined
+  pendingBackgroundLoad = undefined
   backgroundWorkerReady = undefined
   backgroundActive.value = false
+  backgroundDeferred.value = false
   for (const controller of fetchControllers) controller.abort()
   fetchControllers.clear()
   const task = loadingTask
@@ -123,7 +138,7 @@ async function loadDocument() {
     if (currentLoad !== loadVersion) return
 
     loadingTask = pdfjs.getDocument(source)
-    loadingTask.onProgress = ({ loaded, total }) => {
+    loadingTask.onProgress = ({ loaded, total }: OnProgressParameters) => {
       if (currentLoad !== loadVersion || !total) return
       progress.value = Math.min(100, Math.round((loaded / total) * 100))
     }
@@ -138,7 +153,14 @@ async function loadDocument() {
       loading.value = false
       const backgroundLoad = beginBackgroundLoad
       beginBackgroundLoad = undefined
-      if (backgroundLoad) void backgroundLoad()
+      if (backgroundLoad) {
+        if (shouldAutoCachePdf()) {
+          void backgroundLoad()
+        } else {
+          pendingBackgroundLoad = backgroundLoad
+          backgroundDeferred.value = true
+        }
+      }
     }
   } catch (error) {
     if (currentLoad !== loadVersion) return
@@ -177,7 +199,7 @@ async function createPdfSource(
   pdfjs: PdfJsModule,
   currentLoad: number
 ): Promise<DocumentInitParameters> {
-  const initialResponse = await fetchPdfRange(0, rangeChunkSize)
+  const initialResponse = await fetchPdfRange(0, rangeChunkSize, currentLoad)
   const initialData = initialResponse.data
   const initialSize = initialData.byteLength
   const totalSize = readTotalSize(initialResponse.headers.get('content-range'))
@@ -192,7 +214,7 @@ async function createPdfSource(
   progress.value = Math.max(1, Math.round((loadedBytes / totalSize) * 100))
   const tailBegin = Math.max(initialSize, totalSize - tailPrefetchSize)
   const tailPromise = tailBegin < totalSize
-    ? fetchPdfRange(tailBegin, totalSize)
+    ? fetchPdfRange(tailBegin, totalSize, currentLoad)
       .then((response) => {
         if (currentLoad !== loadVersion) return undefined
         const data = response.status === 206
@@ -235,7 +257,7 @@ async function createPdfSource(
         }
       }
 
-      const response = await fetchPdfRange(begin, end)
+      const response = await fetchPdfRange(begin, end, currentLoad)
       if (currentLoad !== loadVersion) return
 
       const chunk = response.status === 206
@@ -270,32 +292,86 @@ async function createPdfSource(
 }
 
 function isAbortError(error: unknown) {
-  return error instanceof Error && error.name === 'AbortError'
+  return Boolean(error && typeof error === 'object' && 'name' in error && error.name === 'AbortError')
 }
 
-async function fetchPdfRange(begin: number, end: number) {
-  const controller = new AbortController()
-  fetchControllers.add(controller)
+async function fetchPdfRange(begin: number, end: number, currentLoad: number) {
   foregroundRequestCount += 1
 
   try {
-    const response = await fetch(props.src, {
-      headers: {
-        Range: `bytes=${begin}-${Math.max(begin, end - 1)}`
-      },
-      signal: controller.signal
-    })
+    let lastError: unknown
 
-    if (!response.ok) throw new Error(`PDF request failed with ${response.status}`)
-    return {
-      status: response.status,
-      headers: response.headers,
-      data: new Uint8Array(await response.arrayBuffer())
+    for (let attempt = 0; attempt <= foregroundRetryLimit; attempt += 1) {
+      if (currentLoad !== loadVersion) throw createAbortError()
+
+      const controller = new AbortController()
+      let timedOut = false
+      fetchControllers.add(controller)
+      const timeout = window.setTimeout(() => {
+        timedOut = true
+        controller.abort()
+      }, foregroundTimeout)
+
+      try {
+        const response = await fetch(props.src, {
+          headers: {
+            Range: `bytes=${begin}-${Math.max(begin, end - 1)}`
+          },
+          signal: controller.signal
+        })
+
+        if (!response.ok) throw new Error(`PDF request failed with ${response.status}`)
+        return {
+          status: response.status,
+          headers: response.headers,
+          data: new Uint8Array(await response.arrayBuffer())
+        }
+      } catch (error) {
+        if (currentLoad !== loadVersion || (isAbortError(error) && !timedOut)) throw error
+        lastError = timedOut ? new Error('PDF request timed out') : error
+        if (attempt >= foregroundRetryLimit) throw lastError
+        await delay(300 * (attempt + 1))
+      } finally {
+        window.clearTimeout(timeout)
+        fetchControllers.delete(controller)
+      }
     }
+
+    throw lastError || new Error('PDF request failed')
   } finally {
     foregroundRequestCount = Math.max(0, foregroundRequestCount - 1)
-    fetchControllers.delete(controller)
   }
+}
+
+function createAbortError() {
+  return new DOMException('PDF loading was cancelled', 'AbortError')
+}
+
+function readNetworkInformation() {
+  return (navigator as Navigator & { connection?: NetworkInformationLike }).connection
+}
+
+function shouldAutoCachePdf() {
+  const connection = networkInformation || readNetworkInformation()
+  if (connection?.saveData) return false
+  if (connection?.effectiveType && ['slow-2g', '2g', '3g'].includes(connection.effectiveType)) {
+    return false
+  }
+  const isLikelyMobile = navigator.maxTouchPoints > 0 && window.innerWidth <= 900
+  if (isLikelyMobile && (props.sizeBytes || 0) > mobileBackgroundLimit) return false
+  return true
+}
+
+function startDeferredBackgroundLoad() {
+  const backgroundLoad = pendingBackgroundLoad
+  if (!backgroundLoad) return
+  pendingBackgroundLoad = undefined
+  backgroundDeferred.value = false
+  void backgroundLoad()
+}
+
+function handleNetworkChange() {
+  if (backgroundDeferred.value && shouldAutoCachePdf()) startDeferredBackgroundLoad()
 }
 
 function readTotalSize(contentRange: string | null) {
@@ -614,6 +690,8 @@ function handleFullscreenKeyboard(event: KeyboardEvent) {
 
 onMounted(() => {
   fullscreenAvailable.value = document.fullscreenEnabled
+  networkInformation = readNetworkInformation()
+  networkInformation?.addEventListener('change', handleNetworkChange)
   document.addEventListener('fullscreenchange', handleFullscreenChange)
   document.addEventListener('keydown', handleFullscreenKeyboard)
   resizeObserver = new ResizeObserver(scheduleRender)
@@ -623,6 +701,8 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   loadVersion += 1
+  networkInformation?.removeEventListener('change', handleNetworkChange)
+  networkInformation = undefined
   document.removeEventListener('fullscreenchange', handleFullscreenChange)
   document.removeEventListener('keydown', handleFullscreenKeyboard)
   resizeObserver?.disconnect()
@@ -698,6 +778,16 @@ watch(() => props.src, loadDocument)
           <Plus aria-hidden="true" />
         </button>
         <span class="kb-toolbar-divider" aria-hidden="true"></span>
+        <button
+          v-if="backgroundDeferred"
+          type="button"
+          class="kb-icon-button"
+          title="缓存完整文档"
+          aria-label="缓存完整文档"
+          @click="startDeferredBackgroundLoad"
+        >
+          <CloudDownload aria-hidden="true" />
+        </button>
         <button
           type="button"
           class="kb-icon-button"

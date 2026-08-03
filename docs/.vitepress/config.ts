@@ -1,12 +1,16 @@
 import { defineConfig } from 'vitepress'
 
 const base = process.env.VITEPRESS_BASE || '/'
+const siteUrl = 'https://cdut-osa.cn'
 
 export default defineConfig({
   lang: 'zh-CN',
   title: '开源协会知识库',
   description: '沉淀嵌入式与机器人运动控制资料的公开知识库',
   base,
+  sitemap: {
+    hostname: siteUrl
+  },
   router: {
     prefetchLinks: false
   },
@@ -16,8 +20,29 @@ export default defineConfig({
       ''
     )
   },
+  transformHead({ page, title, description }) {
+    const pagePath = page
+      .replace(/(^|\/)index\.md$/, '$1')
+      .replace(/\.md$/, '')
+    const canonicalUrl = new URL(`/${pagePath}`.replace(/\/{2,}/g, '/'), siteUrl).href
+
+    return [
+      ['link', { rel: 'canonical', href: canonicalUrl }],
+      ['meta', { property: 'og:type', content: 'website' }],
+      ['meta', { property: 'og:locale', content: 'zh_CN' }],
+      ['meta', { property: 'og:site_name', content: '开源协会知识库' }],
+      ['meta', { property: 'og:title', content: title }],
+      ['meta', { property: 'og:description', content: description }],
+      ['meta', { property: 'og:url', content: canonicalUrl }],
+      ['meta', { property: 'og:image', content: `${siteUrl}/association-logo.jpg` }],
+      ['meta', { name: 'twitter:card', content: 'summary' }],
+      ['meta', { name: 'twitter:title', content: title }],
+      ['meta', { name: 'twitter:description', content: description }]
+    ]
+  },
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}logo.svg` }]
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}logo.svg` }],
+    ['meta', { name: 'theme-color', content: '#0b7285' }]
   ],
   cleanUrls: true,
   srcExclude: ['public/**'],
@@ -51,19 +76,20 @@ export default defineConfig({
         _render(src, env, md) {
           const relativePath = env.relativePath.replace(/\\/g, '/')
           const html = md.render(src, env)
+          const frontmatter = env.frontmatter || {}
 
           if (relativePath.includes('library/generated/')) {
-            const title = env.frontmatter.searchTitle || env.frontmatter.title
+            const title = frontmatter.searchTitle || frontmatter.title
             if (!title) return ''
 
-            const details = [env.frontmatter.searchPath, env.frontmatter.searchType]
+            const details = [frontmatter.searchPath, frontmatter.searchType]
               .filter(Boolean)
               .map(String)
               .join(' · ')
             return md.render(`# ${String(title)}\n\n${details}\n`, {})
           }
 
-          return env.frontmatter.search === false ? '' : html
+          return frontmatter.search === false ? '' : html
         }
       }
     },
@@ -80,7 +106,8 @@ export default defineConfig({
           { text: '开始使用', link: '/guide/getting-started' },
           { text: '资料库', link: '/library/' },
           { text: '嵌入式', link: '/guide/embedded' },
-          { text: '机器人运动控制', link: '/guide/robot-motion-control' }
+          { text: '机器人运动控制', link: '/guide/robot-motion-control' },
+          { text: '资料版权与下架', link: '/guide/content-rights' }
         ]
       }
     ],

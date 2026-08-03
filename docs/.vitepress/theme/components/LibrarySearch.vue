@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { withBase } from 'vitepress'
 
 interface LibraryDocument {
@@ -18,9 +18,11 @@ const props = defineProps<{
 const query = ref('')
 const selectedCategory = ref('')
 const selectedType = ref('')
+let urlUpdateTimer: number | undefined
+let mounted = false
 
 const categories = computed(() => {
-  const preferredOrder = ['嵌入式', '机器人运动控制']
+  const preferredOrder = ['嵌入式', '机器人运动控制', 'ROS', '开源项目']
   const counts = new Map<string, number>()
   for (const document of props.documents) {
     counts.set(document.category, (counts.get(document.category) || 0) + 1)
@@ -38,7 +40,8 @@ const categories = computed(() => {
     })
 })
 
-const types = computed(() => [...new Set(props.documents.map((document) => document.type))])
+const types = computed(() => [...new Set(props.documents.map((document) => document.type))]
+  .sort((a, b) => a.localeCompare(b, 'zh-CN')))
 
 const hasFilters = computed(() => Boolean(
   query.value.trim() || selectedCategory.value || selectedType.value
@@ -69,6 +72,48 @@ function clearFilters() {
   selectedCategory.value = ''
   selectedType.value = ''
 }
+
+function readFiltersFromUrl() {
+  const parameters = new URL(window.location.href).searchParams
+  const category = parameters.get('category') || ''
+  const type = parameters.get('type') || ''
+  query.value = parameters.get('q') || ''
+  selectedCategory.value = categories.value.some((item) => item.name === category) ? category : ''
+  selectedType.value = types.value.includes(type) ? type : ''
+}
+
+function updateFilterUrl() {
+  if (!mounted) return
+  const url = new URL(window.location.href)
+  setSearchParameter(url, 'q', query.value.trim())
+  setSearchParameter(url, 'category', selectedCategory.value)
+  setSearchParameter(url, 'type', selectedType.value)
+  window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`)
+}
+
+function setSearchParameter(url: URL, key: string, value: string) {
+  if (value) url.searchParams.set(key, value)
+  else url.searchParams.delete(key)
+}
+
+function scheduleUrlUpdate() {
+  if (urlUpdateTimer) window.clearTimeout(urlUpdateTimer)
+  urlUpdateTimer = window.setTimeout(updateFilterUrl, 120)
+}
+
+onMounted(() => {
+  readFiltersFromUrl()
+  mounted = true
+  window.addEventListener('popstate', readFiltersFromUrl)
+})
+
+onBeforeUnmount(() => {
+  mounted = false
+  if (urlUpdateTimer) window.clearTimeout(urlUpdateTimer)
+  window.removeEventListener('popstate', readFiltersFromUrl)
+})
+
+watch([query, selectedCategory, selectedType], scheduleUrlUpdate)
 </script>
 
 <template>

@@ -4,20 +4,35 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "sync:uploads": "node scripts/sync-uploads.mjs",
-    "docs:dev": "npm run sync:uploads && vitepress dev docs --host 0.0.0.0",
+    "content:check": "node scripts/check-content-rights.mjs",
+    "content:update": "node scripts/check-content-rights.mjs --update",
+    "sync:uploads": "npm run content:check && node scripts/sync-uploads.mjs",
+    "docs:dev": "npm run sync:uploads && vitepress dev docs",
     "docs:build": "npm run sync:uploads && vitepress build docs",
-    "docs:preview": "vitepress preview docs --host 0.0.0.0",
-    "docs:deploy": "cross-env VITEPRESS_BASE=/ npm run docs:build && gh-pages -d docs/.vitepress/dist"
+    "docs:preview": "vitepress preview docs",
+    "docs:deploy": "cross-env VITEPRESS_BASE=/ npm run docs:build && gh-pages -d docs/.vitepress/dist",
+    "test": "node --test tests/*.test.mjs",
+    "typecheck": "vue-tsc --noEmit",
+    "test:links": "node scripts/check-links.mjs",
+    "test:size": "node scripts/check-size-budget.mjs",
+    "test:e2e": "playwright test",
+    "check": "npm test && npm run typecheck && npm run docs:build && npm run test:links && npm run test:size"
   },
   "devDependencies": {
     "@lucide/vue": "^1.28.0",
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.1.2",
     "cross-env": "^10.1.0",
     "gh-pages": "^6.3.0",
     "jszip": "^3.10.1",
     "mammoth": "^1.12.0",
+    "markdown-it": "^15.0.0",
+    "parse5": "^8.0.1",
     "pdfjs-dist": "^6.2.108",
+    "sanitize-html": "^2.17.6",
+    "typescript": "~6.0.3",
     "vitepress": "^1.6.4",
+    "vue-tsc": "^3.3.9",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   }
 }
