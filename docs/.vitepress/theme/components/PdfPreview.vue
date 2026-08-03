@@ -56,6 +56,7 @@ let resizeObserver: ResizeObserver | undefined
 let resizeFrame: number | undefined
 let backgroundController: AbortController | undefined
 let beginBackgroundLoad: (() => Promise<void>) | undefined
+let backgroundWorkerReady: Promise<void> | undefined
 let foregroundRequestCount = 0
 let loadVersion = 0
 let renderVersion = 0
@@ -87,6 +88,7 @@ function releaseDocument() {
   backgroundController?.abort()
   backgroundController = undefined
   beginBackgroundLoad = undefined
+  backgroundWorkerReady = undefined
   backgroundActive.value = false
   for (const controller of fetchControllers) controller.abort()
   fetchControllers.clear()
@@ -177,17 +179,18 @@ async function createPdfSource(
 ): Promise<DocumentInitParameters> {
   const initialResponse = await fetchPdfRange(0, rangeChunkSize)
   const initialData = initialResponse.data
+  const initialSize = initialData.byteLength
   const totalSize = readTotalSize(initialResponse.headers.get('content-range'))
 
-  if (initialResponse.status !== 206 || !totalSize || initialData.byteLength >= totalSize) {
+  if (initialResponse.status !== 206 || !totalSize || initialSize >= totalSize) {
     progress.value = 100
     backgroundProgress.value = 100
     return { data: initialData, docBaseUrl: props.src }
   }
 
-  let loadedBytes = initialData.byteLength
+  let loadedBytes = initialSize
   progress.value = Math.max(1, Math.round((loadedBytes / totalSize) * 100))
-  const tailBegin = Math.max(initialData.byteLength, totalSize - tailPrefetchSize)
+  const tailBegin = Math.max(initialSize, totalSize - tailPrefetchSize)
   const tailPromise = tailBegin < totalSize
     ? fetchPdfRange(tailBegin, totalSize)
       .then((response) => {
@@ -252,7 +255,7 @@ async function createPdfSource(
   const transport = new HttpRangeTransport()
   beginBackgroundLoad = () => streamPdfInBackground(
     transport,
-    initialData.byteLength,
+    initialSize,
     totalSize,
     currentLoad
   )
@@ -313,6 +316,7 @@ async function streamPdfInBackground(
 ) {
   let nextOffset = startOffset
   let consecutiveFailures = 0
+  let workerReady: Promise<void> | undefined
   backgroundActive.value = true
   backgroundProgress.value = Math.max(1, Math.round((nextOffset / totalSize) * 100))
 
@@ -326,7 +330,7 @@ async function streamPdfInBackground(
 
       try {
         const request: RequestInit & { priority?: 'low' } = {
-          headers: { Range: `bytes=${nextOffset}-` },
+          headers: { Range: `bytes=${nextOffset}-${totalSize - 1}` },
           signal: controller.signal,
           priority: 'low'
         }
@@ -391,13 +395,17 @@ async function streamPdfInBackground(
 
     if (currentLoad === loadVersion && nextOffset >= totalSize) {
       transport.onDataProgressiveDone()
+      workerReady = pdfDocument?.getDownloadInfo().then(() => undefined)
+      backgroundWorkerReady = workerReady
       backgroundProgress.value = 100
+      await workerReady
     }
   } catch (error) {
     if (!isAbortError(error) && currentLoad === loadVersion) {
       console.warn('PDF background loading stopped; on-demand reading remains available', error)
     }
   } finally {
+    if (backgroundWorkerReady === workerReady) backgroundWorkerReady = undefined
     if (currentLoad === loadVersion) backgroundActive.value = false
   }
 }
@@ -424,6 +432,12 @@ async function renderCurrentPage(scrollAnchor?: ScrollAnchor) {
   rendering.value = true
 
   try {
+    const workerReady = backgroundWorkerReady
+    if (workerReady) {
+      await workerReady
+      if (currentRender !== renderVersion) return
+    }
+
     const page = await pdfDocument.getPage(pageNumber.value)
     if (currentRender !== renderVersion) return
 
