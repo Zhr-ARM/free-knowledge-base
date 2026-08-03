@@ -108,7 +108,14 @@ jobs:
         run: npm run docs:build
 
       - name: Deploy gh-pages branch
+        env:
+          GH_PAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >-
           npx gh-pages
           -d docs/.vitepress/dist
+          --no-history
+          --nojekyll
+          --cname cdut-osa.cn
+          --silent
+          --repo "https://x-access-token:${GH_PAGES_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           -u "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
