@@ -27,6 +27,10 @@ const props = defineProps<{
 
 type PdfJsModule = typeof import('pdfjs-dist')
 type ScrollAnchor = { x: number, y: number }
+type ProgressivePdfTransport = {
+  onDataProgressiveRead: (chunk: Uint8Array) => void
+  onDataProgressiveDone: () => void
+}
 
 const canvas = ref<HTMLCanvasElement | null>(null)
 const preview = ref<HTMLDivElement | null>(null)
@@ -36,6 +40,8 @@ const rendering = ref(false)
 const fullscreenAvailable = ref(false)
 const isFullscreen = ref(false)
 const panning = ref(false)
+const backgroundProgress = ref<number | null>(null)
+const backgroundActive = ref(false)
 const errorMessage = ref('')
 const progress = ref<number | null>(null)
 const pageNumber = ref(1)
@@ -48,11 +54,16 @@ let pdfDocument: PDFDocumentProxy | undefined
 let renderTask: RenderTask | undefined
 let resizeObserver: ResizeObserver | undefined
 let resizeFrame: number | undefined
+let backgroundController: AbortController | undefined
+let beginBackgroundLoad: (() => Promise<void>) | undefined
+let foregroundRequestCount = 0
 let loadVersion = 0
 let renderVersion = 0
 const fetchControllers = new Set<AbortController>()
 const rangeChunkSize = 256 * 1024
 const tailPrefetchSize = 768 * 1024
+const backgroundReadDelay = 40
+const backgroundRetryLimit = 3
 let panOrigin: { x: number, y: number, left: number, top: number } | undefined
 
 const progressStyle = computed(() => ({
@@ -60,6 +71,10 @@ const progressStyle = computed(() => ({
 }))
 
 const zoomLabel = computed(() => `${Math.round(zoom.value * 100)}%`)
+
+const backgroundProgressStyle = computed(() => ({
+  width: `${Math.max(1, backgroundProgress.value || 0)}%`
+}))
 
 function cancelRender() {
   renderVersion += 1
@@ -69,6 +84,10 @@ function cancelRender() {
 
 function releaseDocument() {
   cancelRender()
+  backgroundController?.abort()
+  backgroundController = undefined
+  beginBackgroundLoad = undefined
+  backgroundActive.value = false
   for (const controller of fetchControllers) controller.abort()
   fetchControllers.clear()
   const task = loadingTask
@@ -86,6 +105,8 @@ async function loadDocument() {
   rendering.value = false
   errorMessage.value = ''
   progress.value = null
+  backgroundProgress.value = null
+  backgroundActive.value = false
   pageNumber.value = 1
   pageInput.value = '1'
   pageCount.value = 0
@@ -111,7 +132,12 @@ async function loadDocument() {
     pageCount.value = pdfDocument.numPages
     await nextTick()
     await renderCurrentPage()
-    if (currentLoad === loadVersion) loading.value = false
+    if (currentLoad === loadVersion) {
+      loading.value = false
+      const backgroundLoad = beginBackgroundLoad
+      beginBackgroundLoad = undefined
+      if (backgroundLoad) void backgroundLoad()
+    }
   } catch (error) {
     if (currentLoad !== loadVersion) return
     loading.value = false
@@ -155,6 +181,7 @@ async function createPdfSource(
 
   if (initialResponse.status !== 206 || !totalSize || initialData.byteLength >= totalSize) {
     progress.value = 100
+    backgroundProgress.value = 100
     return { data: initialData, docBaseUrl: props.src }
   }
 
@@ -222,8 +249,16 @@ async function createPdfSource(
     }
   }
 
+  const transport = new HttpRangeTransport()
+  beginBackgroundLoad = () => streamPdfInBackground(
+    transport,
+    initialData.byteLength,
+    totalSize,
+    currentLoad
+  )
+
   return {
-    range: new HttpRangeTransport(),
+    range: transport,
     docBaseUrl: props.src,
     disableStream: true,
     disableAutoFetch: true,
@@ -238,6 +273,7 @@ function isAbortError(error: unknown) {
 async function fetchPdfRange(begin: number, end: number) {
   const controller = new AbortController()
   fetchControllers.add(controller)
+  foregroundRequestCount += 1
 
   try {
     const response = await fetch(props.src, {
@@ -254,6 +290,7 @@ async function fetchPdfRange(begin: number, end: number) {
       data: new Uint8Array(await response.arrayBuffer())
     }
   } finally {
+    foregroundRequestCount = Math.max(0, foregroundRequestCount - 1)
     fetchControllers.delete(controller)
   }
 }
@@ -261,6 +298,122 @@ async function fetchPdfRange(begin: number, end: number) {
 function readTotalSize(contentRange: string | null) {
   const match = contentRange?.match(/\/(\d+)$/)
   return match ? Number.parseInt(match[1], 10) : 0
+}
+
+function readRangeStart(contentRange: string | null) {
+  const match = contentRange?.match(/^bytes\s+(\d+)-/i)
+  return match ? Number.parseInt(match[1], 10) : null
+}
+
+async function streamPdfInBackground(
+  transport: ProgressivePdfTransport,
+  startOffset: number,
+  totalSize: number,
+  currentLoad: number
+) {
+  let nextOffset = startOffset
+  let consecutiveFailures = 0
+  backgroundActive.value = true
+  backgroundProgress.value = Math.max(1, Math.round((nextOffset / totalSize) * 100))
+
+  try {
+    while (nextOffset < totalSize && currentLoad === loadVersion) {
+      if (!await waitForBackgroundSlot(currentLoad)) return
+
+      const attemptStart = nextOffset
+      const controller = new AbortController()
+      backgroundController = controller
+
+      try {
+        const request: RequestInit & { priority?: 'low' } = {
+          headers: { Range: `bytes=${nextOffset}-` },
+          signal: controller.signal,
+          priority: 'low'
+        }
+        const response = await fetch(props.src, request)
+        if (!response.ok) throw new Error(`PDF background request failed with ${response.status}`)
+
+        const responseStart = response.status === 206
+          ? (readRangeStart(response.headers.get('content-range')) ?? nextOffset)
+          : 0
+        if (responseStart > nextOffset) {
+          throw new Error(`PDF background response skipped bytes ${nextOffset}-${responseStart - 1}`)
+        }
+
+        let bytesToSkip = nextOffset - responseStart
+        const pushChunk = async (sourceChunk: Uint8Array) => {
+          if (bytesToSkip >= sourceChunk.byteLength) {
+            bytesToSkip -= sourceChunk.byteLength
+            return true
+          }
+
+          let chunk = bytesToSkip > 0
+            ? sourceChunk.slice(bytesToSkip)
+            : sourceChunk
+          bytesToSkip = 0
+          if (chunk.byteLength > totalSize - nextOffset) {
+            chunk = chunk.slice(0, totalSize - nextOffset)
+          }
+
+          if (!await waitForBackgroundSlot(currentLoad)) return false
+          const chunkLength = chunk.byteLength
+          transport.onDataProgressiveRead(chunk)
+          nextOffset += chunkLength
+          backgroundProgress.value = Math.min(100, Math.round((nextOffset / totalSize) * 100))
+          if (nextOffset < totalSize) await delay(backgroundReadDelay)
+          return currentLoad === loadVersion
+        }
+
+        if (response.body) {
+          const reader = response.body.getReader()
+          while (true) {
+            const { value, done } = await reader.read()
+            if (done) break
+            if (!await pushChunk(value)) {
+              await reader.cancel()
+              return
+            }
+          }
+        } else if (!await pushChunk(new Uint8Array(await response.arrayBuffer()))) {
+          return
+        }
+
+        if (nextOffset < totalSize) throw new Error('PDF background response ended early')
+      } catch (error) {
+        if (isAbortError(error) || currentLoad !== loadVersion) return
+        consecutiveFailures = nextOffset > attemptStart ? 1 : consecutiveFailures + 1
+        if (consecutiveFailures > backgroundRetryLimit) throw error
+        await delay(400 * consecutiveFailures)
+      } finally {
+        if (backgroundController === controller) backgroundController = undefined
+      }
+    }
+
+    if (currentLoad === loadVersion && nextOffset >= totalSize) {
+      transport.onDataProgressiveDone()
+      backgroundProgress.value = 100
+    }
+  } catch (error) {
+    if (!isAbortError(error) && currentLoad === loadVersion) {
+      console.warn('PDF background loading stopped; on-demand reading remains available', error)
+    }
+  } finally {
+    if (currentLoad === loadVersion) backgroundActive.value = false
+  }
+}
+
+async function waitForBackgroundSlot(currentLoad: number) {
+  while (
+    currentLoad === loadVersion &&
+    (foregroundRequestCount > 0 || rendering.value || document.hidden)
+  ) {
+    await delay(document.hidden ? 400 : 60)
+  }
+  return currentLoad === loadVersion
+}
+
+function delay(duration: number) {
+  return new Promise((resolve) => window.setTimeout(resolve, duration))
 }
 
 async function renderCurrentPage(scrollAnchor?: ScrollAnchor) {
@@ -553,6 +706,18 @@ watch(() => props.src, loadDocument)
           <Maximize2 v-else aria-hidden="true" />
         </button>
       </div>
+      <span
+        v-if="backgroundActive && backgroundProgress !== null"
+        class="kb-pdf-background-progress"
+        role="progressbar"
+        aria-label="后台读取 PDF"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        :aria-valuenow="backgroundProgress"
+        :title="`后台读取 ${backgroundProgress}%`"
+      >
+        <span :style="backgroundProgressStyle"></span>
+      </span>
     </div>
 
     <div ref="preview" class="kb-pdf-preview" :aria-busy="loading || rendering">

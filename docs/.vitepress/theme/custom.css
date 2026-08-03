@@ -374,6 +374,25 @@
   color: var(--vp-c-text-3);
 }
 
+.kb-pdf-background-progress {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--kb-teal) 10%, transparent);
+  pointer-events: none;
+}
+
+.kb-pdf-background-progress > span {
+  display: block;
+  height: 100%;
+  border-radius: 0 2px 2px 0;
+  background: var(--kb-teal);
+  transition: width 0.2s ease;
+}
+
 .kb-pdf-toolbar-group,
 .kb-page-control {
   display: inline-flex;
