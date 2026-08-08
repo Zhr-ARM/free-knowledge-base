@@ -6,7 +6,7 @@ const siteUrl = 'https://cdut-osa.cn'
 export default defineConfig({
   lang: 'zh-CN',
   title: '开源协会',
-  description: '成都理工大学开源协会官网与嵌入式、机器人运动控制知识库',
+  description: '成都理工大学开源协会官网，聚焦电源、信号、嵌入式控制与机器人控制',
   base,
   sitemap: {
     hostname: siteUrl
@@ -106,8 +106,10 @@ export default defineConfig({
       {
         text: '技术方向',
         items: [
-          { text: '嵌入式', link: '/guide/embedded' },
-          { text: '机器人运动控制', link: '/guide/robot-motion-control' }
+          { text: '电源', link: '/guide/power' },
+          { text: '信号', link: '/guide/signal' },
+          { text: '控制（嵌入式）', link: '/guide/embedded' },
+          { text: '控制（机器人）', link: '/guide/robot-motion-control' }
         ]
       },
       { text: '资料库', link: '/library/' },
@@ -118,8 +120,10 @@ export default defineConfig({
         items: [
           { text: '开始使用', link: '/guide/getting-started' },
           { text: '资料库', link: '/library/' },
-          { text: '嵌入式', link: '/guide/embedded' },
-          { text: '机器人运动控制', link: '/guide/robot-motion-control' },
+          { text: '电源', link: '/guide/power' },
+          { text: '信号', link: '/guide/signal' },
+          { text: '控制（嵌入式）', link: '/guide/embedded' },
+          { text: '控制（机器人）', link: '/guide/robot-motion-control' },
           { text: '资料版权与下架', link: '/guide/content-rights' }
         ]
       }

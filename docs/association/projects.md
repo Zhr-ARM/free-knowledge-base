@@ -117,7 +117,7 @@ import { ArrowRight, Bot, Cpu, Radar, Route, Settings2 } from '@lucide/vue'
       <div>
         <p class="osa-kicker">知识沉淀</p>
         <h2>从项目回到资料，再从资料走向下一个项目</h2>
-        <p>知识库提供嵌入式与机器人运动控制相关讲义、手册和源码。</p>
+        <p>目前已收录嵌入式控制与机器人控制资料；电源、信号方向暂无资料。</p>
       </div>
       <div class="osa-resource-actions">
         <a class="osa-button osa-button-primary" :href="withBase('/library/')">打开资料库 <ArrowRight :size="18" aria-hidden="true" /></a>

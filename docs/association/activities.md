@@ -9,7 +9,7 @@ description: 开源协会的培训、竞赛、科技志愿服务与成员交流�
 
 <script setup>
 import { withBase } from 'vitepress'
-import { ArrowRight, CalendarDays, CircuitBoard, GraduationCap, HeartHandshake, UsersRound } from '@lucide/vue'
+import { ArrowRight, Bot, Car, CircuitBoard, GraduationCap, HeartHandshake, Radio, Trophy, UsersRound, Zap } from '@lucide/vue'
 </script>
 
 <main class="osa-site osa-inner-page">
@@ -19,16 +19,34 @@ import { ArrowRight, CalendarDays, CircuitBoard, GraduationCap, HeartHandshake, 
     <div class="osa-shell osa-page-hero-copy">
       <p class="osa-kicker">Activities</p>
       <h1>活动记录</h1>
-      <p>一起学习，也把技术带到更远的地方。这里记录培训、竞赛、分享和科技志愿服务的现场。</p>
+      <p>记录竞赛培训、成员交流和科技志愿服务。</p>
     </div>
   </header>
+
+  <section class="osa-training-band">
+    <div class="osa-shell">
+      <div class="osa-section-heading">
+        <div>
+          <p class="osa-kicker">竞赛培训</p>
+          <h2>五项主要比赛</h2>
+        </div>
+      </div>
+      <div class="osa-training-grid">
+        <article><Trophy :size="22" aria-hidden="true" /><strong>蓝桥杯</strong></article>
+        <article><Radio :size="22" aria-hidden="true" /><strong>大唐杯</strong></article>
+        <article><Zap :size="22" aria-hidden="true" /><strong>电子设计大赛</strong></article>
+        <article><Bot :size="22" aria-hidden="true" /><strong>RoboCon</strong></article>
+        <article><Car :size="22" aria-hidden="true" /><strong>智能车</strong></article>
+      </div>
+    </div>
+  </section>
 
   <section class="osa-band">
     <div class="osa-shell">
       <div class="osa-section-heading">
         <div>
           <p class="osa-kicker">活动现场</p>
-          <h2>知识在动手、交流与分享中真正留下来</h2>
+          <h2>培训之外，也一起比赛和分享</h2>
         </div>
       </div>
       <div class="osa-timeline">
@@ -55,8 +73,8 @@ import { ArrowRight, CalendarDays, CircuitBoard, GraduationCap, HeartHandshake, 
           <img :src="withBase('/association/training-bench.webp')" alt="协会嵌入式培训现场" width="1400" height="1050" loading="lazy" decoding="async">
           <div class="osa-timeline-copy">
             <span class="osa-card-label"><GraduationCap :size="15" aria-hidden="true" /> 技术培训</span>
-            <h3>蓝桥杯与嵌入式基础训练</h3>
-            <p>从单片机基础、外设使用到竞赛题目训练，成员在讲解、任务和复盘中逐步建立完整的开发思路。</p>
+            <h3>竞赛专项培训</h3>
+            <p>围绕蓝桥杯、大唐杯、电子设计大赛、RoboCon 和智能车开展基础训练与项目实践。</p>
           </div>
         </article>
         <article class="osa-timeline-item">
@@ -93,7 +111,7 @@ import { ArrowRight, CalendarDays, CircuitBoard, GraduationCap, HeartHandshake, 
       <div>
         <p class="osa-kicker">从现场继续学习</p>
         <h2>活动结束，知识继续开放</h2>
-        <p>培训中使用的公开资料会按嵌入式与机器人运动控制方向持续整理。</p>
+        <p>目前已收录嵌入式控制与机器人控制资料；电源、信号方向暂无资料。</p>
       </div>
       <div class="osa-resource-actions">
         <a class="osa-button osa-button-primary" :href="withBase('/library/')">进入资料库 <ArrowRight :size="18" aria-hidden="true" /></a>

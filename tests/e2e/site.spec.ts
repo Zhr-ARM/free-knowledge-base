@@ -5,6 +5,8 @@ test('首页和资料库入口可以直接使用', async ({ page }) => {
   await expect(page).toHaveTitle(/成都理工大学开源协会/)
   await expect(page.getByRole('heading', { level: 1, name: '开源协会' })).toBeVisible()
   await expect(page.locator('.osa-hero-stats').getByText('236', { exact: true })).toBeVisible()
+  await expect(page.locator('.osa-tech-card')).toHaveCount(4)
+  await expect(page.locator('.osa-competition-item')).toHaveCount(5)
   await page.getByRole('link', { name: '浏览资料库' }).click()
   await expect(page).toHaveURL(/\/library\/$/)
   await expect(page.getByRole('heading', { level: 1, name: '资料库' })).toBeVisible()
