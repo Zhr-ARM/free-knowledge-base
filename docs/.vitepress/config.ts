@@ -5,8 +5,8 @@ const siteUrl = 'https://cdut-osa.cn'
 
 export default defineConfig({
   lang: 'zh-CN',
-  title: '开源协会知识库',
-  description: '沉淀嵌入式与机器人运动控制资料的公开知识库',
+  title: '开源协会',
+  description: '成都理工大学开源协会官网与嵌入式、机器人运动控制知识库',
   base,
   sitemap: {
     hostname: siteUrl
@@ -30,11 +30,11 @@ export default defineConfig({
       ['link', { rel: 'canonical', href: canonicalUrl }],
       ['meta', { property: 'og:type', content: 'website' }],
       ['meta', { property: 'og:locale', content: 'zh_CN' }],
-      ['meta', { property: 'og:site_name', content: '开源协会知识库' }],
+      ['meta', { property: 'og:site_name', content: '成都理工大学开源协会' }],
       ['meta', { property: 'og:title', content: title }],
       ['meta', { property: 'og:description', content: description }],
       ['meta', { property: 'og:url', content: canonicalUrl }],
-      ['meta', { property: 'og:image', content: `${siteUrl}/association-logo.jpg` }],
+      ['meta', { property: 'og:image', content: `${siteUrl}/association/hero-group.webp` }],
       ['meta', { name: 'twitter:card', content: 'summary' }],
       ['meta', { name: 'twitter:title', content: title }],
       ['meta', { name: 'twitter:description', content: description }]
@@ -95,9 +95,22 @@ export default defineConfig({
     },
     nav: [
       { text: '首页', link: '/' },
+      {
+        text: '协会',
+        items: [
+          { text: '关于协会', link: '/association/' },
+          { text: '项目成果', link: '/association/projects' },
+          { text: '活动记录', link: '/association/activities' }
+        ]
+      },
+      {
+        text: '技术方向',
+        items: [
+          { text: '嵌入式', link: '/guide/embedded' },
+          { text: '机器人运动控制', link: '/guide/robot-motion-control' }
+        ]
+      },
       { text: '资料库', link: '/library/' },
-      { text: '嵌入式', link: '/guide/embedded' },
-      { text: '机器人运动控制', link: '/guide/robot-motion-control' }
     ],
     sidebar: [
       {
@@ -115,7 +128,7 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/Zhr-ARM/free-knowledge-base' }
     ],
     footer: {
-      message: '开源协会知识沉淀与资料共享。',
+      message: '开放、平等、共享、协作。',
       copyright: 'Powered by VitePress and GitHub Pages.'
     },
     docFooter: {
