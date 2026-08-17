@@ -18,7 +18,7 @@
     "check": "npm test && npm run typecheck && npm run docs:build && npm run test:links && npm run test:size"
   },
   "devDependencies": {
-    "@lucide/vue": "^1.28.0",
+    "@lucide/vue": "^1.31.0",
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.1.2",
     "jszip": "^3.10.1",
